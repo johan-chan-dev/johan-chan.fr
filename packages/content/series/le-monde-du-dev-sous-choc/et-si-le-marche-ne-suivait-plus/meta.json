@@ -1,0 +1,11 @@
+{
+  "type": "série",
+  "title": "Et si le marché ne suivait plus ?",
+  "date": "2026-02-21",
+  "excerpt": "L'histoire dit que les devs s'en sortent toujours. Ce qu'elle ne dit pas, c'est que le marché grossissait en même temps.",
+  "image": "./images/hero.webp",
+  "parent": "Le monde du dev sous choc",
+  "order": 6,
+  "published": true,
+  "tags": ["ia", "marché", "craft"]
+}

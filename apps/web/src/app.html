@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="%paraglide.lang%">
+	<head>
+		<meta charset="utf-8" />
+		<!-- Favicon - Multiple formats for comprehensive browser support -->
+		<link rel="icon" href="%sveltekit.assets%/favicon.ico" />
+		<link rel="icon" type="image/png" sizes="32x32" href="%sveltekit.assets%/favicon.png" />
+		<link rel="apple-touch-icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!-- Web Manifest -->
+		<link rel="manifest" href="%sveltekit.assets%/manifest.json" />
+		<meta name="theme-color" content="#3B82F6" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+		<meta name="apple-mobile-web-app-title" content="Johan Chan" />
+
+		<!-- Essential Meta Tags -->
+		<meta name="author" content="Johan Chan" />
+		<meta name="language" content="French" />
+		<meta name="geo.region" content="FR" />
+		<meta name="geo.placename" content="France" />
+
+		<style>
+			@font-face {
+				font-family: 'Inter';
+				src: url('Inter-VariableFont_slnt,wght.ttf') format('truetype');
+			}
+		</style>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

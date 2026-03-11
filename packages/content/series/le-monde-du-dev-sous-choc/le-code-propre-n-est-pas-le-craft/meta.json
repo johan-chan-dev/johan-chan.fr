@@ -1,0 +1,13 @@
+{
+	"title": "Le code propre n'est pas le craft",
+	"date": "2026-01-30",
+	"excerpt": "Si le craft c'est écrire du code propre, c'est une question de temps. Mais le craft c'est pas ça. C'est le soin, le feedback, la discipline, et le poids de ce qu'on construit, qu'aucune IA ne porte.",
+	"published": true,
+	"image": "./images/hero-craft.webp",
+	"tags": ["craft", "philosophie", "IA"],
+	"parent": "Le monde du dev sous choc",
+	"order": 2,
+	"updatedAt": "2026-02-07T22:00:00.000Z",
+	"firstPublishedAt": "2026-01-30T00:00:00.000Z",
+	"lastPublishedAt": "2026-02-07T22:00:00.000Z"
+}

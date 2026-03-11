@@ -1,0 +1,11 @@
+{
+  "type": "série",
+  "title": "D'où viendront les devs de demain ?",
+  "date": "2026-02-25",
+  "excerpt": "On a dit à une génération entière d'apprendre à coder. Le marché se ferme sous leurs pieds.",
+  "image": "./images/hero.webp",
+  "parent": "Le monde du dev sous choc",
+  "order": 7,
+  "published": true,
+  "tags": ["ia", "juniors", "marché", "craft"]
+}

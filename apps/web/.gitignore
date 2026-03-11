@@ -1,0 +1,33 @@
+# Build outputs
+.svelte-kit
+.vercel
+build
+dist
+
+# Dependencies
+node_modules
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Session files (colocated with content, managed by Studio)
+src/content/**/.session.jsonl
+src/content/**/.*.session.json
+
+# Draft sessions (temporary, managed by Studio)
+src/content/_drafts/
+
+# Generated content images (built from src/content/**/images/)
+static/images/articles/
+static/images/series/
+static/images/devlogs/
+static/images/posts/
+
+# Image manifest (generated at build time)
+src/content/.image-manifest.json

@@ -1,0 +1,82 @@
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"navigation": {
+		"brand": "Johan Chan",
+		"all": "Tout",
+		"articles": "Articles",
+		"series": "Séries",
+		"devlogs": "Devlogs",
+		"about": "À propos"
+	},
+	"homepage": {
+		"hero_title": "Software Crafter",
+		"hero_augmented": "Augmented",
+		"tagline": "Make it work. Make it right. Make it fast.",
+		"empty_feed": "Aucun contenu pour le moment. Revenez bientôt !",
+		"linkedin_aria_label": "Profil LinkedIn de Johan Chan"
+	},
+	"error": {
+		"404": {
+			"title": "Page introuvable",
+			"subtitle": "Erreur 404",
+			"message": "Désolé, la page que vous recherchez n'existe pas ou a été déplacée.",
+			"suggestion": "Vous pouvez retourner à l'accueil ou explorer les autres sections du site.",
+			"homeButton": "Retour à l'accueil",
+			"aboutButton": "À propos"
+		}
+	},
+	"articles": {
+		"page_title": "Articles | Johan Chan",
+		"page_description": "Réflexions sur le craft logiciel, l'architecture durable et la philosophie du code par Johan Chan.",
+		"heading": "Articles",
+		"lead_text": "Réflexions sur le craft, la pensée systémique et l'entrepreneuriat.",
+		"empty": "Aucun article pour le moment."
+	},
+	"series": {
+		"page_title": "Séries | Johan Chan",
+		"page_description": "Explorations approfondies en plusieurs chapitres par Johan Chan.",
+		"heading": "Séries",
+		"lead_text": "Explorations approfondies en plusieurs chapitres.",
+		"empty": "Aucune série pour le moment.",
+		"chapters": "chapitres"
+	},
+	"devlogs": {
+		"page_title": "Devlogs | Johan Chan",
+		"page_description": "Carnets de développement de mes projets par Johan Chan.",
+		"heading": "Devlogs",
+		"lead_text": "Carnets de développement de mes projets.",
+		"empty": "Aucun devlog pour le moment.",
+		"posts": "posts",
+		"latest": "Dernier"
+	},
+	"about": {
+		"page_title": "À propos | Johan Chan",
+		"page_description": "Qui est Johan Chan ? Penseur, bâtisseur, père au foyer. Découvrez l'humain derrière l'écriture.",
+		"bio_tag_crafter": "Software Crafter Augmented",
+		"bio_tag_dad": "Père au foyer",
+		"bio_text": "Ce qui m'anime dans la construction de logiciels : comprendre les systèmes complexes, créer des choses durables, et partager ce que j'apprends en chemin.",
+		"philosophy_heading": "Ce qui me guide",
+		"pillar_simplicity": "Simple",
+		"pillar_simplicity_desc": "La simplicité n'est pas une réduction, c'est une clarté. Un système simple est celui que vous comprenez encore 6 mois plus tard sans vous frustrer. Il ne fait que ce qu'il doit faire, mais le fait bien.",
+		"pillar_coherence": "Cohérent",
+		"pillar_coherence_desc": "La continuité logique entre les parties d'un tout. Chaque composant, chaque décision, doit « rimer » avec le reste du système. La cohérence garantit la maintenabilité.",
+		"pillar_durability": "Durable",
+		"pillar_durability_desc": "Pas la durée de vie d'un produit, mais sa capacité à évoluer sans se déformer. Un système durable supporte le changement sans perdre son équilibre. C'est penser à long terme.",
+		"craft_heading": "Le Craft",
+		"craft_text": "Une éthique de travail, pas une tendance technique. Une manière d'être développeur, plus qu'une méthode de développement. Chaque projet est une graine : il mérite d'être cultivé, pas assemblé à la chaîne.",
+		"augmented_heading": "Augmenté ?",
+		"augmented_text": "L'IA ne remplace pas le craft — elle l'amplifie. Utiliser l'IA comme levier, c'est garder la main sur les décisions d'architecture, la qualité du code et la vision produit, tout en accélérant l'exécution. Ce n'est pas produire plus vite pour produire plus : c'est libérer du temps pour penser mieux.",
+		"augmented_link": "Lire l'article complet →",
+		"links_heading": "Me retrouver",
+		"business_heading": "Pour les projets professionnels",
+		"business_text": "Je travaille avec des entreprises via La Graine du Craft. Consulting, formations, et accompagnement technique.",
+		"business_cta": "La Graine du Craft"
+	},
+	"footer": {
+		"tagline": "Software Crafter",
+		"location": "France | Remote",
+		"email": "me@johan-chan.fr",
+		"business_text": "Pour les projets professionnels",
+		"business_link": "La Graine du Craft →"
+	}
+}

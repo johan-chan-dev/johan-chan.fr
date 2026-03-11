@@ -1,0 +1,36 @@
+{
+	"name": "Johan Chan - Développeur d'Applications",
+	"short_name": "Johan Chan",
+	"description": "Portfolio professionnel de Johan Chan, développeur freelance spécialisé en applications web et mobile",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#0F172A",
+	"theme_color": "#3B82F6",
+	"orientation": "portrait-primary",
+	"icons": [
+		{
+			"src": "/favicon.png",
+			"sizes": "128x128",
+			"type": "image/png",
+			"purpose": "any maskable"
+		},
+		{
+			"src": "/images/johan.webp",
+			"sizes": "512x512",
+			"type": "image/webp",
+			"purpose": "any"
+		}
+	],
+	"categories": ["business", "productivity", "developer"],
+	"lang": "fr-FR",
+	"scope": "/",
+	"screenshots": [
+		{
+			"src": "/images/johan.webp",
+			"sizes": "1280x720",
+			"type": "image/webp",
+			"platform": "wide",
+			"label": "Portfolio de Johan Chan"
+		}
+	]
+}

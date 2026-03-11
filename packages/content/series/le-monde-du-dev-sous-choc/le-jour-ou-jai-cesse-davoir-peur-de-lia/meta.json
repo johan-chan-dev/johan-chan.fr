@@ -1,0 +1,13 @@
+{
+	"title": "Le jour où j'ai cessé d'avoir peur de l'IA",
+	"date": "2026-01-28",
+	"excerpt": "Dev depuis 2011, et pour la première fois, je ne sais pas où va mon métier. De la peur de l'obsolescence à une nouvelle relation avec l'IA.",
+	"published": true,
+	"image": "./images/hero.webp",
+	"tags": ["IA", "carrière", "réflexion"],
+	"parent": "Le monde du dev sous choc",
+	"order": 1,
+	"updatedAt": "2026-02-02T21:10:58.516Z",
+	"firstPublishedAt": "2026-01-28T00:00:00.000Z",
+	"lastPublishedAt": "2026-01-28T00:00:00.000Z"
+}

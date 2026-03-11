@@ -1,0 +1,10 @@
+{
+	"title": "Quand tout le monde génère, qui relit ?",
+	"date": "2026-02-16",
+	"excerpt": "Le code arrive plus vite que la capacité à le relire. La compréhension partagée du système se dilue, une PR à la fois.",
+	"published": true,
+	"image": "./images/hero.webp",
+	"tags": ["IA", "craft", "réflexion"],
+	"parent": "Le monde du dev sous choc",
+	"order": 4
+}

@@ -1,0 +1,12 @@
+{
+  "type": "série",
+  "title": "Le marché se restructure",
+  "date": "2026-02-28",
+  "image": "./images/hero.webp",
+  "imageFocus": "bottom",
+  "excerpt": "Licenciements massifs, offres en chute, contre-signaux. Les données brutes d'un marché en pleine recomposition.",
+  "parent": "Le monde du dev sous choc",
+  "order": 8,
+  "published": true,
+  "tags": ["ia", "marché", "emploi", "données"]
+}

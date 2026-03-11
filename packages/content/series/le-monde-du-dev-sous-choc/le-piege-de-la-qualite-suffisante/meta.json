@@ -1,0 +1,13 @@
+{
+	"title": "Le piège de la qualité suffisante",
+	"date": "2026-02-01",
+	"excerpt": "Plus le code généré par l'IA s'améliore, moins on le relit. Le muscle du discernement s'atrophie sans qu'on s'en rende compte. Et le piège, c'est de confondre \"ça marche\" avec \"c'est bien\".",
+	"published": true,
+	"image": "./images/hero-code.webp",
+	"tags": ["IA", "craft", "réflexion"],
+	"parent": "Le monde du dev sous choc",
+	"order": 3,
+	"updatedAt": "2026-02-08T22:00:00.000Z",
+	"firstPublishedAt": "2026-02-01T00:00:00.000Z",
+	"lastPublishedAt": "2026-02-08T22:00:00.000Z"
+}

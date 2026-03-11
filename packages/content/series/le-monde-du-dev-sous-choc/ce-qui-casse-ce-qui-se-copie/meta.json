@@ -1,0 +1,11 @@
+{
+  "type": "série",
+  "title": "L'IA ne menace pas que les postes",
+  "date": "2026-02-28",
+  "image": "./images/hero.webp",
+  "excerpt": "La prod qui casse, les SaaS qui s'effondrent, et un récit bien pratique pour vendre des formations. Et si on lisait mal la situation ?",
+  "parent": "Le monde du dev sous choc",
+  "order": 9,
+  "published": true,
+  "tags": ["ia", "production", "saas", "données"]
+}

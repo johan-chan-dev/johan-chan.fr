@@ -1,0 +1,13 @@
+{
+	"name": "@johan-chan/content",
+	"version": "1.0.0",
+	"description": "Contenu et schema du site johan-chan.fr",
+	"type": "module",
+	"exports": {
+		"./schema": "./schema/index.ts",
+		"./schema/*": "./schema/*.ts"
+	},
+	"dependencies": {
+		"zod": "^4.3.6"
+	}
+}

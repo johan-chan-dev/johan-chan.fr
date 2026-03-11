@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+@plugin "daisyui" {
+	themes:
+		autumn --default,
+		abyss --prefersdark;
+}
+
+body {
+	@apply h-dvh;
+	background:
+		radial-gradient(ellipse at top, oklch(62% 0.2 260 / 0.04) 0%, transparent 50%),
+		radial-gradient(ellipse at bottom right, oklch(70% 0.15 330 / 0.03) 0%, transparent 40%);
+}
+
+/* 2025/2026 vibe: subtle grain texture overlay */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	pointer-events: none;
+	opacity: 0.08;
+	background-image: url('/noise.png');
+	background-repeat: repeat;
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentcolor);
+	}
+}
+
+.content-grid {
+	@apply w-full relative grid;
+	grid-template-columns:
+		[full-width-start] var(--page-margin) [breakout-start] var(--page-breakout) [content-start]
+		1fr
+		[content-end] var(--page-breakout) [breakout-end] var(--page-margin) [full-width-end];
+}
+
+.content-grid > * {
+	grid-column: content;
+}
+
+.content-grid > .breakout {
+	grid-column: breakout;
+}
+
+.content-grid > .full-width {
+	grid-column: full-width;
+}

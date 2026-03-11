@@ -1,0 +1,13 @@
+{
+  "type": "série",
+  "title": "La discipline se déplace",
+  "date": "2026-03-07",
+  "excerpt": "Les voix les plus lucides du secteur décrivent un métier qui se transforme. Des penseurs d'il y a un siècle avaient vu venir le même mécanisme.",
+  "image": "./images/hero.webp",
+  "imageFocus": "center",
+  "parent": "Le monde du dev sous choc",
+  "order": 10,
+  "published": true,
+  "preview": false,
+  "tags": ["ia", "craft", "discipline", "tdd", "dette-cognitive"]
+}

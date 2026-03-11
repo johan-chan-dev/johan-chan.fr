@@ -1,0 +1,11 @@
+{
+  "type": "article",
+  "title": "Ce que « augmenté » veut dire",
+  "date": "2026-03-09",
+  "excerpt": "Augmenté, ce n'est pas aller plus vite. C'est changer de rôle : passer d'auteur de code à architecte de contraintes.",
+  "slug": "ce-que-augmente-veut-dire",
+  "image": "./images/hero.webp",
+  "imageFocus": "center",
+  "published": true,
+  "tags": ["ia", "craft", "augmented"]
+}

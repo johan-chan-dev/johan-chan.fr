@@ -1,0 +1,10 @@
+{
+	"title": "L'IA est faillible. Et ton code ?",
+	"date": "2026-02-19",
+	"excerpt": "On rejette l'IA parce qu'elle fait des erreurs. On a inventé le TDD parce que nous aussi. Le vrai sujet c'est ce qu'on n'a pas regardé.",
+	"image": "./images/hero.webp",
+	"published": true,
+	"tags": ["IA", "craft", "réflexion"],
+	"parent": "Le monde du dev sous choc",
+	"order": 5
+}
