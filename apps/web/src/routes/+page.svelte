@@ -13,7 +13,7 @@
 			<span class="inline-block">Software</span>{' '}
 			<span class="relative inline-block"
 				><span
-					class="hero-shimmer text-[0.4em] font-bold absolute -top-[0.8em] right-0 inline-block rotate-3 pb-1 whitespace-nowrap"
+					class="hero-shimmer text-[0.5em] font-bold absolute -top-[0.8em] right-0 inline-block rotate-3 pb-1 whitespace-nowrap"
 					>{m['homepage.hero_augmented']()}<span class="sparkle ml-1">✦</span></span
 				>Crafter</span
 			>

@@ -19,6 +19,7 @@
 		theme.toggle();
 	}}
 	class="button is-ghost is-small navbar-item"
+	aria-label="Changer de thème"
 >
 	{#key icon}
 		<Icon {icon} height={'1.75rem'} />

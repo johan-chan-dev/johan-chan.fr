@@ -9,11 +9,9 @@ export const load: PageServerLoad = async () => {
 	return {
 		content,
 		seo: {
-			title: 'Johan Chan - Ce que je pense. Ce que j\'apprends.',
+			title: 'Johan Chan - Software Crafter',
 			description:
-				'Réflexions sur le craft logiciel, la pensée systémique et l\'entrepreneuriat. Articles, séries et carnets de développement par Johan Chan.',
-			keywords:
-				'craft logiciel, pensée systémique, entrepreneuriat, développement, articles, réflexions techniques'
+				'Réflexions sur le craft logiciel, la pensée systémique et l\'entrepreneuriat. Articles, séries et carnets de développement par Johan Chan.'
 		}
 	};
 };

@@ -21,10 +21,8 @@
 	<script defer src="https://cloud.umami.is/script.js" data-website-id="e9a3f679-3cfb-4606-9bdf-ad7f68c177e4"></script>
 {/if}
 
-<!-- SEO Component (only for static pages — dynamic pages set their own) -->
-{#if seoData}
-	<SEO {...seoData} />
-{/if}
+<!-- SEO Component (fallback for all pages — dynamic pages override via their own <svelte:head>) -->
+<SEO {...seoData} />
 
 <!-- load user theme before rendering -->
 <svelte:head>
@@ -63,7 +61,7 @@
 	:root {
 		--page-breakout: 0.5rem;
 		--page-margin: 0.5rem;
-		font-size: 12px;
+		font-size: 14px;
 	}
 
 	@media (min-width: 640px) {

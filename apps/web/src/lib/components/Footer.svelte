@@ -15,7 +15,7 @@
 				<p class="text-base-content/70">{m['footer.location']()}</p>
 				<a
 					href="mailto:{m['footer.email']()}"
-					class="link link-hover text-primary"
+					class="link link-hover link-accent"
 				>
 					{m['footer.email']()}
 				</a>

@@ -4,7 +4,6 @@
 	interface SEOProps {
 		title: string;
 		description: string;
-		keywords?: string;
 		image?: string;
 		type?: 'website' | 'article' | 'profile';
 		canonical?: string;
@@ -15,7 +14,6 @@
 	const {
 		title,
 		description,
-		keywords,
 		image = '/images/johan.webp',
 		type = 'website',
 		canonical,
@@ -32,7 +30,6 @@
 	<!-- Basic Meta Tags -->
 	<title>{title}</title>
 	<meta name="description" content={description} />
-	{#if keywords}<meta name="keywords" content={keywords} />{/if}
 	<meta name="author" content={author} />
 	<link rel="canonical" href={fullCanonical} />
 
