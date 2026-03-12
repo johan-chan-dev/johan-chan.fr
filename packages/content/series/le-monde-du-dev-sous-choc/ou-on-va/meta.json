@@ -1,0 +1,13 @@
+{
+  "type": "série",
+  "title": "Où on va",
+  "date": "2026-03-12",
+  "excerpt": "Personne sait. Alors plutôt que de deviner, j'ai regardé ce qui avait déjà changé dans ma façon de bosser.",
+  "image": "./images/hero.webp",
+  "imageFocus": "center",
+  "parent": "Le monde du dev sous choc",
+  "order": 11,
+  "published": true,
+  "preview": false,
+  "tags": ["ia", "craft", "tdd", "ddd", "incertitude"]
+}
