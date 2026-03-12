@@ -12,7 +12,9 @@
 
 	const { children, data } = $props();
 
-	// Get SEO data for current page
+	// Get SEO data for current page — skip for content pages that render their own SEO
+	const contentRoutes = ['/articles/[slug]', '/devlogs/[slug]', '/series/[series]', '/series/[series]/[chapter]'];
+	const hasOwnSEO = $derived(contentRoutes.includes(page.route.id ?? ''));
 	const seoData = $derived(getSEOData(page.url.pathname));
 </script>
 
@@ -21,8 +23,10 @@
 	<script defer src="https://cloud.umami.is/script.js" data-website-id="e9a3f679-3cfb-4606-9bdf-ad7f68c177e4"></script>
 {/if}
 
-<!-- SEO Component (fallback for all pages — dynamic pages override via their own <svelte:head>) -->
-<SEO {...seoData} />
+<!-- SEO Component (only for pages that don't render their own) -->
+{#if !hasOwnSEO}
+	<SEO {...seoData} />
+{/if}
 
 <!-- load user theme before rendering -->
 <svelte:head>
