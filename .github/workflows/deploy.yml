@@ -43,8 +43,6 @@ jobs:
 
       - name: Build
         run: pnpm turbo run build --filter=@johan-chan/web
-        env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

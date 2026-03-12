@@ -45,3 +45,4 @@ test-results
 
 # Sources (transcripts, raw data)
 .sources/
+lighthouse.json
