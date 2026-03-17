@@ -1,0 +1,13 @@
+{
+  "type": "série",
+  "title": "La fin ?",
+  "date": "2026-03-16",
+  "excerpt": "J'ai cru que c'était la fin du métier. C'était la fin de celui que j'étais.",
+  "image": "./images/hero.webp",
+  "imageFocus": "center",
+  "parent": "Le monde du dev sous choc",
+  "order": 12,
+  "published": true,
+  "preview": false,
+  "tags": ["ia", "craft", "incertitude"]
+}
