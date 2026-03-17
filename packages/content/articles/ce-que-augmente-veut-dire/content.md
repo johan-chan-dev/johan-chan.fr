@@ -1,58 +1,67 @@
-<!-- DRAFT v2 — restructure : concret plus tot, anaphores cassees, Morris integre -->
+<!-- DRAFT v2 — restructure : concret plus tôt, anaphores cassées, Morris intégré -->
 <!-- Cible : devs, crafters, tech leads -->
-<!-- Angle : augmente = changement de role, pas acceleration -->
+<!-- Angle : augmenté = changement de rôle, pas accélération -->
 
-Le mot "augmente" circule beaucoup. En general, il veut dire "plus vite". Un dev augmente, c'est un dev qui produit plus de code en moins de temps. Le dashboard monte, tout le monde est content.
+Le mot "augmenté" circule beaucoup. En général, il veut dire "plus vite". Un dev augmenté, c'est un dev qui produit plus de code en moins de temps. Le dashboard monte, tout le monde est content.
 
-C'est pas ca.
-
----
-
-## Deux facons d'utiliser l'IA
-
-Kent Beck a pose la distinction la plus nette. D'un cote, le vibe coding : tu decris ce que tu veux, l'IA genere, tu regardes si ca marche. Si ca casse, tu renvoies l'erreur a l'IA et tu esperes un fix. Le code est une boite noire. Tu ne le lis pas, tu t'en fiches tant que ca tourne.
-
-De l'autre, ce qu'il appelle l'augmented coding : tu gardes les memes standards qu'a la main. Le code doit etre lisible, teste, simple. Tu ne tapes plus chaque ligne, mais tu prends chaque decision. Beck le dit comme ca : *"I make more consequential programming decisions per hour, fewer boring vanilla decisions."*
-
-La difference n'est pas dans l'outil. C'est dans ce que tu choisis de garder.
+C'est pas ça.
 
 ---
 
-## D'auteur a architecte
+## Deux façons d'utiliser l'IA
 
-Dans un podcast, Beck decrit l'ingenieur augmente comme un "constraint writer". Pas quelqu'un qui produit du code, mais quelqu'un qui definit les contraintes dans lesquelles le code est produit. Les specs, les tests, les garde-fous, les limites de complexite. Le code peut etre jete et regenere. Les contraintes, elles, sont le vrai artefact.
+Kent Beck a posé la distinction la plus nette. D'un côté, le vibe coding : tu décris ce que tu veux, l'IA génère, tu regardes si ça marche. Si ça casse, tu renvoies l'erreur à l'IA et tu espères un fix. Le code est une boîte noire. Tu ne le lis pas, tu t'en fiches tant que ça tourne.
 
-Kief Morris, chez Thoughtworks, formalise la meme idee autrement : l'ingenieur n'est plus dans la boucle d'execution, il est au-dessus. Il ameliore le systeme de contraintes, pas le code lui-meme.
+De l'autre, ce qu'il appelle l'augmented coding : tu gardes les mêmes standards qu'à la main. Le code doit être lisible, testé, simple. Tu ne tapes plus chaque ligne, mais tu prends chaque décision. Beck le dit comme ça : *"I make more consequential programming decisions per hour, fewer boring vanilla decisions."*
 
-Ce glissement est discret mais profond. Ecrire du code, ta valeur est dans ce que tu produis. Definir des contraintes, ta valeur est dans ce que tu empeches.
+La différence n'est pas dans l'outil. C'est dans ce que tu choisis de garder.
 
 ---
 
-## A quoi ca ressemble
+## D'auteur à architecte
 
-Etre augmente, au quotidien, c'est passer plus de temps a ecrire des tests qu'a ecrire du code. Les tests sont tes contraintes. Le code, l'IA peut le generer. Les contraintes, c'est toi qui decides lesquelles comptent.
+Dans un podcast, Beck décrit l'ingénieur augmenté comme un "constraint writer". Pas quelqu'un qui produit du code, mais quelqu'un qui définit les contraintes dans lesquelles le code est produit. Les specs, les tests, les garde-fous, les limites de complexité. Le code peut être jeté et régénéré. Les contraintes, elles, sont le vrai artefact.
 
-C'est aussi lire plus de code qu'on en ecrit. Pas parce qu'on est lent. Parce que la review est devenue le vrai travail. L'IA genere vite. Comprendre ce qu'elle a genere et decider si c'est bon, ca prend du temps. Et c'est la que la valeur se cree.
+Kief Morris, chez Thoughtworks, formalise la même idée autrement : l'ingénieur n'est plus dans la boucle d'exécution, il est au-dessus. Il améliore le système de contraintes, pas le code lui-même.
 
-C'est dire non plus souvent. L'IA propose des solutions qui marchent mais qui compliquent. Beck note qu'elle n'a pas de "gout" : elle etend les fonctions, reutilise des patterns problematiques, ne restructure jamais d'elle-meme. Accepter sans reflechir, c'est accumuler de la complexite. Refuser le code qui marche mais qui n'est pas bon, c'est probablement le geste le plus "augmente" qui existe.
+Ce glissement est discret mais profond. Écrire du code, ta valeur est dans ce que tu produis. Définir des contraintes, ta valeur est dans ce que tu empêches.
 
-Et c'est explorer plus largement. Simon Willison le resume bien : le gain n'est pas d'aller plus vite, c'est de pouvoir lancer des projets qu'on n'aurait jamais eu le temps de justifier. Des prototypes en une heure pour verifier une hypothese. Des explorations dans des domaines qu'on connait mal. L'espace libere par l'IA n'est pas rempli de plus de code. Il est rempli de plus de curiosite.
+---
+
+## À quoi ça ressemble
+
+Être augmenté, au quotidien, c'est passer plus de temps à écrire des tests qu'à écrire du code. Les tests sont tes contraintes. Le code, l'IA peut le générer. Les contraintes, c'est toi qui décides lesquelles comptent.
+
+C'est aussi lire plus de code qu'on en écrit. Pas parce qu'on est lent. Parce que la review est devenue le vrai travail. L'IA génère vite. Comprendre ce qu'elle a généré et décider si c'est bon, ça prend du temps. Et c'est là que la valeur se crée.
+
+C'est dire non plus souvent. L'IA propose des solutions qui marchent mais qui compliquent. Beck note qu'elle n'a pas de "goût" : elle étend les fonctions, réutilise des patterns problématiques, ne restructure jamais d'elle-même. Accepter sans réfléchir, c'est accumuler de la complexité.
+
+Et c'est explorer plus largement. Simon Willison le résume bien : le gain n'est pas d'aller plus vite, c'est de pouvoir explorer des pistes qu'on n'aurait jamais eu le temps de creuser. Des prototypes en une heure pour vérifier une hypothèse. Des explorations dans des domaines qu'on connaît mal. Le temps que l'IA te libère, tu le mets pas à produire plus mais à mieux comprendre.
 
 Mais Willison met une condition : l'IA amplifie l'expertise existante. Sans expertise, pas d'amplification. Un junior qui utilise l'IA produit du code qu'il ne comprend pas. Un senior qui utilise l'IA explore des territoires qu'il n'aurait pas atteints seul.
 
 ---
 
-## Ce que c'est, ce que c'est pas
+## Ce que c'est, ce qui ne l'est pas
 
-Augmente, ca ne veut pas dire dependant. Si l'outil disparait demain, tu sais toujours coder. L'IA est un levier, pas une prothese.
+Augmenté, ça veut dire un peu dépendant, oui. Si l'outil disparaît demain, tu sais toujours coder. Comme le vélo, ça revient. Mais ça fait mal, parce que le cerveau s'est habitué à plus facile. Et surtout, tu perds ce qui te rendait augmenté : la capacité d'explorer ce que tu connais pas. Ce que t'as appris en chemin reste. Mais les territoires que t'aurais pu découvrir, eux, disparaissent.
 
-Ca ne veut pas dire plus productif non plus. Parfois on va plus lentement parce qu'on explore plus. Parfois on produit moins de code parce qu'on en refuse davantage. La productivite est un resultat possible, pas l'objectif. On en a parle dans l'article sur la productivite IA.
+Ça ne veut pas dire plus productif non plus. En tout cas, pas au sens où on l'entend d'habitude. La productivité qu'on vend, c'est la vitesse : plus de code, plus de features, plus vite. Celle qui compte, c'est la diversité : plus de solutions explorées, plus de problèmes compris en profondeur, plus de chemins envisagés avant de choisir. L'IA nous rend pas directement plus rapide, mais elle peut nous pousser à aller plus loin dans nos réflexions, nos recherches. Et c'est ça qui, au bout du compte, peut nous amener à produire plus.
 
-Et surtout, augmente ca ne veut pas dire automatise. L'automatisation retire l'humain de la boucle. L'augmentation le deplace vers les decisions qui comptent. L'une pousse dehors, l'autre pousse vers le haut. La direction n'est pas la meme.
 
 ---
 
-Augmente, c'est garder le craft. Juste depuis un endroit different.
+## Ce que ça change vraiment
+
+Le plus dur, c'est pas l'outil. C'est ce que ça fait à ton identité. Si t'as toujours été "celui qui code", "le technicien qu'on appelle quand ça marche pas", l'IA vient toucher quelque chose de plus profond qu'un workflow. Elle touche qui tu es.
+
+Augmenté, c'est pas juste un nouveau rapport à l'outil. C'est un nouveau rapport à soi. Accepter que ta valeur est pas dans le geste mais dans le jugement. Que le métier c'est pas le code, c'est le besoin auquel il répond.
+
+L'artisanat du code, celui qu'on a toujours connu, disparaît pas. Tant qu'il y aura des passionnés qui veulent comprendre chaque ligne, il existera. Mais à côté, un autre artisanat émerge : celui du logiciel. Penser le système, guider l'IA, comprendre le problème métier. C'est pas moins artisanal. C'est un geste différent.
+
+---
+
+Augmenté, c'est garder le craft. Juste depuis un endroit différent.
 
 <details>
 <summary>Sources</summary>
