@@ -20,6 +20,10 @@ Mais même si tout ça tombe, j'aurai appris à douter de ce qui a l'air de marc
 
 Et pour ceux qui découvrent le métier : apprendre à avoir le sens de l'orientation, c'est pas un luxe. On en a pas besoin au quotidien. Mais c'est ce qui permet de reconnaître que quelque chose va pas et qu'il faut commencer à se poser des questions avant d'aller trop loin.
 
+L'artisanat du code, celui qu'on a toujours connu, va pas disparaître. Tant qu'il y aura des passionnés qui veulent comprendre chaque ligne, optimiser un algo pour le plaisir, connaître les entrailles d'un langage, il existera. Il aura juste moins de place.
+
+Et à côté, un autre artisanat émerge. Penser le système, guider l'IA, comprendre le problème métier, assembler le tout en quelque chose de cohérent. C'est pas moins artisanal. C'est un geste différent.
+
 Le métier continue. Le paysage a changé, l'approche pour trouver des solutions aussi. Mais le besoin de quelqu'un qui comprend le problème avant de chercher la réponse, ça, c'est toujours là.
 
 ---
