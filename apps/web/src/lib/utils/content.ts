@@ -31,7 +31,10 @@ const metaModules = import.meta.glob('../../../../../packages/content/**/meta.js
 });
 
 // Content directory path (for dev mode file reads)
-const CONTENT_DIR = path.resolve(process.cwd(), '../../packages/content');
+// In dev, DEV_CONTENT_DIR can point to le-cockpit's content (source of truth)
+const CONTENT_DIR = dev && process.env.DEV_CONTENT_DIR
+	? path.resolve(process.env.DEV_CONTENT_DIR)
+	: path.resolve(process.cwd(), '../../packages/content');
 
 // Type directories to scan
 const TYPE_DIRS = ['articles', 'series', 'devlogs', 'posts'] as const;

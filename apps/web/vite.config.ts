@@ -7,9 +7,12 @@ import { kitRoutes } from 'vite-plugin-kit-routes';
 import tailwindcss from '@tailwindcss/vite';
 import { contentImages } from './vite-plugins/content-images';
 
+// In dev, DEV_CONTENT_DIR can point to le-cockpit's content (source of truth)
+const devContentDir = process.env.DEV_CONTENT_DIR;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const plugins: any[] = [
-	contentImages({ contentDir: '../../packages/content', outputDir: 'images' }),
+	contentImages({ contentDir: devContentDir ?? '../../packages/content', outputDir: 'images' }),
 	tailwindcss(),
 	sveltekit(),
 	kitRoutes<KIT_ROUTES>({}),

@@ -188,6 +188,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 	const quality = options.quality ?? 80;
 
 	let projectRoot: string;
+	let resolvedContentDir: string;
 	let isDev = true;
 
 	return {
@@ -196,6 +197,10 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 		configResolved(config) {
 			projectRoot = config.root;
 			isDev = config.command === 'serve';
+			// Support absolute paths (e.g. DEV_CONTENT_DIR from .env)
+			resolvedContentDir = path.isAbsolute(contentDir)
+				? contentDir
+				: path.join(projectRoot, contentDir);
 		},
 
 		// -----------------------------------------------------------------------
@@ -223,7 +228,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 						// Could be series/{seriesSlug}/{chapterSlug}/{filename}
 						// Image lives at: series/{seriesSlug}/{chapterSlug}/images/{filename}
 						imagePath = path.join(
-							projectRoot, contentDir, typeDir, parentSlug, slug, 'images', filename
+							resolvedContentDir, typeDir, parentSlug, slug, 'images', filename
 						);
 						// Also try: series/{seriesSlug}/images/{slug}/{filename} (series-level images in subfolders)
 						// But first check if the nested chapter path exists
@@ -256,7 +261,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 
 				// Build path to image in content folder
 				imagePath = path.join(
-					projectRoot, contentDir, typeDir, slug, 'images', filename
+					resolvedContentDir, typeDir, slug, 'images', filename
 				);
 
 				try {
@@ -291,7 +296,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 				return;
 			}
 
-			const contentRoot = path.join(projectRoot, contentDir);
+			const contentRoot = resolvedContentDir;
 			const outputRoot = path.join(projectRoot, 'static', outputDir);
 
 			// Ensure output directory exists
