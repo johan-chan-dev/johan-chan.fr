@@ -57,7 +57,7 @@ Le plus dur, c'est pas l'outil. C'est ce que ça fait à ton identité. Si t'as 
 
 Augmenté, c'est pas juste un nouveau rapport à l'outil. C'est un nouveau rapport à soi. Accepter que ta valeur est pas dans le geste mais dans le jugement. Que le métier c'est pas le code, c'est le besoin auquel il répond.
 
-L'artisanat du code, celui qu'on a toujours connu, disparaît pas. Tant qu'il y aura des passionnés qui veulent comprendre chaque ligne, il existera. Mais à côté, un autre artisanat émerge : celui du logiciel. Penser le système, guider l'IA, comprendre le problème métier. C'est pas moins artisanal. C'est un geste différent.
+Le Software Craftsmanship, le soin du code, ça disparaît pas. Tant qu'il y aura des passionnés qui veulent comprendre chaque ligne, il existera. Mais à côté, quelque chose émerge. Pas encore de nom. Une pratique qui vient après le soin du code : les contraintes, l'architecture, le problème métier. Penser le système, guider l'IA, assembler le tout. C'est pas moins artisanal. C'est un geste différent.
 
 ---
 
