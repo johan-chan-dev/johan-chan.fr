@@ -1,7 +1,3 @@
-<!-- DRAFT v2 — restructure : concret plus tôt, anaphores cassées, Morris intégré -->
-<!-- Cible : devs, crafters, tech leads -->
-<!-- Angle : augmenté = changement de rôle, pas accélération -->
-
 Le mot "augmenté" circule beaucoup. En général, il veut dire "plus vite". Un dev augmenté, c'est un dev qui produit plus de code en moins de temps. Le dashboard monte, tout le monde est content.
 
 C'est pas ça.
