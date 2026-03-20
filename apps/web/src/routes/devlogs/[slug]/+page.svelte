@@ -19,7 +19,7 @@
 </script>
 
 <SEO
-	title="{post.title} | {projectInfo.name} Devlog | Johan Chan"
+	title="{post.title} | {projectInfo.name} Devlog"
 	description={post.excerpt}
 	type="article"
 	image={post.ogUrl || post.heroUrl || post.coverUrl || post.image}

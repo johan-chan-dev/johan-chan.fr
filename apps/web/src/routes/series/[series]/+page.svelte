@@ -10,7 +10,7 @@
 </script>
 
 <SEO
-	title="{series.title} | Johan Chan"
+	title="{series.title}"
 	description={series.description}
 	type="article"
 	image={series.coverUrl || undefined}

@@ -18,7 +18,7 @@
 </script>
 
 <SEO
-	title="{article.title} | Johan Chan"
+	title="{article.title}"
 	description={article.excerpt}
 	type="article"
 	image={article.ogUrl || article.coverUrl || article.image}
