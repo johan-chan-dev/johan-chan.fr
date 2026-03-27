@@ -30,6 +30,11 @@ const metaModules = import.meta.glob('../../../../../packages/content/**/meta.js
 	eager: true
 });
 
+// For production: import .svx files as compiled Svelte components (mdsvex pipeline)
+const svxModules = import.meta.glob('../../../../../packages/content/**/*.svx', {
+	eager: true
+});
+
 // Content directory path (for dev mode file reads)
 // In dev, DEV_CONTENT_DIR can point to le-cockpit's content (source of truth)
 const CONTENT_DIR = dev && process.env.DEV_CONTENT_DIR
@@ -42,6 +47,7 @@ const TYPE_DIRS = ['articles', 'series', 'devlogs', 'posts'] as const;
 interface LoadedContentItem extends ContentItem {
 	content: string;
 	filePath: string;
+	renderMode: 'md' | 'svx';
 }
 
 
@@ -98,7 +104,7 @@ function scanContentFolders(): IndexEntryWithCover[] {
 
 				// For series: check if this is a series parent folder (has meta.json but no content.md)
 				// If so, scan its subdirectories for chapters
-				if (typeDir === 'series' && !fs.existsSync(path.join(folderPath, 'content.md'))) {
+				if (typeDir === 'series' && !fs.existsSync(path.join(folderPath, 'content.md')) && !fs.existsSync(path.join(folderPath, 'content.svx'))) {
 					const seriesSlug = entry.name;
 					const chapterEntries = fs.readdirSync(folderPath, { withFileTypes: true });
 					for (const chapterEntry of chapterEntries) {
@@ -124,10 +130,12 @@ function scanContentFolders(): IndexEntryWithCover[] {
 								? `/@content-images/${typeDir}/${seriesSlug}/${chapterEntry.name}/${imageFilename}`
 								: undefined;
 
-							// Read content.md for reading time
-							const chapterContentPath = path.join(chapterPath, 'content.md');
-							const chapterContent = fs.existsSync(chapterContentPath)
-								? fs.readFileSync(chapterContentPath, 'utf-8')
+							// Read content for reading time (try .svx first, then .md)
+							const svxContentPath = path.join(chapterPath, 'content.svx');
+							const mdContentPath = path.join(chapterPath, 'content.md');
+							const readingContentPath = fs.existsSync(svxContentPath) ? svxContentPath : mdContentPath;
+							const chapterContent = fs.existsSync(readingContentPath)
+								? fs.readFileSync(readingContentPath, 'utf-8')
 								: '';
 
 							items.push({
@@ -165,10 +173,12 @@ function scanContentFolders(): IndexEntryWithCover[] {
 						? `/@content-images/${typeDir}/${entry.name}/${imageFilename}`
 						: undefined;
 
-					// Read content.md for reading time
-					const contentMdPath = path.join(folderPath, 'content.md');
-					const contentText = fs.existsSync(contentMdPath)
-						? fs.readFileSync(contentMdPath, 'utf-8')
+					// Read content for reading time (try .svx first, then .md)
+					const svxContentPath = path.join(folderPath, 'content.svx');
+					const mdContentPath = path.join(folderPath, 'content.md');
+					const readingContentPath = fs.existsSync(svxContentPath) ? svxContentPath : mdContentPath;
+					const contentText = fs.existsSync(readingContentPath)
+						? fs.readFileSync(readingContentPath, 'utf-8')
 						: '';
 
 					items.push({
@@ -541,21 +551,29 @@ function readFolderContent(folderPath: string): LoadedContentItem | undefined {
 			return undefined;
 		}
 
-		// Read content.md
-		const contentPath = path.join(folderPath, 'content.md');
+		// Detect content format: .svx (mdsvex) or .md (marked)
+		const svxPath = path.join(folderPath, 'content.svx');
+		const mdPath = path.join(folderPath, 'content.md');
+		const hasSvx = fs.existsSync(svxPath);
+		const renderMode = hasSvx ? 'svx' : 'md';
+		const contentPath = hasSvx ? svxPath : mdPath;
+
 		let content = fs.existsSync(contentPath)
 			? fs.readFileSync(contentPath, 'utf-8').trim()
 			: '';
 
-		// Transform image URLs using the full content path (including series slug if nested)
-		content = transformImageUrls(content, imageTypeDir, slug, dev && !building);
+		// Only transform image URLs for .md (mdsvex handles images differently via layout)
+		if (renderMode === 'md') {
+			content = transformImageUrls(content, imageTypeDir, slug, dev && !building);
+		}
 
 		return {
 			...metaResult.data,
 			type,
 			slug,
 			content,
-			filePath: folderPath
+			filePath: folderPath,
+			renderMode
 		};
 	} catch (error) {
 		console.error(`Error reading folder ${folderPath}:`, error);
@@ -586,7 +604,8 @@ function parseLegacyContentFile(filePath: string): LoadedContentItem | undefined
 		return {
 			...result.data,
 			content,
-			filePath
+			filePath,
+			renderMode: 'md' as const
 		};
 	} catch (error) {
 		console.error(`Error parsing ${filePath}:`, error);
@@ -684,19 +703,25 @@ function readContentFromModules(slug: string): LoadedContentItem | undefined {
 			continue;
 		}
 
-		// Find matching content.md
-		const contentPath = metaPath.replace('meta.json', 'content.md');
-		let content = (contentModules[contentPath] as string) || '';
+		// Check for .svx content first (mdsvex pipeline), then .md (marked pipeline)
+		const svxPath = metaPath.replace('meta.json', 'content.svx');
+		const mdContentPath = metaPath.replace('meta.json', 'content.md');
+		const hasSvx = svxPath in svxModules;
+		const renderMode = hasSvx ? 'svx' : 'md';
 
-		// Transform image URLs for production
-		content = transformImageUrls(content, imageTypeDir, folderSlug, dev && !building);
+		let content = '';
+		if (renderMode === 'md') {
+			content = (contentModules[mdContentPath] as string) || '';
+			content = transformImageUrls(content, imageTypeDir, folderSlug, dev && !building);
+		}
 
 		return {
 			...metaResult.data,
 			type,
 			slug: folderSlug,
 			content,
-			filePath: metaPath
+			filePath: metaPath,
+			renderMode
 		};
 	}
 
@@ -722,7 +747,8 @@ function readContentFromModules(slug: string): LoadedContentItem | undefined {
 				return {
 					...result.data,
 					content,
-					filePath: modulePath
+					filePath: modulePath,
+					renderMode: 'md' as const
 				};
 			}
 		} catch (error) {
