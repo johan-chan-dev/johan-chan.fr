@@ -22,11 +22,13 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 	}
 
-	// Configure marked with Shiki renderer for syntax highlighting
-	const renderer = await createShikiRenderer();
-	marked.use({ renderer });
-
-	const htmlContent = await marked(item.content);
+	// Render markdown content (only for .md — .svx is pre-compiled by mdsvex)
+	let htmlContent: string | null = null;
+	if (item.renderMode === 'md') {
+		const renderer = await createShikiRenderer();
+		marked.use({ renderer });
+		htmlContent = await marked(item.content);
+	}
 
 	// Compute cover thumbnail URL, hero image URL, and OG image URL
 	const coverUrl = getCoverImageUrl(item.type, slug, item.image);
@@ -54,6 +56,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		post: {
 			...item,
 			htmlContent,
+			renderMode: item.renderMode,
 			coverUrl,
 			heroUrl: hero?.url ?? null,
 			heroSrcset: hero?.srcset ?? null,
