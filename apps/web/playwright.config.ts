@@ -12,7 +12,7 @@ export default defineConfig({
 		['junit', { outputFile: 'test-results/results.xml' }]
 	],
 	use: {
-		baseURL: 'http://localhost:5173',
+		baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:5173',
 		trace: 'on-first-retry',
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure'
@@ -20,37 +20,44 @@ export default defineConfig({
 	projects: [
 		{
 			name: 'chromium',
-			use: { ...devices['Desktop Chrome'] }
+			use: { ...devices['Desktop Chrome'] },
+			testIgnore: 'visual-regression.spec.ts'
 		},
 		{
 			name: 'firefox',
-			use: { ...devices['Desktop Firefox'] }
+			use: { ...devices['Desktop Firefox'] },
+			testIgnore: 'visual-regression.spec.ts'
 		},
 		{
 			name: 'webkit',
-			use: { ...devices['Desktop Safari'] }
+			use: { ...devices['Desktop Safari'] },
+			testIgnore: 'visual-regression.spec.ts'
 		},
 		{
 			name: 'Mobile Chrome',
-			use: { ...devices['Pixel 5'] }
+			use: { ...devices['Pixel 5'] },
+			testIgnore: 'visual-regression.spec.ts'
 		},
 		{
 			name: 'Mobile Safari',
-			use: { ...devices['iPhone 12'] }
+			use: { ...devices['iPhone 12'] },
+			testIgnore: 'visual-regression.spec.ts'
+		},
+		{
+			name: 'visual-regression',
+			use: {
+				...devices['Desktop Chrome'],
+				viewport: { width: 1280, height: 720 }
+			},
+			testMatch: 'visual-regression.spec.ts'
 		}
 	],
 	webServer: [
 		{
-			command: 'npm run dev',
-			url: 'http://localhost:5173',
+			command: 'pnpm dev',
+			url: process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:5173',
 			reuseExistingServer: !process.env.CI,
 			timeout: 120 * 1000
-		},
-		{
-			command: 'npm run mailpit:start',
-			url: 'http://localhost:8025',
-			reuseExistingServer: true,
-			timeout: 30 * 1000
 		}
 	]
 });
