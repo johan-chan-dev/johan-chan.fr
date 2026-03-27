@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import { formatDate } from '$lib/utils/format';
 	import { appHref } from '$lib/utils/href';
 	import { previewHref } from '$lib/utils/preview';
@@ -13,6 +14,7 @@
 	const seriesInfo = $derived(data.seriesInfo);
 	const prevChapter = $derived(data.prevChapter);
 	const nextChapter = $derived(data.nextChapter);
+	const ChapterComponent = $derived((data.chapter as unknown as { component?: Component }).component);
 
 	const isDraft = $derived(chapter.published === false);
 	const isPreview = $derived(chapter.preview === true);
@@ -97,7 +99,11 @@
 	</header>
 
 	<div class="chapter-content">
-		{@html chapter.htmlContent}
+		{#if ChapterComponent}
+			<ChapterComponent />
+		{:else}
+			{@html chapter.htmlContent}
+		{/if}
 	</div>
 
 	<!-- Chapter Navigation -->

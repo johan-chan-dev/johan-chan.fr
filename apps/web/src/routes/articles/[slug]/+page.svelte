@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import { formatDate } from '$lib/utils/format';
 	import { appHref } from '$lib/utils/href';
 	import { previewHref } from '$lib/utils/preview';
@@ -12,6 +13,7 @@
 	const { data } = $props();
 	const article = $derived(data.article);
 	const relatedArticles = $derived(data.relatedArticles);
+	const ArticleComponent = $derived((data.article as unknown as { component?: Component }).component);
 
 	const isDraft = $derived(article.published === false);
 	const isPreview = $derived(article.preview === true);
@@ -92,7 +94,11 @@
 	<hr class="content-separator" />
 
 	<div class="article-content">
-		{@html article.htmlContent}
+		{#if ArticleComponent}
+			<ArticleComponent />
+		{:else}
+			{@html article.htmlContent}
+		{/if}
 	</div>
 
 	{#if relatedArticles.length > 0}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Component } from 'svelte';
 	import { formatDate } from '$lib/utils/format';
 	import { appHref } from '$lib/utils/href';
 	import { previewHref } from '$lib/utils/preview';
@@ -13,6 +14,7 @@
 	const projectInfo = $derived(data.projectInfo);
 	const newerPost = $derived(data.newerPost);
 	const olderPost = $derived(data.olderPost);
+	const PostComponent = $derived((data.post as unknown as { component?: Component }).component);
 
 	const isDraft = $derived(post.published === false);
 	const isPreview = $derived(post.preview === true);
@@ -94,7 +96,11 @@
 		</header>
 
 	<div class="post-content">
-		{@html post.htmlContent}
+		{#if PostComponent}
+			<PostComponent />
+		{:else}
+			{@html post.htmlContent}
+		{/if}
 	</div>
 
 	<!-- Post Navigation -->
