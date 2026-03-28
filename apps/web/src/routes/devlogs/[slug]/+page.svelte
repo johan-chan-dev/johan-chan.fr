@@ -332,7 +332,7 @@
 	}
 
 	.post-content :global(pre) {
-		@apply bg-base-200 text-base-content p-4 rounded-lg overflow-x-auto mb-4;
+		@apply bg-base-200 text-base-content p-4 rounded-lg overflow-x-auto mb-4 w-0 min-w-full;
 	}
 
 	.post-content :global(img) {

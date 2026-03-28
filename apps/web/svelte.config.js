@@ -30,7 +30,17 @@ const config = {
 				highlighter: async (code, lang) => {
 					const html = shikiHighlighter.codeToHtml(code, {
 						lang: lang || 'text',
-						theme: 'github-dark'
+						theme: 'github-dark',
+						transformers: [
+							{
+								pre(node) {
+									node.properties.class = 'shiki-pre overflow-x-auto rounded-lg p-4 my-4';
+								},
+								code(node) {
+									node.properties.class = 'shiki-code';
+								}
+							}
+						]
 					});
 					return `{@html \`${escapeSvelte(html)}\`}`;
 				}
