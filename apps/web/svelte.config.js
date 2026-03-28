@@ -2,6 +2,10 @@ import { mdsvex, escapeSvelte } from 'mdsvex';
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { createHighlighter } from 'shiki';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const shikiHighlighter = await createHighlighter({
 	themes: ['github-dark', 'github-light'],
@@ -18,7 +22,7 @@ const config = {
 		vitePreprocess(),
 		mdsvex({
 			extensions: ['.svx'],
-			layout: './src/lib/layouts/content.svelte',
+			layout: resolve(__dirname, './src/lib/layouts/content.svelte'),
 			highlight: {
 				highlighter: async (code, lang) => {
 					const html = shikiHighlighter.codeToHtml(code, {
