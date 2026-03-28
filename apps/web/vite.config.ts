@@ -26,6 +26,15 @@ const plugins: any[] = [
 
 export default defineConfig({
 	plugins,
-	server: { host: true, allowedHosts: ['devbox'] },
+	server: {
+		host: true,
+		allowedHosts: ['.dev.box', 'devbox'],
+		fs: {
+			allow: [
+				// Allow Vite to access content outside project root (DEV_CONTENT_DIR for mdsvex compilation)
+				...(devContentDir ? [devContentDir] : [])
+			]
+		}
+	},
 	test: { include: ['src/**/*.{test,spec}.{js,ts}'] }
 });
