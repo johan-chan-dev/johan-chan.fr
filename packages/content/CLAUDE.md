@@ -39,6 +39,58 @@ This API was removed in v3.
 </C.Callout>
 ```
 
-### Adding New Components
+## Three Ways to Use Components
 
-New components are added in the web app at `apps/web/src/lib/components/content/` and exported from the barrel file (`index.ts`). They become available as `C.ComponentName` in all `.svx` files automatically. Update this documentation when adding new components.
+| Need | Approach | Import |
+|------|----------|--------|
+| Shared component (Callout, etc.) | `<C.Callout>` | Auto-injected, no import needed |
+| Inline one-off logic | `<script>` + markup in `.svx` | N/A — write directly in the file |
+| Complex one-off component | Colocate `.svelte` file next to `content.svx` | `import Demo from './Demo.svelte'` |
+
+### Shared components (`C.` namespace)
+
+Available everywhere, no imports. See "Available Components" above.
+
+### Inline logic
+
+`.svx` is a Svelte file — reactive logic works directly:
+
+```svelte
+<script>
+let count = $state(0);
+</script>
+
+Click the button: <button onclick={() => count++}>Clicked {count} times</button>
+
+Regular **markdown** continues here.
+```
+
+### Colocated components
+
+For complex one-off components, create a `.svelte` file next to `content.svx` in the same folder:
+
+```
+articles/my-article/
+├── meta.json
+├── content.svx
+├── InteractiveDemo.svelte    ← colocated component
+└── images/
+```
+
+Import with a relative path in `content.svx`:
+
+```svelte
+<script>
+import InteractiveDemo from './InteractiveDemo.svelte';
+</script>
+
+## Try it out
+
+<InteractiveDemo />
+```
+
+Colocated components are only available to the content item they live with. They support full Svelte 5 features (runes, snippets, transitions, etc.).
+
+## Adding New Shared Components
+
+New shared components are added in the web app at `apps/web/src/lib/components/content/` and exported from the barrel file (`index.ts`). They become available as `C.ComponentName` in all `.svx` files automatically. Update this documentation when adding new components.
