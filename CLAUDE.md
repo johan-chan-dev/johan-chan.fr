@@ -109,6 +109,17 @@ Custom Vite plugin that:
 
 `PUBLIC_PREVIEW_KEY` env var controls preview access.
 
+### Rendering Pipeline
+
+Two rendering paths, selected per content item by which file exists:
+
+- **`content.md`** — plain markdown rendered by `marked` + shiki at runtime → `{@html}`. Default for all content.
+- **`content.svx`** — markdown with Svelte components, compiled by mdsvex at build time → dynamic Svelte component. Used when content needs interactive elements.
+
+Each `.svx` file must explicitly import its components (`import Callout from '$lib/components/content/Callout.svelte'`). Custom components live in `$lib/components/content/`.
+
+Full documentation: `apps/web/docs/rendering-pipeline.md`
+
 ## Web App Architecture
 
 ### Routes (`apps/web/src/routes/`)
