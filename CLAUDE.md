@@ -116,7 +116,7 @@ Two rendering paths, selected per content item by which file exists:
 - **`content.md`** — plain markdown rendered by `marked` + shiki at runtime → `{@html}`. Default for all content.
 - **`content.svx`** — markdown with Svelte components, compiled by mdsvex at build time → dynamic Svelte component. Used when content needs interactive elements.
 
-Each `.svx` file must explicitly import its components (`import Callout from '$lib/components/content/Callout.svelte'`). Custom components live in `$lib/components/content/`.
+Content components are auto-injected under the `C` namespace — authors write `<C.Callout>` with no imports needed. Components live in `$lib/components/content/` and are exported from the barrel file (`index.ts`). Component reference: `packages/content/CLAUDE.md`.
 
 Full documentation: `apps/web/docs/rendering-pipeline.md`
 

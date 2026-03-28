@@ -50,29 +50,27 @@ Both paths use shiki, but at different stages:
 
 ## Custom components in `.svx`
 
-Each `.svx` file must explicitly import the components it uses:
+All content components are auto-injected into `.svx` files under the `C` namespace. No imports needed — authors just use `<C.ComponentName>`:
 
 ```svelte
-<script>
-import Callout from '$lib/components/content/Callout.svelte';
-</script>
-
-<Callout type="tip" title="Example">
+<C.Callout type="tip" title="Example">
 Content here
-</Callout>
+</C.Callout>
 ```
+
+This works via a preprocessor (`src/lib/preprocessors/content-components.js`) that injects `import * as C from '$lib/components/content'` into every `.svx` file before mdsvex processes it.
 
 ### Available components
 
-| Component | Props | Description |
-|-----------|-------|-------------|
-| `Callout` | `type`: `info` / `warning` / `tip` / `note`, `title`: string | Styled aside box |
+See `packages/content/CLAUDE.md` for the full component reference (props, variants, examples). That file is the contract between studio and the web app.
 
 ### Adding a new custom component
 
 1. Create the component in `$lib/components/content/`.
-2. Document its props and usage in the table above.
-3. `.svx` files import it explicitly — no global registration needed.
+2. Export it from `$lib/components/content/index.ts` (barrel file).
+3. Document it in `packages/content/CLAUDE.md`.
+
+It becomes available as `C.ComponentName` in all `.svx` files automatically.
 
 ## Image handling
 

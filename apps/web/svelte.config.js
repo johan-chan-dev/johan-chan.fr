@@ -4,6 +4,7 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import { createHighlighter } from 'shiki';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
+import { contentComponents } from './src/lib/preprocessors/content-components.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -19,6 +20,7 @@ const shikiHighlighter = await createHighlighter({
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [
+		contentComponents(),
 		vitePreprocess(),
 		mdsvex({
 			extensions: ['.svx'],
