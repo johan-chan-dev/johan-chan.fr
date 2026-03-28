@@ -43,6 +43,8 @@ jobs:
 
       - name: Build
         run: pnpm turbo run build --filter=@johan-chan/web
+        env:
+          PUBLIC_PREVIEW_KEY: ${{ secrets.PUBLIC_PREVIEW_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
