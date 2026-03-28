@@ -7,7 +7,7 @@ export const load: PageLoad = async ({ data }) => {
 	}
 
 	const slug = data.article.slug;
-	const modules = import.meta.glob('../../../../../../packages/content/articles/*/content.svx');
+	const modules = import.meta.glob('$content/articles/*/content.svx');
 	const modulePath = Object.keys(modules).find((p) => p.includes(`/${slug}/content.svx`));
 
 	if (!modulePath) {

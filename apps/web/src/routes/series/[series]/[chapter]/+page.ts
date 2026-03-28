@@ -7,7 +7,7 @@ export const load: PageLoad = async ({ data }) => {
 	}
 
 	const slug = data.chapter.slug;
-	const modules = import.meta.glob('../../../../../../../packages/content/series/**/content.svx');
+	const modules = import.meta.glob('$content/series/**/content.svx');
 	const modulePath = Object.keys(modules).find((p) => p.includes(`/${slug}/content.svx`));
 
 	if (!modulePath) {

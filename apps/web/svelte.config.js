@@ -13,7 +13,8 @@ const shikiHighlighter = await createHighlighter({
 	langs: [
 		'javascript', 'typescript', 'svelte', 'html', 'css',
 		'json', 'bash', 'shell', 'yaml', 'markdown',
-		'jsx', 'tsx', 'toml', 'dockerfile'
+		'jsx', 'tsx', 'toml', 'dockerfile',
+		'python', 'java', 'go', 'rust', 'c', 'cpp', 'sql'
 	]
 });
 

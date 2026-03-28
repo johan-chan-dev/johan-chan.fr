@@ -18,20 +18,20 @@ import { transformImageUrls } from '../../../vite-plugins/content-images';
 
 // For production: import all content files at build time
 // This includes both legacy .md files and new folder-based content.md files
-const contentModules = import.meta.glob('../../../../../packages/content/**/*.md', {
+const contentModules = import.meta.glob('$content/**/*.md', {
 	query: '?raw',
 	import: 'default',
 	eager: true
 });
 
 // Also import meta.json files for folder-based content
-const metaModules = import.meta.glob('../../../../../packages/content/**/meta.json', {
+const metaModules = import.meta.glob('$content/**/meta.json', {
 	import: 'default',
 	eager: true
 });
 
 // For production: import .svx files as compiled Svelte components (mdsvex pipeline)
-const svxModules = import.meta.glob('../../../../../packages/content/**/*.svx', {
+const svxModules = import.meta.glob('$content/**/*.svx', {
 	eager: true
 });
 

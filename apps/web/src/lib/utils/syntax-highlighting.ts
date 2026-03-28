@@ -25,7 +25,14 @@ export async function initHighlighter(): Promise<Highlighter> {
 			'jsx',
 			'tsx',
 			'toml',
-			'dockerfile'
+			'dockerfile',
+			'python',
+			'java',
+			'go',
+			'rust',
+			'c',
+			'cpp',
+			'sql'
 		]
 	});
 

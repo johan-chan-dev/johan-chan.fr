@@ -6,9 +6,14 @@ import type { KIT_ROUTES } from '$lib/ROUTES';
 import { kitRoutes } from 'vite-plugin-kit-routes';
 import tailwindcss from '@tailwindcss/vite';
 import { contentImages } from './vite-plugins/content-images';
+import path from 'path';
 
 // In dev, DEV_CONTENT_DIR can point to le-cockpit's content (source of truth)
 const devContentDir = process.env.DEV_CONTENT_DIR;
+// Resolve content directory — used as Vite alias for $content
+const contentDir = devContentDir
+	? path.resolve(devContentDir)
+	: path.resolve('../../packages/content');
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const plugins: any[] = [
@@ -26,6 +31,11 @@ const plugins: any[] = [
 
 export default defineConfig({
 	plugins,
+	resolve: {
+		alias: {
+			'$content': contentDir
+		}
+	},
 	server: {
 		host: true,
 		allowedHosts: ['.dev.box', 'devbox'],
