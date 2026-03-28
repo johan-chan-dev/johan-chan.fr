@@ -1,0 +1,12 @@
+{
+  "type": "article",
+  "title": "Boring languages win",
+  "date": "2026-03-27",
+  "excerpt": "L'IA se plante deux fois plus en JavaScript qu'en Java. Le problème c'est pas le modèle, c'est le langage.",
+  "slug": "boring-languages-win",
+  "image": "./images/hero.webp",
+  "imageFocus": "center",
+  "published": true,
+  "preview": true,
+  "tags": ["ia", "craft", "langages"]
+}
