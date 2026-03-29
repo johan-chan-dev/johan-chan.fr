@@ -32,11 +32,11 @@
 <rect x="0" y={cy} width={cx} height={$height - cy} fill={fills[3]} />
 
 {#if labels}
-	<!-- Position labels in the corners of each quadrant, away from the center where points cluster -->
-	<text x={10} y={20} text-anchor="start" class="quadrant-label">{labels[0]}</text>
-	<text x={$width - 10} y={20} text-anchor="end" class="quadrant-label">{labels[1]}</text>
-	<text x={$width - 10} y={$height - 10} text-anchor="end" class="quadrant-label">{labels[2]}</text>
-	<text x={10} y={$height - 10} text-anchor="start" class="quadrant-label">{labels[3]}</text>
+	<!-- Position labels at the bottom of each quadrant, near the center dividers -->
+	<text x={10} y={cy - 8} text-anchor="start" class="quadrant-label">{labels[0]}</text>
+	<text x={$width - 10} y={cy - 8} text-anchor="end" class="quadrant-label">{labels[1]}</text>
+	<text x={$width - 10} y={$height - 8} text-anchor="end" class="quadrant-label">{labels[2]}</text>
+	<text x={10} y={$height - 8} text-anchor="start" class="quadrant-label">{labels[3]}</text>
 {/if}
 
 <style>
