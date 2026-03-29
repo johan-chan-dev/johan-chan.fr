@@ -39,6 +39,33 @@ This API was removed in v3.
 </C.Callout>
 ```
 
+#### `C.ScatterChart`
+
+Scatter plot with labeled quadrants. Powered by LayerCake.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `xLabel` | `string` | — | Label for the x-axis (displayed below chart) |
+| `yLabel` | `string` | — | Label for the y-axis (displayed left of chart, rotated) |
+| `points` | `Array<{ label, x, y, color? }>` | required | Data points with 0-100 coordinates |
+| `quadrants` | `[string, string, string, string]` | — | Labels for [top-left, top-right, bottom-right, bottom-left] quadrants |
+
+Coordinates are percentages: `x: 0` = left edge, `x: 100` = right edge, `y: 0` = bottom, `y: 100` = top.
+
+```svelte
+<C.ScatterChart
+  xLabel="Boring → Expressif"
+  yLabel="Permissif → Strict"
+  quadrants={["Fiable pour l'IA", "Strict mais complexe", "Imprévisible pour l'IA", "Simple mais risqué"]}
+  points={[
+    { label: "Go", x: 10, y: 85 },
+    { label: "Java", x: 25, y: 80 },
+    { label: "Python", x: 78, y: 24 },
+    { label: "Rust", x: 70, y: 95, color: "#f59e0b" }
+  ]}
+/>
+```
+
 ## Three Ways to Use Components
 
 | Need | Approach | Import |
