@@ -8,22 +8,17 @@
 		yGet: Readable<(d: Record<string, unknown>) => number>;
 	}>('LayerCake');
 
-	function labelTransform(xPct: number, yPct: number): string {
-		// Flip label to the left when point is in the right 30% of the chart
-		const dx = xPct > 70 ? 'calc(-100% - 10px)' : '10px';
-		// Shift label down when near top, up when near bottom
-		const dy = yPct < 15 ? '2px' : yPct > 85 ? 'calc(-100% - 2px)' : '-50%';
-		return `translate(${dx}, ${dy})`;
-	}
+	let containerWidth = $state(300);
 </script>
 
-<div class="labels">
+<div class="labels" bind:clientWidth={containerWidth}>
 	{#each $data as d}
-		{@const xPct = $xGet(d)}
-		{@const yPct = $yGet(d)}
+		{@const xPx = $xGet(d)}
+		{@const yPx = $yGet(d)}
+		{@const flipLeft = xPx > containerWidth * 0.6}
 		<div
 			class="label"
-			style="left: {xPct}%; top: {yPct}%; transform: {labelTransform(xPct, yPct)};"
+			style="left: {xPx}px; top: {yPx}px; transform: translate({flipLeft ? 'calc(-100% - 8px)' : '8px'}, -50%);"
 		>
 			{d.label as string}
 		</div>
