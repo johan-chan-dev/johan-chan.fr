@@ -54,6 +54,8 @@ Les trois sont du Python valide. Y'en a d'autres (generator expressions, numpy..
 
 L'expressivité, c'est ça : le nombre de chemins pour arriver au même endroit. Pour un humain expert, c'est de la puissance. Moins de code, plus dense, plus élégant. Pour un LLM, chaque chemin en plus c'est un endroit où se tromper.
 
+L'expressivité, c'est du DRY poussé loin. Les langages expressifs ont été conçus pour résoudre un problème humain : la répétition. Écrire moins, abstraire plus, ne jamais se répéter. Le LLM n'a pas ce problème. Écrire 10 fois le même pattern ne le fatigue pas. Mais choisir entre 5 façons de ne pas se répéter, ça le rend confus. Il n'a pas de préférence, juste des probabilités. Cinq options valides c'est cinq probabilités proches, et il prend la plus fréquente, pas la plus adaptée.
+
 Paul Graham défendait l'expressivité comme une arme secrète. Dans *Beating the Averages*, il expliquait que Lisp lui donnait un avantage concurrentiel parce que ses concurrents ne pouvaient même pas voir ce qui leur manquait. Le "Blub Paradox" : le programmeur moyen regarde un langage plus expressif et voit des trucs bizarres, pas de la puissance.
 
 Rob Pike a pris le contre-pied exact en créant Go. *"Less is exponentially more."* Go est conçu pour que le code soit lisible par les autres, pas pour que l'auteur se sente puissant.
