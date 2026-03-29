@@ -6,7 +6,7 @@ Python est le langage le plus utilisé pour faire de l'IA. C'est aussi un des pi
 
 En 2022, une équipe a testé Copilot sur 33 problèmes LeetCode dans quatre langages. Java : 57% de code correct. JavaScript : 27%. Même modèle, même benchmark. La seule variable, c'est le langage. Les modèles ont beaucoup progressé depuis. L'écart entre langages, par contre, persiste.
 
-En mars 2026, une étude teste Gemini 2.5 Flash sur la génération de suites de tests. Résultat : 2 155 tentatives en Python pour arriver à une suite correcte, contre 323 en Java. Presque 7 fois plus. Le typage dynamique force le modèle à deviner les types au fur et à mesure, et c'est là qu'il peut se tromper.
+En mars 2026, une étude teste Gemini 2.5 Flash sur la génération de suites de tests. Résultat : 2 155 tentatives en Python pour arriver à une suite correcte, contre 323 en Java. Presque 7 fois plus de tours pour converger. C'est pas juste un taux d'erreur, c'est une friction de base qui se propage sur tout le workflow.
 
 Le langage que les devs trouvent ennuyeux est celui où l'IA se plante le moins.
 
@@ -107,7 +107,7 @@ Plus un framework repose sur des conventions implicites, des décorateurs, de l'
 
 Le truc, c'est que le code boring était déjà la recommandation du craft bien avant l'IA. Explicit is better than implicit. KISS. Pas de magie. On répète ça depuis des années. Ce qui change, c'est qu'on a maintenant les chiffres pour le prouver.
 
-Le choix du langage c'est la première couche. Y'a d'autres couches qui aident : le contexte qu'on donne au modèle, les tests, l'architecture du projet. Mais plus la première couche est expressive, plus les autres doivent compenser.
+Le choix du langage c'est la friction de base. Y'a d'autres couches qui aident : le contexte qu'on donne au modèle, les tests, l'architecture du projet. Mais plus la première couche est expressive, plus les autres doivent compenser.
 
 <C.Callout type="tip" title="Boring ≠ propre">
 Du Python idiomatique peut être très propre, bien structuré, bien nommé, et très dur pour un LLM. Parce que "propre" ça dit rien sur le nombre de chemins possibles. "Boring" si.
