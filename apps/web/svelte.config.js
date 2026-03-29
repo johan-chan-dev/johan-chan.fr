@@ -8,14 +8,30 @@ import { contentComponents } from './src/lib/preprocessors/content-components.js
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Shared shiki config — canonical source: src/lib/utils/shiki-config.ts
+// Cannot import .ts in svelte.config.js. Keep in sync manually.
+const SHIKI_THEMES = ['github-dark', 'github-light'];
+const SHIKI_DEFAULT_THEME = 'github-dark';
+const SHIKI_LANGS = [
+	'javascript', 'typescript', 'svelte', 'html', 'css',
+	'json', 'bash', 'shell', 'yaml', 'markdown',
+	'jsx', 'tsx', 'toml', 'dockerfile',
+	'python', 'java', 'go', 'rust', 'c', 'cpp', 'sql'
+];
+const SHIKI_TRANSFORMERS = [
+	{
+		pre(node) {
+			node.properties.class = 'shiki-pre overflow-x-auto rounded-lg p-4 my-4';
+		},
+		code(node) {
+			node.properties.class = 'shiki-code';
+		}
+	}
+];
+
 const shikiHighlighter = await createHighlighter({
-	themes: ['github-dark', 'github-light'],
-	langs: [
-		'javascript', 'typescript', 'svelte', 'html', 'css',
-		'json', 'bash', 'shell', 'yaml', 'markdown',
-		'jsx', 'tsx', 'toml', 'dockerfile',
-		'python', 'java', 'go', 'rust', 'c', 'cpp', 'sql'
-	]
+	themes: SHIKI_THEMES,
+	langs: SHIKI_LANGS
 });
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -30,17 +46,8 @@ const config = {
 				highlighter: async (code, lang) => {
 					const html = shikiHighlighter.codeToHtml(code, {
 						lang: lang || 'text',
-						theme: 'github-dark',
-						transformers: [
-							{
-								pre(node) {
-									node.properties.class = 'shiki-pre overflow-x-auto rounded-lg p-4 my-4';
-								},
-								code(node) {
-									node.properties.class = 'shiki-code';
-								}
-							}
-						]
+						theme: SHIKI_DEFAULT_THEME,
+						transformers: SHIKI_TRANSFORMERS
 					});
 					return `{@html \`${escapeSvelte(html)}\`}`;
 				}

@@ -1,5 +1,12 @@
 import { createHighlighter } from 'shiki';
 import type { Highlighter } from 'shiki';
+import {
+	SHIKI_THEMES,
+	SHIKI_LANGS,
+	SHIKI_DEFAULT_THEME,
+	SHIKI_LANG_ALIASES,
+	SHIKI_TRANSFORMERS
+} from './shiki-config';
 
 let highlighter: Highlighter | null = null;
 
@@ -10,30 +17,8 @@ export async function initHighlighter(): Promise<Highlighter> {
 	}
 
 	highlighter = await createHighlighter({
-		themes: ['github-dark', 'github-light'],
-		langs: [
-			'javascript',
-			'typescript',
-			'svelte',
-			'html',
-			'css',
-			'json',
-			'bash',
-			'shell',
-			'yaml',
-			'markdown',
-			'jsx',
-			'tsx',
-			'toml',
-			'dockerfile',
-			'python',
-			'java',
-			'go',
-			'rust',
-			'c',
-			'cpp',
-			'sql'
-		]
+		themes: [...SHIKI_THEMES],
+		langs: [...SHIKI_LANGS]
 	});
 
 	return highlighter;
@@ -52,32 +37,13 @@ export async function createShikiRenderer() {
 				return `<pre class="shiki-pre overflow-x-auto rounded-lg p-4 my-4 bg-gray-100 dark:bg-gray-800"><code class="shiki-code">${escapeHtml(code)}</code></pre>`;
 			}
 
-			// Map common language aliases
-			const languageMap: Record<string, any> = {
-				js: 'javascript',
-				ts: 'typescript',
-				sh: 'bash',
-				yml: 'yaml',
-				md: 'markdown'
-			};
-
-			const language = languageMap[lang] || lang;
+			const language = SHIKI_LANG_ALIASES[lang] || lang;
 
 			try {
 				return shiki.codeToHtml(code, {
 					lang: language,
-					theme: 'github-dark',
-					transformers: [
-						{
-							// Add custom CSS classes for better styling integration
-							code(node) {
-								node.properties.class = 'shiki-code';
-							},
-							pre(node) {
-								node.properties.class = 'shiki-pre overflow-x-auto rounded-lg p-4 my-4';
-							}
-						}
-					]
+					theme: SHIKI_DEFAULT_THEME,
+					transformers: SHIKI_TRANSFORMERS
 				});
 			} catch (error) {
 				console.warn(`Failed to highlight code for language: ${lang}`, error);
