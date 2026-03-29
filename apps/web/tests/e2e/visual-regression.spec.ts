@@ -22,7 +22,7 @@ for (const { path: pagePath, name } of contentPages) {
 		await page.goto(pagePath);
 		await page.waitForLoadState('networkidle');
 
-		const contentBody = page.locator('.article-content, .post-content, .chapter-content');
+		const contentBody = page.locator('.prose-content');
 		await expect(contentBody).toBeVisible();
 
 		await expect(contentBody).toHaveScreenshot(`${name}.png`, {
