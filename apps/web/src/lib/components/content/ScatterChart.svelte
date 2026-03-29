@@ -25,7 +25,7 @@
 <figure class="scatter-chart-wrapper">
 	<div class="chart-row">
 		{#if yLabel}
-			<div class="y-label">{yLabel}</div>
+			<div class="y-label"><span>{yLabel}</span></div>
 		{/if}
 		<div class="chart-container">
 			<LayerCake
@@ -70,16 +70,17 @@
 		position: relative;
 	}
 	.y-label {
-		writing-mode: vertical-lr;
-		transform: rotate(180deg);
 		display: flex;
 		align-items: center;
-		justify-content: center;
 		font-size: 12px;
 		color: var(--color-base-content, #666);
 		opacity: 0.6;
 		white-space: nowrap;
 		padding-right: 6px;
+	}
+	.y-label span {
+		writing-mode: vertical-lr;
+		transform: rotate(180deg);
 	}
 	.x-label {
 		text-align: center;
