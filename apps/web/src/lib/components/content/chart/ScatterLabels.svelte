@@ -39,5 +39,6 @@
 		color: var(--color-base-content, #333);
 		white-space: nowrap;
 		pointer-events: none;
+		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 0, 0, 0.3);
 	}
 </style>
