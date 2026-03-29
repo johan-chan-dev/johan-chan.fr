@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ContentType } from '@johan-chan/content/schema';
+	import { typeToDir, type ContentType } from '@johan-chan/content/schema';
 	import type { IndexEntryWithCover } from '$lib/utils/content';
 	import { appHref } from '$lib/utils/href';
 	import { previewHref } from '$lib/utils/preview';
@@ -24,21 +24,13 @@
 	const isDraft = $derived(item.published === false);
 	const isPreview = $derived(item.preview === true);
 
-	// Map content types to URL paths (série -> series without accent)
-	const typeToPath: Record<ContentType, string> = {
-		article: 'articles',
-		série: 'series',
-		devlog: 'devlogs',
-		post: 'posts'
-	};
-
 	// For series chapters with parentSlug, use nested URL: /series/{parentSlug}/{slug}
 	const href = $derived.by(() => {
 		if (item.external_url) return item.external_url;
 		if (!item.slug) return '#';
 		const path = item.type === 'série' && item.parentSlug
 			? `/series/${item.parentSlug}/${item.slug}`
-			: `/${typeToPath[item.type]}/${item.slug}`;
+			: `/${typeToDir(item.type)}/${item.slug}`;
 		return previewHref(appHref(path));
 	});
 </script>

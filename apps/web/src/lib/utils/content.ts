@@ -726,120 +726,58 @@ function loadImageManifest(): Record<string, { cover?: string; optimized?: strin
 }
 
 /**
- * Get cover image URL for a content item
- * Dev: serves from Vite middleware
- * Prod: looks up optimized xs size from manifest
- * @param image - relative path like "./images/hero.png"
- * @param parentSlug - for nested series chapters, the series slug
+ * Resolve image path and manifest entry for a content item.
+ * Shared logic for cover, hero, and OG image URL functions.
  */
-export function getCoverImageUrl(
+function resolveImageEntry(
 	type: ContentType,
 	slug: string,
 	image: string | undefined,
 	parentSlug?: string
-): string | null {
+): { devUrl: string; entry: { cover?: string; optimized?: string; srcset?: string; og?: string } | undefined } | null {
 	if (!image) return null;
 
-	// Extract filename from relative path (./images/hero.png -> hero.png)
 	const filename = image.replace(/^\.\/images\//, '');
 	const typeDir = typeToDir(type);
-	// For nested series: series/{seriesSlug}/{chapterSlug}
 	const contentPath = parentSlug
 		? `${typeDir}/${parentSlug}/${slug}`
 		: `${typeDir}/${slug}`;
-	const isDevMode = dev && !building;
 
-	if (isDevMode) {
-		return `/@content-images/${contentPath}/${filename}`;
+	const devUrl = `/@content-images/${contentPath}/${filename}`;
+
+	if (dev && !building) {
+		return { devUrl, entry: undefined };
 	}
 
-	// Production: look up manifest for optimized cover URL
 	const manifest = loadImageManifest();
-	const key = `${contentPath}/${filename}`;
-	const entry = manifest[key];
-
-	if (entry?.cover) {
-		return `${base}${entry.cover}`;
-	}
-
-	return null;
+	const entry = manifest[`${contentPath}/${filename}`];
+	return { devUrl, entry };
 }
 
-/**
- * Get hero image URL with srcset for full-size display on detail pages.
- * Dev: serves original image from Vite middleware
- * Prod: looks up optimized lg size + srcset from manifest
- * @param image - relative path like "./images/hero.png"
- * @param parentSlug - for nested series chapters, the series slug
- */
-export function getHeroImageUrl(
-	type: ContentType,
-	slug: string,
-	image: string | undefined,
-	parentSlug?: string
-): { url: string; srcset: string } | null {
-	if (!image) return null;
-
-	const filename = image.replace(/^\.\/images\//, '');
-	const typeDir = typeToDir(type);
-	const contentPath = parentSlug
-		? `${typeDir}/${parentSlug}/${slug}`
-		: `${typeDir}/${slug}`;
-	const isDevMode = dev && !building;
-
-	if (isDevMode) {
-		return {
-			url: `/@content-images/${contentPath}/${filename}`,
-			srcset: ''
-		};
-	}
-
-	// Production: look up manifest for optimized hero URL + srcset
-	const manifest = loadImageManifest();
-	const key = `${contentPath}/${filename}`;
-	const entry = manifest[key];
-
-	if (entry?.optimized) {
-		return {
-			url: `${base}${entry.optimized}`,
-			srcset: entry.srcset ? entry.srcset.replace(/(\/images\/)/g, `${base}/images/`) : ''
-		};
-	}
-
-	return null;
+/** Cover image URL (thumbnail for feeds). */
+export function getCoverImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): string | null {
+	const resolved = resolveImageEntry(type, slug, image, parentSlug);
+	if (!resolved) return null;
+	if (!resolved.entry) return resolved.devUrl;
+	return resolved.entry.cover ? `${base}${resolved.entry.cover}` : null;
 }
 
-/**
- * Get OG image URL (1200x630) for social sharing meta tags.
- * Dev: returns original image URL (no cropping in dev — only matters in prod OG tags)
- * Prod: looks up og variant from manifest, falls back to optimized (lg) URL
- * @param image - relative path like "./images/hero.png"
- * @param parentSlug - for nested series chapters, the series slug
- */
-export function getOGImageUrl(
-	type: ContentType,
-	slug: string,
-	image: string | undefined,
-	parentSlug?: string
-): string | null {
-	if (!image) return null;
+/** Hero image URL + srcset (full-size for detail pages). */
+export function getHeroImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): { url: string; srcset: string } | null {
+	const resolved = resolveImageEntry(type, slug, image, parentSlug);
+	if (!resolved) return null;
+	if (!resolved.entry) return { url: resolved.devUrl, srcset: '' };
+	if (!resolved.entry.optimized) return null;
+	return {
+		url: `${base}${resolved.entry.optimized}`,
+		srcset: resolved.entry.srcset ? resolved.entry.srcset.replace(/(\/images\/)/g, `${base}/images/`) : ''
+	};
+}
 
-	const filename = image.replace(/^\.\/images\//, '');
-	const typeDir = typeToDir(type);
-	const contentPath = parentSlug
-		? `${typeDir}/${parentSlug}/${slug}`
-		: `${typeDir}/${slug}`;
-	const isDevMode = dev && !building;
-
-	if (isDevMode) {
-		return `/@content-images/${contentPath}/${filename}`;
-	}
-
-	const manifest = loadImageManifest();
-	const key = `${contentPath}/${filename}`;
-	const entry = manifest[key];
-
-	// OG images are used in absolute URLs (siteUrl + path) by SEO.svelte,
-	// so they must NOT include the base path prefix
-	return entry?.og || entry?.optimized || null;
+/** OG image URL (social sharing). No base path — used in absolute URLs. */
+export function getOGImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): string | null {
+	const resolved = resolveImageEntry(type, slug, image, parentSlug);
+	if (!resolved) return null;
+	if (!resolved.entry) return resolved.devUrl;
+	return resolved.entry.og || resolved.entry.optimized || null;
 }

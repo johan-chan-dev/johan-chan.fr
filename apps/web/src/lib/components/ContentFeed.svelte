@@ -2,7 +2,6 @@
 	import type { IndexEntryWithCover } from '$lib/utils/content';
 	import ContentItemCard from './ContentItem.svelte';
 	import { formatMonthYear } from '$lib/utils/format';
-	import { getLocale } from '$lib/paraglide/runtime';
 
 	interface Props {
 		items: IndexEntryWithCover[];
