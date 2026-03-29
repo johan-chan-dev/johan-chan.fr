@@ -31,7 +31,7 @@
 			xDomain={[0, 100]}
 			yDomain={[0, 100]}
 			yReverse={true}
-			padding={{ top: 20, right: 20, bottom: 20, left: 20 }}
+			padding={{ top: 20, right: 20, bottom: 20, left: 40 }}
 			data={points}
 			ssr={true}
 		>

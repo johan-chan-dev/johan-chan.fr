@@ -33,7 +33,7 @@
 	}
 	.y-label {
 		position: absolute;
-		left: -24px;
+		left: -36px;
 		top: 50%;
 		transform: translateY(-50%) rotate(-90deg);
 		font-size: 12px;
