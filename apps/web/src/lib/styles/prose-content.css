@@ -7,68 +7,68 @@
 	@apply max-w-none text-base-content mb-12 text-lg leading-relaxed;
 }
 
-.prose-content :global(h1),
-.prose-content :global(h2),
-.prose-content :global(h3),
-.prose-content :global(h4),
-.prose-content :global(h5),
-.prose-content :global(h6) {
+.prose-content h1,
+.prose-content h2,
+.prose-content h3,
+.prose-content h4,
+.prose-content h5,
+.prose-content h6 {
 	@apply text-base-content font-bold mt-8 mb-4;
 }
 
-.prose-content :global(h2) {
+.prose-content h2 {
 	@apply text-2xl border-b border-base-300 pb-2;
 }
 
-.prose-content :global(h3) {
+.prose-content h3 {
 	@apply text-xl;
 }
 
-.prose-content :global(p) {
+.prose-content p {
 	@apply text-base-content/80 mb-4 leading-relaxed;
 }
 
-.prose-content :global(a) {
+.prose-content a {
 	@apply text-primary hover:text-blue-600 underline;
 }
 
-.prose-content :global(ul),
-.prose-content :global(ol) {
+.prose-content ul,
+.prose-content ol {
 	@apply text-base-content/80 mb-4 pl-6;
 }
 
-.prose-content :global(li) {
+.prose-content li {
 	@apply mb-2;
 }
 
-.prose-content :global(blockquote) {
+.prose-content blockquote {
 	@apply border-l-4 border-primary bg-base-200 p-4 mb-4 italic;
 }
 
-.prose-content :global(code) {
+.prose-content code {
 	@apply bg-base-200 text-base-content px-2 py-1 rounded text-sm font-mono;
 }
 
-.prose-content :global(pre) {
+.prose-content pre {
 	@apply bg-base-200 text-base-content p-4 rounded-lg overflow-x-auto mb-4 w-0 min-w-full;
 }
 
-.prose-content :global(pre code) {
+.prose-content pre code {
 	@apply bg-transparent p-0;
 }
 
-.prose-content :global(img) {
+.prose-content img {
 	@apply max-w-full h-auto rounded-lg shadow-md my-6 mx-auto;
 }
 
-.prose-content :global(hr) {
+.prose-content hr {
 	@apply border-base-300 my-8;
 }
 
-.prose-content :global(strong) {
+.prose-content strong {
 	@apply font-bold text-base-content;
 }
 
-.prose-content :global(em) {
+.prose-content em {
 	@apply italic text-base-content/70;
 }
