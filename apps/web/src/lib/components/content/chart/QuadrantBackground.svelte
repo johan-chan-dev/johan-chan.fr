@@ -32,18 +32,21 @@
 <rect x="0" y={cy} width={cx} height={$height - cy} fill={fills[3]} />
 
 {#if labels}
-	<text x={cx / 2} y={cy / 2} text-anchor="middle" dominant-baseline="middle" class="quadrant-label">{labels[0]}</text>
-	<text x={cx + ($width - cx) / 2} y={cy / 2} text-anchor="middle" dominant-baseline="middle" class="quadrant-label">{labels[1]}</text>
-	<text x={cx + ($width - cx) / 2} y={cy + ($height - cy) / 2} text-anchor="middle" dominant-baseline="middle" class="quadrant-label">{labels[2]}</text>
-	<text x={cx / 2} y={cy + ($height - cy) / 2} text-anchor="middle" dominant-baseline="middle" class="quadrant-label">{labels[3]}</text>
+	<!-- Position labels in the corners of each quadrant, away from the center where points cluster -->
+	<text x={10} y={20} text-anchor="start" class="quadrant-label">{labels[0]}</text>
+	<text x={$width - 10} y={20} text-anchor="end" class="quadrant-label">{labels[1]}</text>
+	<text x={$width - 10} y={$height - 10} text-anchor="end" class="quadrant-label">{labels[2]}</text>
+	<text x={10} y={$height - 10} text-anchor="start" class="quadrant-label">{labels[3]}</text>
 {/if}
 
 <style>
 	.quadrant-label {
-		font-size: 11px;
+		font-size: 10px;
 		fill: var(--color-base-content, #888);
-		opacity: 0.4;
+		opacity: 0.5;
 		pointer-events: none;
 		font-style: italic;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
 	}
 </style>
