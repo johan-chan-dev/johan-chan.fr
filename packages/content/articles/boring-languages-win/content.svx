@@ -4,9 +4,9 @@
 
 Python est le langage le plus utilisé pour faire de l'IA. C'est aussi un des pires langages pour l'IA qui code.
 
-En 2022, une équipe a testé Copilot sur 33 problèmes LeetCode dans quatre langages. Java : 57% de code correct. JavaScript : 27%. Même modèle, même benchmark. La seule variable, c'est le langage. Les modèles ont beaucoup progressé depuis, mais l'écart entre langages, lui, persiste.
+En 2022, une équipe a testé Copilot sur 33 problèmes LeetCode dans quatre langages. Java : 57% de code correct. JavaScript : 27%. Même modèle, même benchmark. La seule variable, c'est le langage. Les modèles ont beaucoup progressé depuis. L'écart entre langages, par contre, persiste.
 
-En mars 2026, une étude teste Gemini 2.5 Flash sur la génération de suites de tests. Résultat : 2 155 tentatives en Python pour arriver à une suite correcte, contre 323 en Java. Presque 7 fois plus. Le typage dynamique force le modèle à deviner les types depuis le flux de contrôle, et il se plante.
+En mars 2026, une étude teste Gemini 2.5 Flash sur la génération de suites de tests. Résultat : 2 155 tentatives en Python pour arriver à une suite correcte, contre 323 en Java. Presque 7 fois plus. Le typage dynamique force le modèle à deviner les types au fur et à mesure, et c'est là qu'il peut se tromper.
 
 Le langage que les devs trouvent ennuyeux est celui où l'IA se plante le moins.
 
@@ -20,7 +20,7 @@ Sauf que Python aussi a un corpus énorme. PyPI, data science, notebooks Jupyter
 
 JavaScript a plus de données que Go. Et les agents produisent du Go valide en one-shot 95% du temps.
 
-Le volume de données joue, mais c'est pas le facteur dominant. Rust score moyen en partie parce que son corpus est plus petit. Mais le design du langage pèse plus lourd que la taille du dataset.
+Le volume de données joue, mais pas comme on le pense. Le corpus détermine quel pattern le LLM va choisir : le plus fréquent. La sémantique du langage détermine combien de patterns sont valides. Dans un langage boring, y'a un seul chemin, donc le plus fréquent est aussi le bon. Dans un langage expressif, le plus fréquent c'est pas forcément le plus adapté au contexte. Le training data ne rend pas le LLM meilleur sur un langage. Il détermine quel chemin le LLM prend quand il y en a plusieurs.
 
 <C.Callout type="note" title="Sur la méthode">
 Il n'existe pas d'étude qui corrèle formellement l'expressivité d'un langage au taux d'erreur LLM. Les chiffres cités viennent de benchmarks indépendants (Copilot 2022, Gemini 2026, ETH Zurich 2025). Le lien expressivité → fiabilité est une inférence, pas une mesure directe.
@@ -85,11 +85,11 @@ Les deux avaient raison. Mais pas pour le même utilisateur. L'humain expert pro
 
 **Rust** est le cas le plus intéressant. C'est le langage le plus strict qui existe. Le borrow checker, les lifetimes, tout est vérifié à la compilation. Si "strict = bon pour l'IA", Rust devrait dominer. Il est au milieu. Parce que strict et boring c'est pas la même chose. Rust a un système de types très puissant, plein de façons idiomatiques de gérer un problème de lifetime. Pour le LLM, le borrow checker c'est pas un garde-fou, c'est un labyrinthe de plus à résoudre.
 
-Graydon Hoare, le créateur de Rust, l'a dit lui-même : *"I would have traded performance and expressivity away for simplicity."* Il parlait de la complexité du compilateur et du système de types, pas de l'expressivité syntaxique au sens où on l'a définie plus haut. Mais la direction est la même : même lui aurait préféré plus simple.
+Graydon Hoare, le créateur de Rust, l'a dit lui-même : *"I would have traded performance and expressivity away for simplicity."* Il parlait de la complexité du compilateur et du système de types, pas du nombre de façons d'écrire la même chose. Mais la direction est la même : même lui aurait préféré plus simple.
 
-**TypeScript** est le cas le plus parlant. C'est JavaScript qui devient statique, en temps réel. Une étude de l'ETH Zurich (PLDI 2025) montre que forcer le LLM à respecter le système de types pendant la génération divise les erreurs de compilation par deux. Les types donnent au modèle des rails. Moins de choix possibles, moins d'erreurs. Et l'adoption suit : en août 2025, TypeScript est devenu le langage #1 sur GitHub en contributeurs mensuels. 40% des devs JS écrivent exclusivement en TypeScript.
+**TypeScript** est le cas le plus parlant. C'est JavaScript qui devient statique, en temps réel. Une étude de l'ETH Zurich (PLDI 2025) montre que forcer le LLM à respecter le système de types pendant la génération divise les erreurs de compilation par deux. Les types posent des limites. Moins de choix possibles, moins d'erreurs. Et l'adoption suit : en août 2025, TypeScript est devenu le langage #1 sur GitHub en contributeurs mensuels. 40% des devs JS écrivent exclusivement en TypeScript.
 
-**Python** est deux langages en un. Le subset typé, avec mypy strict et les type hints, produit du code que les LLMs gèrent bien. Le subset dynamique, avec le duck typing et la magie, produit du code où ils se plantent. Le score moyen de Python cache cette dualité. Et la tendance est nette : une enquête Meta de 2025 montre que 86% des développeurs Python utilisent les type hints. Même Python devient plus boring.
+**Python** est deux langages en un. Le subset typé, avec mypy strict et les type hints, produit du code que les LLMs gèrent bien. Le subset dynamique, avec le duck typing et la magie, produit du code où ils se plantent. Le score moyen de Python mélange les deux. Et la tendance est nette : une enquête Meta de 2025 montre que 86% des développeurs Python utilisent les type hints. Même Python devient plus boring.
 
 ---
 
@@ -97,15 +97,15 @@ Graydon Hoare, le créateur de Rust, l'a dit lui-même : *"I would have traded p
 
 C'est pas "change de langage". C'est "quel que soit ton langage, écris boring".
 
-TypeScript strict plutôt que `any`. Des interfaces explicites plutôt que des types inférés. Python typé plutôt que duck typing. Le moins de magie possible. Le moins d'idiomatique clever possible. Une list comprehension imbriquée c'est du Python "propre", c'est du Python idiomatique, et c'est exactement ce qui fait planter la machine. Trois lignes avec une boucle `for`, c'est moche, c'est verbose, et le LLM le génère correctement du premier coup.
+TypeScript strict plutôt que `any`. Des interfaces explicites plutôt que des types inférés. Python typé plutôt que duck typing. Le moins de magie possible. Le moins de trucs astucieux possible. Une list comprehension imbriquée c'est du Python "propre", c'est du Python idiomatique, et c'est exactement ce qui fait planter la machine. Trois lignes avec une boucle `for`, c'est moche, c'est verbose, et le LLM le génère correctement du premier coup.
 
 Et ce qui vaut pour le langage vaut pour le framework. Tout framework qui repose sur de la magie déclarative plutôt que du flux explicite pose le même problème.
 
-Next.js avec ses server actions, ses conventions de fichiers magiques, ses directives `"use client"` et `"use server"`. Angular avec ses décorateurs, son injection de dépendances résolue par metadata au runtime, ses modules qui ré-exportent des modules.
-
-Dans les deux cas, le LLM écrit du code qui compile mais qui fait pas ce qu'on attend. Le corpus d'entraînement est là, les patterns de base passent. C'est tout ce qui est implicite qui casse.
+Plus un framework repose sur des conventions implicites, des décorateurs, de l'injection par metadata, plus le LLM devine. Et quand il devine, il choisit le pattern le plus courant, pas le plus adapté au contexte.
 
 Le truc, c'est que le code boring était déjà la recommandation du craft bien avant l'IA. Explicit is better than implicit. KISS. Pas de magie. On répète ça depuis des années. Ce qui change, c'est qu'on a maintenant les chiffres pour le prouver.
+
+Le choix du langage c'est la première couche. Y'a d'autres couches qui aident : le contexte qu'on donne au modèle, les tests, l'architecture du projet. Mais plus la première couche est expressive, plus les autres doivent compenser.
 
 <C.Callout type="tip" title="Boring ≠ propre">
 Du Python idiomatique peut être très propre, bien structuré, bien nommé, et très dur pour un LLM. Parce que "propre" ça dit rien sur le nombre de chemins possibles. "Boring" si.
