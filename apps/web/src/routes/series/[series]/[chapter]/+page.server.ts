@@ -1,9 +1,8 @@
 import { dev } from '$app/environment';
 import { building } from '$app/environment';
 import { error } from '@sveltejs/kit';
-import { getContentBySlug, loadContentByType, getCoverImageUrl, getHeroImageUrl, getOGImageUrl, loadSeriesGroupedForPrerender } from '$lib/utils/content';
-import { marked } from 'marked';
-import { createShikiRenderer } from '$lib/utils/syntax-highlighting';
+import { getContentBySlug, loadContentByType, loadSeriesGroupedForPrerender } from '$lib/utils/content';
+import { prepareContentDetail } from '$lib/utils/content-detail';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
 export const prerender = true;
@@ -34,18 +33,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		});
 	}
 
-	// Render markdown content (only for .md — .svx is pre-compiled by mdsvex)
-	let htmlContent: string | null = null;
-	if (item.renderMode === 'md') {
-		const renderer = await createShikiRenderer();
-		marked.use({ renderer });
-		htmlContent = await marked(item.content);
-	}
-
-	// Compute cover thumbnail URL, hero image URL, and OG image URL using nested path
-	const coverUrl = getCoverImageUrl(item.type, chapterSlug, item.image, seriesSlug);
-	const hero = getHeroImageUrl(item.type, chapterSlug, item.image, seriesSlug);
-	const ogImage = getOGImageUrl(item.type, chapterSlug, item.image, seriesSlug);
+	const detail = await prepareContentDetail(item, chapterSlug, seriesSlug);
 
 	// Get all chapters in the same series
 	const allSeriesItems = loadContentByType('série').filter(
@@ -60,20 +48,11 @@ export const load: PageServerLoad = async ({ params }) => {
 	const prevChapter = currentIndex > 0 ? allSeriesItems[currentIndex - 1] : null;
 	const nextChapter = currentIndex < allSeriesItems.length - 1 ? allSeriesItems[currentIndex + 1] : null;
 
-	// Estimate reading time from raw markdown content
-	const wordCount = item.content.trim().split(/\s+/).filter(Boolean).length;
-	const readingTime = Math.max(1, Math.ceil(wordCount / 250));
-
 	return {
 		chapter: {
 			...item,
-			htmlContent,
-			renderMode: item.renderMode,
-			coverUrl,
-			heroUrl: hero?.url ?? null,
-			heroSrcset: hero?.srcset ?? null,
-			ogUrl: ogImage,
-			readingTime
+			...detail,
+			renderMode: item.renderMode
 		},
 		seriesInfo: {
 			title: item.parent || 'Série',
