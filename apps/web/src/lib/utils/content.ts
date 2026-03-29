@@ -1,5 +1,4 @@
 import {
-	ContentItemSchema,
 	MetaJsonSchema,
 	SeriesMetaJsonSchema,
 	type ContentItem,
@@ -9,7 +8,6 @@ import {
 	typeToDir,
 	dirToType
 } from '@johan-chan/content/schema';
-import matter from 'gray-matter';
 import { base } from '$app/paths';
 import { dev, building } from '$app/environment';
 import fs from 'fs';
@@ -582,40 +580,7 @@ function readFolderContent(folderPath: string): LoadedContentItem | undefined {
 }
 
 /**
- * Parse a legacy content file (with frontmatter)
- */
-function parseLegacyContentFile(filePath: string): LoadedContentItem | undefined {
-	try {
-		const raw = fs.readFileSync(filePath, 'utf-8');
-		const { data, content } = matter(raw);
-
-		// Infer slug from filename if not in frontmatter
-		const filename = path.basename(filePath, '.md');
-		if (!data.slug) {
-			data.slug = filename;
-		}
-
-		const result = ContentItemSchema.safeParse(data);
-		if (!result.success) {
-			console.error(`Validation error in ${filePath}:`, result.error.format());
-			return undefined;
-		}
-
-		return {
-			...result.data,
-			content,
-			filePath,
-			renderMode: 'md' as const
-		};
-	} catch (error) {
-		console.error(`Error parsing ${filePath}:`, error);
-		return undefined;
-	}
-}
-
-/**
  * Read content from disk (dev mode)
- * Supports both folder-based and legacy formats
  */
 function readContentFromDisk(slug: string): LoadedContentItem | undefined {
 	const typeDirs = ['articles', 'series', 'devlogs', 'posts'];
@@ -630,13 +595,7 @@ function readContentFromDisk(slug: string): LoadedContentItem | undefined {
 			return readFolderContent(folderPath);
 		}
 
-		// Try 2: Legacy at type/slug.md
-		const legacyPath = path.join(typePath, `${slug}.md`);
-		if (fs.existsSync(legacyPath)) {
-			return parseLegacyContentFile(legacyPath);
-		}
-
-		// Try 3: Nested content (series/devlog chapters)
+		// Try 2: Nested content (series/devlog chapters)
 		const entries = fs.readdirSync(typePath, { withFileTypes: true });
 		for (const entry of entries) {
 			if (!entry.isDirectory()) continue;
@@ -647,12 +606,6 @@ function readContentFromDisk(slug: string): LoadedContentItem | undefined {
 			const nestedFolder = path.join(subDir, slug);
 			if (fs.existsSync(nestedFolder) && isFolderContent(nestedFolder)) {
 				return readFolderContent(nestedFolder);
-			}
-
-			// Nested legacy
-			const nestedLegacy = path.join(subDir, `${slug}.md`);
-			if (fs.existsSync(nestedLegacy)) {
-				return parseLegacyContentFile(nestedLegacy);
 			}
 		}
 	}
@@ -723,37 +676,6 @@ function readContentFromModules(slug: string): LoadedContentItem | undefined {
 			filePath: metaPath,
 			renderMode
 		};
-	}
-
-	// Fallback: try legacy content (frontmatter in .md)
-	for (const [modulePath, rawContent] of Object.entries(contentModules)) {
-		// Skip content.md files (they're folder-based, handled above)
-		if (modulePath.endsWith('/content.md')) continue;
-
-		try {
-			const { data, content } = matter(rawContent as string);
-
-			// Check if slug matches
-			const filename = path.basename(modulePath, '.md');
-			const contentSlug = data.slug || filename;
-
-			if (contentSlug === slug) {
-				const result = ContentItemSchema.safeParse(data);
-				if (!result.success) {
-					console.error(`Validation error in ${modulePath}:`, result.error.format());
-					continue;
-				}
-
-				return {
-					...result.data,
-					content,
-					filePath: modulePath,
-					renderMode: 'md' as const
-				};
-			}
-		} catch (error) {
-			console.error(`Error parsing content file ${modulePath}:`, error);
-		}
 	}
 
 	return undefined;
