@@ -52,6 +52,7 @@
 <style>
 	.scatter-chart-wrapper {
 		margin: 2rem 0;
+		overflow: hidden;
 	}
 	.chart-container {
 		width: 100%;
