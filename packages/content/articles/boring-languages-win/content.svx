@@ -62,22 +62,27 @@ Rob Pike a pris le contre-pied exact en créant Go. *"Less is exponentially more
 
 Les deux avaient raison. Mais pas pour le même utilisateur. L'humain expert profite de l'expressivité. Le LLM profite de la contrainte.
 
-<C.ScatterChart
+<C.BubbleChart
   xLabel="Boring → Expressif"
   yLabel="Permissif → Strict"
-  quadrants={["Fiable pour l'IA", "Strict mais complexe", "Imprévisible pour l'IA", "Simple mais risqué"]}
-  points={[
-    { label: "Go", x: 10, y: 85 },
-    { label: "Java", x: 25, y: 80 },
-    { label: "C", x: 15, y: 25 },
-    { label: "TypeScript", x: 40, y: 78 },
-    { label: "Rust", x: 70, y: 95 },
-    { label: "C#", x: 58, y: 68 },
-    { label: "Python", x: 78, y: 24 },
-    { label: "JavaScript", x: 68, y: 15 },
-    { label: "Ruby", x: 90, y: 15 }
+  quadrants={["Fiable pour l'IA", "Strict mais coûteux", "Imprévisible pour l'IA", "Simple mais risqué"]}
+  bubbles={[
+    { label: "Go", x: 10, y: 85, size: 1 },
+    { label: "Java", x: 25, y: 80, size: 1 },
+    { label: "C", x: 15, y: 25, size: 0.8 },
+    { label: "TypeScript", x: 40, y: 78, size: 1.2 },
+    { label: "Rust", x: 70, y: 95, size: 1 },
+    { label: "C#", x: 58, y: 68, size: 0.8 },
+    { label: "Python", x: 78, y: 24, size: 1.2 },
+    { label: "JavaScript", x: 68, y: 15, size: 1 },
+    { label: "Ruby", x: 90, y: 15, size: 0.7 }
+  ]}
+  arrows={[
+    { from: "JavaScript", to: "TypeScript" }
   ]}
 />
+
+*Ce positionnement est ma lecture des données, pas un classement mesuré. Les deux axes sont défendables (voir sources) mais les positions exactes sont subjectives.*
 
 ---
 

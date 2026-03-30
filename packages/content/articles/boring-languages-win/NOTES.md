@@ -1,65 +1,135 @@
 # Notes — Boring languages win
 
-## Composant `C.ScatterChart` — besoin et pistes
+## Composants chart — besoin et pistes
 
-### Besoin
+### Contexte
 
-Un composant partagé (`C.ScatterChart`) pour afficher un scatter plot / diagramme en quadrants dans les articles `.svx`. Premier usage : le diagramme boring/expressif × strict/permissif de cet article. Mais le composant doit être générique et réutilisable.
+L'article utilise un diagramme 2D pour positionner des langages sur deux axes (boring/expressif × strict/permissif). Le positionnement est qualitatif, pas mesuré. Un scatter plot classique donne une fausse impression de précision. Il faut explorer d'autres formes visuelles.
 
-**Props attendues :**
-- `xLabel`, `yLabel` — labels des axes
-- `points` — tableau `{ label, x, y, color? }` avec coordonnées en pourcentage (0-100)
-- `quadrants?` — labels optionnels pour les 4 quadrants
-- Responsive, lisible en mobile, dark mode
+### Feedback review
 
-**Exemple d'usage dans un .svx :**
+- Un scatter avec coordonnées précises habille du qualitatif en quantitatif → contradictoire avec la rigueur méthodologique de l'article
+- TypeScript devrait être une zone ou une flèche (JS → TS), pas un point fixe
+- Le quadrant "Strict mais complexe" devrait s'appeler "Strict mais coûteux" (cohérent avec "friction de base")
+- Des zones floues seraient plus honnêtes et paradoxalement plus convaincantes
+
+### Valeurs implémentées (content.svx)
+
 ```svelte
 <C.ScatterChart
   xLabel="Boring → Expressif"
   yLabel="Permissif → Strict"
-  quadrants={["Sweet spot LLM", "Strict mais complexe", "Le pire combo", "Boring mais dangereux"]}
+  quadrants={["Fiable pour l'IA", "Strict mais complexe", "Imprévisible pour l'IA", "Simple mais risqué"]}
   points={[
     { label: "Go", x: 10, y: 85 },
     { label: "Java", x: 25, y: 80 },
     { label: "C", x: 15, y: 25 },
-    { label: "TypeScript", x: 45, y: 75 },
+    { label: "TypeScript", x: 40, y: 78 },
     { label: "Rust", x: 70, y: 95 },
-    { label: "C#", x: 55, y: 75 },
-    { label: "Python", x: 75, y: 20 },
-    { label: "JavaScript", x: 72, y: 18 },
+    { label: "C#", x: 58, y: 68 },
+    { label: "Python", x: 78, y: 24 },
+    { label: "JavaScript", x: 68, y: 15 },
     { label: "Ruby", x: 90, y: 15 }
   ]}
 />
 ```
 
-### Pistes techniques
+### Trois composants à évaluer
 
-**Option 1 : LayerCake** (recommandé)
+On crée les trois, on compare le rendu, on choisit celui qui convient le mieux à l'article.
+
+#### 1. `C.ScatterChart` (déjà spécifié, implémenté)
+
+Points précis sur deux axes. Le plus classique.
+
+**Props :**
+- `xLabel`, `yLabel` — labels des axes
+- `points` — tableau `{ label, x, y, color? }` avec coordonnées 0-100
+- `quadrants?` — labels des 4 quadrants
+- Responsive, dark mode
+
+**Problème :** donne une fausse impression de précision quantitative. Adapté quand les données sont mesurées, pas quand elles sont qualitatives.
+
+#### 2. `C.BubbleChart` (à créer)
+
+Comme le scatter, mais avec des cercles de taille et opacité variables au lieu de points. Rend le flou visible.
+
+**Props :**
+- `xLabel`, `yLabel` — labels des axes
+- `bubbles` — tableau `{ label, x, y, size?, opacity? }` avec coordonnées 0-100
+- `quadrants?` — labels des 4 quadrants
+- `arrows?` — tableau `{ from, to }` pour montrer des mouvements (ex: JS → TS)
+- Responsive, dark mode
+
+**Exemple d'usage :**
+```svelte
+<C.BubbleChart
+  xLabel="Boring → Expressif"
+  yLabel="Permissif → Strict"
+  quadrants={["Fiable pour l'IA", "Strict mais coûteux", "Imprévisible pour l'IA", "Simple mais risqué"]}
+  bubbles={[
+    { label: "Go", x: 10, y: 85, size: 1 },
+    { label: "Java", x: 25, y: 80, size: 1 },
+    { label: "C", x: 15, y: 25, size: 0.8 },
+    { label: "TypeScript", x: 40, y: 78, size: 1.2 },
+    { label: "Rust", x: 70, y: 95, size: 1 },
+    { label: "C#", x: 58, y: 68, size: 0.8 },
+    { label: "Python", x: 78, y: 24, size: 1.2 },
+    { label: "JavaScript", x: 68, y: 15, size: 1 },
+    { label: "Ruby", x: 90, y: 15, size: 0.7 }
+  ]}
+  arrows={[
+    { from: "JavaScript", to: "TypeScript" }
+  ]}
+/>
+```
+
+**Avantage :** le cercle + opacité dit "zone approximative", pas "point exact". La flèche JS → TS montre le mouvement en temps réel.
+
+#### 3. `C.QuadrantChart` (à créer)
+
+Pas de coordonnées du tout. Juste 4 zones avec des labels positionnés dedans. Le plus honnête visuellement pour du qualitatif.
+
+**Props :**
+- `xLabel`, `yLabel` — labels des axes
+- `quadrants` — tableau de 4 objets `{ title, items: string[] }`
+- Responsive, dark mode
+
+**Exemple d'usage :**
+```svelte
+<C.QuadrantChart
+  xLabel="Boring → Expressif"
+  yLabel="Permissif → Strict"
+  quadrants={[
+    { title: "Fiable pour l'IA", items: ["Go", "Java"] },
+    { title: "Strict mais coûteux", items: ["Rust", "C#", "TypeScript"] },
+    { title: "Simple mais risqué", items: ["C"] },
+    { title: "Imprévisible pour l'IA", items: ["Python", "JavaScript", "Ruby"] }
+  ]}
+/>
+```
+
+**Avantage :** zéro fausse précision. Le lecteur voit des groupes, pas des positions. Adapté quand le message c'est "ces langages sont dans ce quadrant", pas "ce langage est à 70% sur l'axe X".
+
+**Inconvénient :** perd la nuance de position relative (Go est plus boring que Java, Rust est plus strict que C#). Tout est aplati par quadrant.
+
+### Pistes techniques (commune aux trois)
+
+**Option 1 : LayerCake** (recommandé pour scatter et bubble)
 - Lib data viz native Svelte, composable, SSR-compatible
-- Scatter plot existant dans les exemples : https://layercake.graphics/example/Scatter
-- Le composant `C.ScatterChart` serait un thin wrapper
-- Avantages : responsive out of the box, theming facile, pas de DOM manipulation
-- À évaluer : taille du bundle, support dark mode
+- Scatter et bubble existants dans les exemples : https://layercake.graphics/example/Scatter
+- Avantages : responsive out of the box, theming facile
 
-**Option 2 : Chart.js + svelte-chartjs**
-- Mature, beaucoup d'exemples, bonne doc
-- Scatter chart natif avec labels
-- Inconvénient : canvas-based (pas SSR), plus lourd, moins "Svelte-native"
-
-**Option 3 : D3 + SVG manuel**
-- Maximum de contrôle
-- Inconvénient : beaucoup de code pour un scatter simple, overkill ici
-
-**Option 4 : SVG pur (pas de lib)**
+**Option 2 : SVG pur** (recommandé pour quadrant, fallback pour les autres)
 - Le plus léger, zéro dépendance
-- Un scatter avec 9 points et 4 quadrants c'est faisable en SVG brut dans un composant Svelte
-- Inconvénient : responsive et tooltips à gérer soi-même
+- Le quadrant chart est trivial en SVG pur (4 rects + labels)
+- Scatter et bubble faisables aussi mais responsive + tooltips à gérer
 
 ### Recommandation
 
-Explorer LayerCake en premier. Si c'est trop lourd pour le besoin (un seul type de chart), fallback sur SVG pur — un scatter plot à 9 points avec des axes et des labels c'est ~80 lignes de SVG.
+Créer les trois composants. Commencer par SVG pur pour le QuadrantChart (le plus simple). Puis évaluer LayerCake pour le BubbleChart. Comparer les trois rendus dans l'article et choisir.
 
-Le composant vit dans `apps/web/src/lib/components/content/ScatterChart.svelte` côté johan-chan.fr. À créer dans une session dédiée au projet public.
+Tous vivent dans `apps/web/src/lib/components/content/` côté johan-chan.fr. À créer dans une session dédiée au projet public.
 
 ---
 
