@@ -8,7 +8,7 @@ En 2022, une équipe a testé Copilot sur 33 problèmes LeetCode dans quatre lan
 
 En mars 2026, une étude teste Gemini 2.5 Flash sur la génération de suites de tests. Résultat : 2 155 tentatives en Python pour arriver à une suite correcte, contre 323 en Java. Presque 7 fois plus de tours pour converger. C'est pas juste un taux d'erreur, c'est une friction de base qui se propage sur tout le workflow.
 
-Le langage que les devs trouvent ennuyeux est celui où l'IA se plante le moins.
+Go, que sa propre communauté revendique comme ennuyeux, est celui où l'IA se plante le moins.
 
 ---
 
