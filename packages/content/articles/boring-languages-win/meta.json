@@ -7,6 +7,5 @@
   "image": "./images/hero.webp",
   "imageFocus": "center",
   "published": true,
-  "preview": true,
   "tags": ["ia", "craft", "langages"]
 }
