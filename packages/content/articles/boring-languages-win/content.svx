@@ -1,7 +1,3 @@
-<!-- DRAFT v2 — corrections éditoriales + lecteur -->
-<!-- Cible : devs, crafters, tech leads qui utilisent l'IA pour coder -->
-<!-- Angle : l'expressivité aide l'humain, nuit au LLM -->
-
 Python est le langage le plus utilisé pour faire de l'IA. C'est aussi un des pires langages pour l'IA qui code.
 
 En 2022, une équipe a testé Copilot sur 33 problèmes LeetCode dans quatre langages. Java : 57% de code correct. JavaScript : 27%. Même modèle, même benchmark. La seule variable, c'est le langage. Les modèles ont beaucoup progressé depuis. L'écart entre langages, par contre, persiste.
@@ -12,7 +8,7 @@ Go, que sa propre communauté revendique comme ennuyeux, est celui où l'IA se p
 
 ---
 
-## "C'est le training data"
+## Le volume de données ne compense pas tout
 
 L'objection vient tout de suite. Java a un corpus énorme sur GitHub, du code enterprise bien testé, bien documenté. Normal que les modèles soient meilleurs en Java.
 
@@ -28,7 +24,7 @@ Il n'existe pas d'étude qui corrèle formellement l'expressivité d'un langage 
 
 ---
 
-## Ce que "expressivité" veut dire
+## L'expressivité, de quoi on parle
 
 Prenons un truc simple : filtrer les nombres pairs dans une liste.
 
@@ -56,11 +52,17 @@ L'expressivité, c'est ça : le nombre de chemins pour arriver au même endroit.
 
 L'expressivité, c'est du DRY poussé loin. Les langages expressifs ont été conçus pour résoudre un problème humain : la répétition. Écrire moins, abstraire plus, ne jamais se répéter. Le LLM n'a pas ce problème. Écrire 10 fois le même pattern ne le fatigue pas. Mais choisir entre 5 façons de ne pas se répéter, ça le rend confus. Il n'a pas de préférence, juste des probabilités. Cinq options valides c'est cinq probabilités proches, et il prend la plus fréquente, pas la plus adaptée.
 
-Paul Graham défendait l'expressivité comme une arme secrète. Dans *Beating the Averages*, il expliquait que Lisp lui donnait un avantage concurrentiel parce que ses concurrents ne pouvaient même pas voir ce qui leur manquait. Le "Blub Paradox" : le programmeur moyen regarde un langage plus expressif et voit des trucs bizarres, pas de la puissance.
+---
 
-Rob Pike a pris le contre-pied exact en créant Go. *"Less is exponentially more."* Go est conçu pour que le code soit lisible par les autres, pas pour que l'auteur se sente puissant.
+## Vitesse ou fiabilité
 
-Les deux avaient raison. Mais pas pour le même utilisateur. L'humain expert profite de l'expressivité. Le LLM profite de la contrainte.
+Ce sont deux priorités que le monde du dev explore depuis toujours. Paul Graham argumentait dans *Beating the Averages* que l'expressivité est un avantage compétitif : moins de code pour la même idée, tu itères plus vite et tu explores plus de solutions. Rob Pike a pris l'autre direction en créant Go : *"Less is exponentially more."* Moins de façons de faire, c'est plus de lisibilité et moins d'erreurs.
+
+Les deux comptent. Mais pas pour le même utilisateur. L'humain expert profite de l'expressivité. Le LLM profite de la contrainte.
+
+---
+
+## La carte des langages
 
 <C.BubbleChart
   xLabel="Boring → Expressif"
@@ -86,7 +88,7 @@ Les deux avaient raison. Mais pas pour le même utilisateur. L'humain expert pro
 
 ---
 
-## Les cas qui testent la thèse
+## Ce que ça donne avec les langages d'aujourd'hui
 
 **C** est syntaxiquement pauvre. Peu de mots-clés, peu de façons d'écrire la même chose. Et les benchmarks montrent que ça aide, en partie. Mais C a un autre problème : le comportement indéfini. L'arithmétique de pointeurs, les buffer overflows, les bugs mémoire subtils. Le LLM écrit du C qui compile et qui a l'air correct, mais qui pète au runtime dans des cas limites. Être boring dans la syntaxe ne suffit pas si le langage te laisse te tirer dans le pied en silence.
 
@@ -100,23 +102,15 @@ Graydon Hoare, le créateur de Rust, l'a dit lui-même : *"I would have traded p
 
 ---
 
-## Et toi, tu fais quoi avec ça
+## Ce qui change au quotidien
 
 C'est pas "change de langage". C'est "quel que soit ton langage, écris boring".
 
-TypeScript strict plutôt que `any`. Des interfaces explicites plutôt que des types inférés. Python typé plutôt que duck typing. Le moins de magie possible. Le moins de trucs astucieux possible. Une list comprehension imbriquée c'est du Python "propre", c'est du Python idiomatique, et c'est exactement ce qui fait planter la machine. Trois lignes avec une boucle `for`, c'est moche, c'est verbose, et le LLM le génère correctement du premier coup.
+TypeScript strict plutôt que `any`. Python typé plutôt que duck typing. Dans les deux cas, des types déclarés, pas devinés. Pas de magie, pas de trucs astucieux : c'est ça qui aide le LLM à générer correctement du premier coup.
 
-Et ce qui vaut pour le langage vaut pour le framework. Tout framework qui repose sur de la magie déclarative plutôt que du flux explicite pose le même problème.
+Et ce qui vaut pour le langage vaut pour le framework : moins de conventions implicites, plus de fiabilité.
 
-Plus un framework repose sur des conventions implicites, des décorateurs, de l'injection par metadata, plus le LLM devine. Et quand il devine, il choisit le pattern le plus courant, pas le plus adapté au contexte.
-
-Le truc, c'est que le code boring était déjà la recommandation du craft bien avant l'IA. Explicit is better than implicit. KISS. Pas de magie. On répète ça depuis des années. Ce qui change, c'est qu'on a maintenant les chiffres pour le prouver.
-
-Le choix du langage c'est la friction de base. Y'a d'autres couches qui aident : le contexte qu'on donne au modèle, les tests, l'architecture du projet. Mais plus la première couche est expressive, plus les autres doivent compenser.
-
-<C.Callout type="tip" title="Boring ≠ propre">
-Du Python idiomatique peut être très propre, bien structuré, bien nommé, et très dur pour un LLM. Parce que "propre" ça dit rien sur le nombre de chemins possibles. "Boring" si.
-</C.Callout>
+Le code boring était déjà la recommandation du craft : KISS, explicit is better than implicit. Ce qui change avec l'IA, c'est que le choix du langage devient une friction de base. Y'a d'autres couches qui aident : le contexte qu'on donne au modèle, les tests, l'architecture du projet. Mais plus la première couche, le langage, est expressive, plus les autres doivent compenser.
 
 ---
 
@@ -133,7 +127,7 @@ Dijkstra, 1975 : *"Simplicity is prerequisite for reliability."* Les chiffres lu
 - [GitHub Octoverse 2025](https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/) — TypeScript #1 sur GitHub en contributeurs mensuels (août 2025)
 - [State of JavaScript 2025](https://www.infoq.com/news/2026/03/state-of-js-survey-2025/) — 40% des devs JS écrivent exclusivement en TS
 - [AutoCodeBench (arXiv:2508.09101, août 2025)](https://arxiv.org/abs/2508.09101) — benchmark multilingue 20 langages, 3920 problèmes
-- [Paul Graham — "Beating the Averages" (2001)](https://paulgraham.com/avg.html) — l'expressivité comme arme secrète, le Blub Paradox
+- [Paul Graham — "Beating the Averages" (2001)](https://paulgraham.com/avg.html) — l'expressivité comme avantage compétitif
 - [Rob Pike — "Less is exponentially more" (2012)](http://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html) — pourquoi Go a moins de features, pas plus
 - [Graydon Hoare — rétrospective sur les débuts de Rust (The New Stack, 2023)](https://thenewstack.io/graydon-hoare-remembers-the-early-days-of-rust/) — "I would have traded expressivity for simplicity"
 - [Edsger Dijkstra — EWD498 (1975)](https://www.cs.virginia.edu/~evans/cs655/readings/ewd498.html) — "Simplicity is prerequisite for reliability"
