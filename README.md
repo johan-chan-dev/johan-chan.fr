@@ -1,427 +1,136 @@
-# Johan Chan - Portfolio & CV Website
+# johan-chan.fr
 
-A modern, bilingual portfolio website built with SvelteKit 5, featuring comprehensive testing infrastructure and internationalization support.
+Johan Chan's personal website — a bilingual **Activity Feed / Personal Changelog**.
 
-## Features
+> _Ce que je pense. Ce que j'apprends._
 
-- 🌍 **Bilingual Support**: French (primary) and English with Paraglide JS
-- 📱 **Responsive Design**: Mobile-first approach with Tailwind CSS
-- 🎨 **Modern UI**: DaisyUI components with dark/light theme support
-- 📄 **Dynamic CV**: PDF generation with customizable templates
-- 📧 **Contact Form**: Email integration with Mailpit testing
-- 🧪 **Comprehensive Testing**: 4-layer testing strategy (Unit, Integration, E2E, Performance)
-- ⚡ **Performance Optimized**: Built for Core Web Vitals excellence
-- 🔍 **SEO Ready**: Structured data and meta tag optimization
+- **Live:** https://www.johan-chan.fr
+- **Deployment:** GitHub Actions → GitHub Pages (static, fully pre-rendered)
 
-## Quick Start
+## Stack
 
-### Prerequisites
+- **SvelteKit 5** with `adapter-static` + **Svelte 5** runes
+- **Vite 7** (Node `^20.19.0` or `>=22.12.0` — see `.nvmrc`)
+- **Tailwind CSS 4** + **DaisyUI 5** (themes: `autumn` / `abyss`)
+- **Paraglide JS** for i18n — FR at `/`, EN at `/en/`
+- **mdsvex** for `.svx` content with embedded Svelte components
+- **marked** + **shiki** for plain `.md` content rendering
+- **Zod 4** for content schema validation
+- **Turbo** + **pnpm** workspaces
 
-- Node.js 18+ with pnpm package manager
-- Docker (for email testing with Mailpit)
+## Monorepo Layout
 
-### Installation
+```
+├── apps/web/          # SvelteKit app (@johan-chan/web)
+├── packages/content/  # Content + schema (@johan-chan/content)
+├── turbo.json
+└── pnpm-workspace.yaml
+```
+
+## Getting Started
 
 ```bash
-# Clone the repository
-git clone https://github.com/jconan/jconan.github.io.git
-cd jconan.github.io
-
-# Install dependencies
 pnpm install
-
-# Install Playwright browsers for E2E testing
-pnpm exec playwright install
-
-# Start development server
-pnpm dev
+pnpm dev                # start all apps via Turbo
+# or
+pnpm dev:web            # start only the web app
 ```
 
-Visit [http://localhost:5173](http://localhost:5173) to see the website.
+## Commands
 
-## Development
-
-### Development Server
+All commands run from the repo root.
 
 ```bash
-# Start development server
-pnpm dev
+# Dev / build
+pnpm dev                # turbo: dev
+pnpm build              # turbo: build
+pnpm dev:web            # apps/web only
+pnpm build:web          # apps/web only
 
-# Start with specific port
-PORT=3000 pnpm dev
+# Quality
+pnpm check:web          # svelte-check
+pnpm lint               # prettier + eslint (via turbo)
+pnpm format             # prettier --write (apps/web)
 
-# Start with host binding
-pnpm dev --host
+# Tests
+pnpm test:unit          # vitest (apps/web)
+pnpm test:e2e           # playwright (apps/web)
 ```
 
-### Building
+## Content
 
-```bash
-# Create production build
-pnpm build
+Content types live under `packages/content/`:
 
-# Preview production build
-pnpm preview
-```
+| Type     | Folder      | Notes                              |
+| -------- | ----------- | ---------------------------------- |
+| `article`| `articles/` | Long-form articles                 |
+| `série`  | `series/`   | Multi-part series (parent + chapters) |
+| `devlog` | `devlogs/`  | Development logs                   |
+| `post`   | `posts/`    | Short-form posts                   |
 
-### Code Quality
+Each item is a folder containing `meta.json`, a content file, and optional `images/`. `type` and `slug` are **inferred from the folder path** — they are not stored in `meta.json`.
 
-```bash
-# Run linting
-pnpm lint
+### Rendering Pipeline
 
-# Format code
-pnpm format
+Two rendering paths, selected per item by which content file exists:
 
-# Type checking
-pnpm check
+- **`content.md`** — plain markdown, rendered at runtime by `marked` + `shiki`. Default.
+- **`content.svx`** — markdown with Svelte components, compiled by mdsvex at build time. Used when interactive elements are needed. Components are auto-injected under the `C` namespace (e.g. `<C.Callout>`).
 
-# Type checking with watch mode
-pnpm check:watch
-```
+Full details: [`apps/web/docs/rendering-pipeline.md`](apps/web/docs/rendering-pipeline.md).
 
-## Testing
+### Publishing States
 
-This project implements a comprehensive 4-layer testing strategy ensuring reliability and maintainability.
+| `published` | `preview` | Behavior                                            |
+| ----------- | --------- | --------------------------------------------------- |
+| `true`      | _absent_  | Public                                              |
+| `true`      | `true`    | Pre-rendered, hidden from feed, accessible via `?preview=<key>` |
+| `false`     | _absent_  | Not pre-rendered → 404                              |
 
-### Quick Test Commands
+Preview access is controlled by the `PUBLIC_PREVIEW_KEY` env var.
 
-```bash
-# Run all tests (recommended)
-pnpm test:all
-
-# Run tests with coverage and reports (CI/CD)
-pnpm test:ci
-
-# Validate testing infrastructure
-tsx scripts/validate-testing-infrastructure.ts
-```
-
-### Test Layers
-
-#### 1. Unit Tests (Vitest)
-
-```bash
-# Run unit tests
-pnpm test:unit
-
-# Run with coverage
-pnpm test:unit:coverage
-
-# Run with UI
-pnpm test:unit:ui
-
-# Run specific test
-pnpm test:unit contact-form-validation.test.ts
-```
-
-#### 2. Integration Tests (Vitest + Mailpit)
-
-```bash
-# Start email testing service
-pnpm mailpit:start
-
-# Run integration tests
-pnpm test:integration
-
-# Stop email testing service
-pnpm mailpit:stop
-```
-
-#### 3. End-to-End Tests (Playwright)
-
-```bash
-# Run E2E tests (all browsers)
-pnpm test:e2e
-
-# Run with UI mode
-pnpm test:e2e:ui
-
-# Run specific browser
-pnpm test:e2e:chromium
-pnpm test:e2e:firefox
-pnpm test:e2e:webkit
-
-# Run mobile tests
-pnpm test:e2e:mobile
-
-# Debug mode
-pnpm test:e2e:debug
-```
-
-#### 4. Performance Tests (k6)
-
-```bash
-# Install k6 (macOS)
-brew install k6
-
-# Run performance tests
-pnpm test:performance
-
-# Run with custom parameters
-k6 run --vus 10 --duration 30s tests/performance/contact-form.js
-```
-
-### Testing Services
-
-#### Mailpit Email Testing
-
-- **Web UI**: [http://localhost:8025](http://localhost:8025)
-- **SMTP**: localhost:1025
-- **Management**: `pnpm mailpit:start|stop|restart`
-
-### Test Reports
-
-- **Unit Coverage**: `coverage/index.html`
-- **E2E Reports**: `playwright-report/index.html`
-- **Test Results**: `test-results/`
-
-### Troubleshooting Tests
-
-Common issues and solutions:
-
-```bash
-# Reinstall Playwright browsers
-pnpm exec playwright install
-
-# Clear test cache
-rm -rf node_modules/.cache
-pnpm install
-
-# Reset Mailpit
-pnpm mailpit:restart
-
-# Check port conflicts
-lsof -ti:5173 | xargs kill -9
-```
-
-For detailed testing documentation, see [docs/TESTING.md](docs/TESTING.md).
-
-## Internationalization
-
-### Language Support
-
-- **Primary**: French (fr) - Base URL `/`
-- **Secondary**: English (en) - URL prefix `/en/`
-
-### Managing Translations
-
-```bash
-# Message files
-messages/fr.json  # French translations
-messages/en.json  # English translations
-
-# Usage in components
-import * as m from '$lib/paraglide/messages';
-<h1>{m.homepage_title()}</h1>
-```
-
-### Adding New Content
-
-1. Add message keys to both `fr.json` and `en.json`
-2. Use semantic naming: `section_element_purpose`
-3. Import and use: `{m.your_message_key()}`
-4. Test both languages during development
-
-## CV & PDF Generation
-
-### Generate CV PDFs
-
-```bash
-# Generate both language versions
-pnpm generate-cv-pdf
-
-# Development version with debug info
-pnpm generate-cv-pdf-dev
-
-# New experimental generator
-pnpm generate-cv-pdf-new
-```
-
-### CV Data Management
-
-- **Source**: `src/lib/data/cv-data.json`
-- **Templates**: `static/CV.{lang}.md`
-- **Output**: `static/CV.{lang}.pdf`
-
-## Project Structure
+## Routes
 
 ```
-src/
-├── lib/
-│   ├── components/     # Reusable Svelte components
-│   ├── data/          # Static data (CV, SEO)
-│   ├── types/         # TypeScript type definitions
-│   ├── utils/         # Utility functions
-│   └── paraglide/     # Internationalization
-├── routes/            # SvelteKit routes
-│   ├── +layout.svelte # Root layout
-│   ├── +page.svelte   # Homepage
-│   ├── about/         # About page with CV
-│   ├── contact/       # Contact form
-│   ├── services/      # Services page
-│   └── portfolio/     # Portfolio projects
-tests/
-├── unit/              # Unit tests (Vitest)
-├── integration/       # Integration tests (Vitest + Mailpit)
-├── e2e/              # End-to-end tests (Playwright)
-├── performance/       # Performance tests (k6)
-├── setup/            # Test configuration
-└── utils/            # Test utilities
-docs/                 # Project documentation
-static/               # Static assets
+/                           Homepage (Activity Feed)
+/articles                   Articles list
+/articles/[slug]            Article detail
+/series                     Series grouped view
+/series/[series]            Series detail
+/series/[series]/[chapter]  Chapter detail
+/devlogs                    Devlogs grouped view
+/devlogs/[slug]             Devlog detail
+/about                      About page
+/sitemap.xml                Dynamic sitemap
 ```
+
+FR at `/`, EN at `/en/` via Paraglide URL rewriting in `hooks.ts`.
+
+## Image Pipeline
+
+A custom Vite plugin (`apps/web/vite-plugins/content-images.ts`) handles content images:
+
+- **Dev:** serves directly from content folders at `/@content-images/{typeDir}/{slug}/{filename}`
+- **Prod:** generates responsive sizes (`xs`/`sm`/`md`/`lg`) with `sharp`, emits to `static/images/` with content hashes, writes `.image-manifest.json`
 
 ## Deployment
 
-### Static Site Generation
+Push to `main` triggers [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml):
+
+1. `pnpm install` + `turbo build` with cache
+2. Static output from `apps/web/build` uploaded to GitHub Pages
+
+Manual build:
 
 ```bash
-# Build for static hosting
-pnpm build
-
-# Output directory
-build/
+pnpm turbo run build --filter=@johan-chan/web
+# → apps/web/build/
 ```
 
-### GitHub Pages Deployment
+## Philosophy
 
-The site is automatically deployed to GitHub Pages on push to main branch.
+Aligned with **Le Foyer du Craft**:
 
-- **Live Site**: [https://jconan.github.io](https://jconan.github.io)
-- **Deployment**: Automated via GitHub Actions
-
-### Environment Variables
-
-```bash
-# Development
-NODE_ENV=development
-
-# Production
-NODE_ENV=production
-
-# Testing
-NODE_ENV=test
-MAILPIT_URL=http://localhost:8025
-```
-
-## Contributing
-
-### Development Workflow
-
-1. **Feature Development**:
-
-   ```bash
-   # Create feature branch
-   git checkout -b feature/your-feature
-
-   # Write tests first (TDD)
-   pnpm test:unit --watch
-
-   # Implement feature
-   pnpm dev
-
-   # Run full test suite
-   pnpm test:all
-   ```
-
-2. **Pre-commit Checks**:
-
-   ```bash
-   # Run pre-commit validation
-   ./scripts/pre-commit-tests.sh
-
-   # Manual validation
-   pnpm lint && pnpm test:unit && pnpm test:integration
-   ```
-
-3. **Pull Request**:
-   - Ensure all tests pass
-   - Update documentation if needed
-   - Include test coverage for new features
-
-### Code Standards
-
-- **TypeScript**: Strict mode enabled
-- **ESLint**: Configured for Svelte and TypeScript
-- **Prettier**: Automatic code formatting
-- **Testing**: Minimum 80% coverage for new code
-- **i18n**: All user-facing text must be internationalized
-
-## Documentation
-
-### Available Documentation
-
-- [📖 Testing Guide](docs/TESTING.md) - Comprehensive testing documentation
-- [🏗️ Technical Architecture](docs/02-technical-architecture.md) - System design
-- [🚀 Development Guide](docs/03-development-guide.md) - Development workflows
-- [📧 Contact Form Migration](docs/contact-form-migration/README.md) - Email system setup
-- [🔍 SEO Guide](docs/seo/README.md) - SEO optimization
-
-### API Reference
-
-- [📚 API Documentation](docs/06-api-reference.md) - API endpoints and schemas
-- [🎨 Component Library](src/lib/components/) - Reusable components
-- [🔧 Utilities](src/lib/utils/) - Helper functions
-
-## Performance
-
-### Core Web Vitals
-
-- **LCP**: < 2.5s (Largest Contentful Paint)
-- **FID**: < 100ms (First Input Delay)
-- **CLS**: < 0.1 (Cumulative Layout Shift)
-
-### Performance Monitoring
-
-```bash
-# Run performance tests
-pnpm test:performance
-
-# Lighthouse audit
-npx lighthouse http://localhost:5173 --output html
-
-# Bundle analysis
-pnpm build && npx vite-bundle-analyzer
-```
-
-## Security
-
-### Security Features
-
-- **CSP**: Content Security Policy headers
-- **HTTPS**: Enforced in production
-- **Input Validation**: Zod schema validation
-- **Email Security**: SMTP authentication and validation
-
-### Security Testing
-
-```bash
-# Dependency audit
-pnpm audit
-
-# Security linting
-pnpm lint:security
-```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-### Getting Help
-
-- **Documentation**: Check [docs/](docs/) directory
-- **Issues**: [GitHub Issues](https://github.com/jconan/jconan.github.io/issues)
-- **Testing**: Run `tsx scripts/validate-testing-infrastructure.ts`
-
-### Contact
-
-- **Website**: [https://jconan.github.io](https://jconan.github.io)
-- **Email**: Via contact form on the website
-- **GitHub**: [@jconan](https://github.com/jconan)
-
----
-
-Built with ❤️ using SvelteKit 5, TypeScript, and comprehensive testing infrastructure.
+- **Simplicity** — minimal complexity, necessary dependencies only
+- **Coherence** — consistent patterns, semantic HTML
+- **Durability** — technologies that age well, accessible by default
