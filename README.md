@@ -1,6 +1,6 @@
 # johan-chan.fr
 
-Johan Chan's personal website — a bilingual **Activity Feed / Personal Changelog**.
+A space for thinking out loud about software craft in the age of AI — articles, series, and devlogs, in French and English.
 
 > _Ce que je pense. Ce que j'apprends._
 
@@ -129,7 +129,7 @@ pnpm turbo run build --filter=@johan-chan/web
 
 ## Philosophy
 
-Aligned with **Le Foyer du Craft**:
+Aligned with **Le Foyer du Craft** — my ongoing practice around software craft:
 
 - **Simplicity** — minimal complexity, necessary dependencies only
 - **Coherence** — consistent patterns, semantic HTML
