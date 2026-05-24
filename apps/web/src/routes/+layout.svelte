@@ -20,7 +20,7 @@
 
 
 {#if data.env === 'production'}
-	<script defer src="https://cloud.umami.is/script.js" data-website-id="e9a3f679-3cfb-4606-9bdf-ad7f68c177e4"></script>
+	<script defer src="https://umami.lagraineducraft.fr/script.js" data-website-id="7c5359c8-d52b-49c2-b780-caf6ff990668"></script>
 {/if}
 
 <!-- SEO Component (only for pages that don't render their own) -->
