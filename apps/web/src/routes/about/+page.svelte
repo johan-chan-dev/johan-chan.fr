@@ -11,7 +11,7 @@
 	<meta name="description" content={m['about.page_description']()} />
 </svelte:head>
 
-<div class="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto py-8">
+<div class="max-w-4xl mx-auto py-8">
 	<!-- Profile section -->
 	<div class="flex flex-col md:flex-row items-center md:items-start gap-6 mb-12">
 		<!-- Photo -->
