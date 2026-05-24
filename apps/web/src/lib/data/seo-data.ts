@@ -3,6 +3,7 @@ export interface SEOData {
 	description: string;
 	image?: string;
 	type?: 'website' | 'article' | 'profile';
+	noindex?: boolean;
 }
 
 export const seoData: Record<string, SEOData> = {
@@ -29,6 +30,12 @@ export const seoData: Record<string, SEOData> = {
 		description:
 			'La page que vous recherchez est introuvable. Retournez à l\'accueil ou explorez les autres sections du site.',
 		type: 'website'
+	},
+	'/call': {
+		title: 'Réserver un appel - Johan Chan',
+		description: 'Choisissez un créneau pour un échange de 30 minutes avec Johan Chan.',
+		type: 'website',
+		noindex: true
 	}
 };
 

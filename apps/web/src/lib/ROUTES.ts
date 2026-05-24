@@ -15,6 +15,7 @@ const PAGES = {
   "/articles/[slug]": (params: { slug: (string | number) }) => {
     return `/articles/${params['slug']}`
   },
+  "/call": `/call`,
   "/devlogs": `/devlogs`,
   "/devlogs/[slug]": (params: { slug: (string | number) }) => {
     return `/devlogs/${params['slug']}`
@@ -155,7 +156,7 @@ export function route<T extends keyof AllTypes>(key: T, ...params: any[]): strin
 * ```
 */
 export type KIT_ROUTES = {
-  PAGES: { '/': never, '/about': never, '/articles': never, '/articles/[slug]': 'slug', '/devlogs': never, '/devlogs/[slug]': 'slug', '/series': never, '/series/[series]': 'series', '/series/[series]/[chapter]': 'series' | 'chapter' }
+  PAGES: { '/': never, '/about': never, '/articles': never, '/articles/[slug]': 'slug', '/call': never, '/devlogs': never, '/devlogs/[slug]': 'slug', '/series': never, '/series/[series]': 'series', '/series/[series]/[chapter]': 'series' | 'chapter' }
   SERVERS: { 'prerender /sitemap.xml': never, 'GET /sitemap.xml': never }
   ACTIONS: Record<string, never>
   LINKS: Record<string, never>

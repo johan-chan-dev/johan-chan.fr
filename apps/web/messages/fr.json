@@ -15,6 +15,10 @@
 		"empty_feed": "Aucun contenu pour le moment. Revenez bientôt !",
 		"linkedin_aria_label": "Profil LinkedIn de Johan Chan"
 	},
+	"call": {
+		"heading": "Réservons un moment",
+		"intro": "Choisissez le créneau qui vous convient pour notre échange de 30 minutes."
+	},
 	"error": {
 		"404": {
 			"title": "Page introuvable",
