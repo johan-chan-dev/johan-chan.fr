@@ -2,16 +2,28 @@
 	import { onMount } from 'svelte';
 	import { m } from '$lib/paraglide/messages';
 	import { theme } from '$lib/components/Theme.svelte';
-	import { mountCalInline } from './cal-embed';
+	import { mountCalInline, updateCalTheme } from './cal-embed';
+
+	const NAMESPACE = '30min';
+	// Map the site's daisyUI theme to Cal's theme; reactive to live toggles.
+	const calTheme = $derived(theme.current === 'abyss' ? 'dark' : 'light');
+	let mounted = false;
 
 	onMount(() => {
 		mountCalInline({
 			origin: 'https://cal.lagraineducraft.fr',
 			calLink: 'johan.chan/30min',
-			namespace: '30min',
+			namespace: NAMESPACE,
 			selector: '#cal-inline',
-			theme: theme.current === 'abyss' ? 'dark' : 'light'
+			theme: calTheme
 		});
+		mounted = true;
+	});
+
+	// Keep the embed's theme in sync when the visitor toggles the site theme.
+	$effect(() => {
+		const next = calTheme;
+		if (mounted) updateCalTheme(NAMESPACE, next);
 	});
 </script>
 

@@ -79,3 +79,13 @@ export function mountCalInline({
 	});
 	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
 }
+
+/**
+ * Re-theme an already-mounted embed. No-op if the embed isn't initialized yet,
+ * so it's safe to call reactively before mountCalInline has run.
+ */
+export function updateCalTheme(namespace: string, theme: 'light' | 'dark'): void {
+	const Cal = window.Cal;
+	if (!Cal || !Cal.ns || !Cal.ns[namespace]) return;
+	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
+}
