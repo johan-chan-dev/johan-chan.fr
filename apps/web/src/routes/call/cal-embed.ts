@@ -74,7 +74,7 @@ export function mountCalInline({
 	Cal('init', namespace, { origin });
 	Cal.ns[namespace]('inline', {
 		elementOrSelector: selector,
-		config: { layout: 'week_view', useSlotsViewOnSmallScreen: 'true', theme },
+		config: { layout: 'week_view', useSlotsViewOnSmallScreen: false, theme },
 		calLink
 	});
 	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });

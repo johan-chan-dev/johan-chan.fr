@@ -15,7 +15,7 @@
 	});
 </script>
 
-<div class="max-w-2xl xl:max-w-3xl 2xl:max-w-4xl mx-auto py-8">
+<div class="max-w-3xl md:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto py-8">
 	<header class="mb-8 text-center md:text-left">
 		<h1 class="text-2xl md:text-3xl font-bold mb-2">{m['call.heading']()}</h1>
 		<p class="text-base-content/80 leading-relaxed">{m['call.intro']()}</p>
