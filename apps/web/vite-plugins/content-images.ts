@@ -94,9 +94,6 @@ const BODY_SIZES = [
 	{ name: 'lg', width: 1200 }
 ];
 
-/** All sizes (for backward compatibility with options.sizes) */
-const DEFAULT_SIZES = [COVER_SIZE, ...BODY_SIZES];
-
 // ============================================================================
 // Image Manifest (populated at build time)
 // ============================================================================
@@ -184,7 +181,6 @@ function escapeRegex(str: string): string {
 export function contentImages(options: ContentImagesOptions = {}): Plugin {
 	const contentDir = options.contentDir ?? 'src/content';
 	const outputDir = options.outputDir ?? 'images/optimized';
-	const sizes = options.sizes ?? DEFAULT_SIZES;
 	const quality = options.quality ?? 80;
 
 	let projectRoot: string;
@@ -228,7 +224,12 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 						// Could be series/{seriesSlug}/{chapterSlug}/{filename}
 						// Image lives at: series/{seriesSlug}/{chapterSlug}/images/{filename}
 						imagePath = path.join(
-							resolvedContentDir, typeDir, parentSlug, slug, 'images', filename
+							resolvedContentDir,
+							typeDir,
+							parentSlug,
+							slug,
+							'images',
+							filename
 						);
 						// Also try: series/{seriesSlug}/images/{slug}/{filename} (series-level images in subfolders)
 						// But first check if the nested chapter path exists
@@ -260,9 +261,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 				}
 
 				// Build path to image in content folder
-				imagePath = path.join(
-					resolvedContentDir, typeDir, slug, 'images', filename
-				);
+				imagePath = path.join(resolvedContentDir, typeDir, slug, 'images', filename);
 
 				try {
 					const buffer = await fs.readFile(imagePath);
@@ -273,7 +272,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 					res.setHeader('Content-Length', buffer.length);
 					res.setHeader('Cache-Control', 'no-cache');
 					res.end(buffer);
-				} catch (err) {
+				} catch {
 					next();
 				}
 			});
@@ -328,11 +327,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 						const { usage, ogCrop } = await detectImageUsage(contentFolderPath, imageFile);
 						const buffer = await fs.readFile(imagePath);
 
-						const hash = crypto
-							.createHash('md5')
-							.update(buffer)
-							.digest('hex')
-							.slice(0, 8);
+						const hash = crypto.createHash('md5').update(buffer).digest('hex').slice(0, 8);
 
 						const imageOutputDir = path.join(outputRoot, contentPath);
 						await fs.mkdir(imageOutputDir, { recursive: true });
@@ -375,9 +370,7 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 									.webp({ quality })
 									.toFile(outputPath);
 
-								srcsetParts.push(
-									`/${outputDir}/${contentPath}/${outputName} ${size.width}w`
-								);
+								srcsetParts.push(`/${outputDir}/${contentPath}/${outputName} ${size.width}w`);
 							}
 
 							const defaultName = `${baseName}-${hash}.webp`;
@@ -464,7 +457,9 @@ export function contentImages(options: ContentImagesOptions = {}): Plugin {
 				else if (entry.cover) coverCount++;
 				else if (entry.srcset) bodyCount++;
 			}
-			console.log(`✅ Optimized ${imageManifest.size} content images (${coverCount} cover-only, ${bodyCount} with body sizes)`);
+			console.log(
+				`✅ Optimized ${imageManifest.size} content images (${coverCount} cover-only, ${bodyCount} with body sizes)`
+			);
 		}
 	};
 }
@@ -525,26 +520,23 @@ export function transformImageUrls(
 ): string {
 	const contentPath = `${typeDir}/${slug}`;
 
-	return markdown.replace(
-		/!\[([^\]]*)\]\(\.\/images\/([^)]+)\)/g,
-		(match, alt, filename) => {
-			if (isDev) {
-				// Dev: Use Vite middleware for instant serving
-				return `![${alt}](${CONTENT_IMAGE_PREFIX}/${contentPath}/${filename})`;
-			}
-
-			// Prod: Look up optimized URL in manifest (load from file)
-			const manifest = loadManifestFromFile();
-			const key = `${contentPath}/${filename}`;
-			const entry = manifest.get(key);
-
-			if (entry) {
-				return `![${alt}](${entry.optimized})`;
-			}
-
-			// Fallback: construct expected path (shouldn't happen if build ran correctly)
-			console.warn(`Image not in manifest: ${key}`);
-			return match;
+	return markdown.replace(/!\[([^\]]*)\]\(\.\/images\/([^)]+)\)/g, (match, alt, filename) => {
+		if (isDev) {
+			// Dev: Use Vite middleware for instant serving
+			return `![${alt}](${CONTENT_IMAGE_PREFIX}/${contentPath}/${filename})`;
 		}
-	);
+
+		// Prod: Look up optimized URL in manifest (load from file)
+		const manifest = loadManifestFromFile();
+		const key = `${contentPath}/${filename}`;
+		const entry = manifest.get(key);
+
+		if (entry) {
+			return `![${alt}](${entry.optimized})`;
+		}
+
+		// Fallback: construct expected path (shouldn't happen if build ran correctly)
+		console.warn(`Image not in manifest: ${key}`);
+		return match;
+	});
 }

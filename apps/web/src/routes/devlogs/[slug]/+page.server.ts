@@ -1,5 +1,9 @@
 import { error } from '@sveltejs/kit';
-import { getContentBySlug, loadContentByType, loadContentByTypeForPrerender } from '$lib/utils/content';
+import {
+	getContentBySlug,
+	loadContentByType,
+	loadContentByTypeForPrerender
+} from '$lib/utils/content';
 import { prepareContentDetail } from '$lib/utils/content-detail';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
@@ -34,7 +38,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	// Find current, previous, and next posts
 	const currentIndex = projectDevlogs.findIndex((d) => d.slug === slug);
 	const newerPost = currentIndex > 0 ? projectDevlogs[currentIndex - 1] : null;
-	const olderPost = currentIndex < projectDevlogs.length - 1 ? projectDevlogs[currentIndex + 1] : null;
+	const olderPost =
+		currentIndex < projectDevlogs.length - 1 ? projectDevlogs[currentIndex + 1] : null;
 
 	return {
 		post: {

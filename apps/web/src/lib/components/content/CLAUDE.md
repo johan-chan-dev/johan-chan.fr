@@ -9,9 +9,7 @@ When a content item needs interactive Svelte components, use `content.svx` inste
 ### Usage
 
 ```svelte
-<C.Callout type="tip" title="Pro tip">
-This renders as a styled callout box.
-</C.Callout>
+<C.Callout type="tip" title="Pro tip">This renders as a styled callout box.</C.Callout>
 
 Regular **markdown** works alongside components.
 ```
@@ -22,57 +20,61 @@ Regular **markdown** works alongside components.
 
 Styled aside box for tips, warnings, notes, and info.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `type` | `'info' \| 'warning' \| 'tip' \| 'note'` | `'info'` | Visual style variant |
-| `title` | `string` | — | Optional heading text |
+| Prop    | Type                                     | Default  | Description           |
+| ------- | ---------------------------------------- | -------- | --------------------- |
+| `type`  | `'info' \| 'warning' \| 'tip' \| 'note'` | `'info'` | Visual style variant  |
+| `title` | `string`                                 | —        | Optional heading text |
 
 Variants:
+
 - `info` — blue, informational
 - `warning` — orange, caution
 - `tip` — green, helpful advice
 - `note` — neutral, supplementary
 
 ```svelte
-<C.Callout type="warning" title="Breaking change">
-This API was removed in v3.
-</C.Callout>
+<C.Callout type="warning" title="Breaking change">This API was removed in v3.</C.Callout>
 ```
 
 #### `C.ScatterChart`
 
 Scatter plot with labeled quadrants. Powered by LayerCake.
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `xLabel` | `string` | — | Label for the x-axis (displayed below chart) |
-| `yLabel` | `string` | — | Label for the y-axis (displayed left of chart, rotated) |
-| `points` | `Array<{ label, x, y, color? }>` | required | Data points with 0-100 coordinates |
-| `quadrants` | `[string, string, string, string]` | — | Labels for [top-left, top-right, bottom-right, bottom-left] quadrants |
+| Prop        | Type                               | Default  | Description                                                           |
+| ----------- | ---------------------------------- | -------- | --------------------------------------------------------------------- |
+| `xLabel`    | `string`                           | —        | Label for the x-axis (displayed below chart)                          |
+| `yLabel`    | `string`                           | —        | Label for the y-axis (displayed left of chart, rotated)               |
+| `points`    | `Array<{ label, x, y, color? }>`   | required | Data points with 0-100 coordinates                                    |
+| `quadrants` | `[string, string, string, string]` | —        | Labels for [top-left, top-right, bottom-right, bottom-left] quadrants |
 
 Coordinates are percentages: `x: 0` = left edge, `x: 100` = right edge, `y: 0` = bottom, `y: 100` = top.
 
 ```svelte
 <C.ScatterChart
-  xLabel="Boring → Expressif"
-  yLabel="Permissif → Strict"
-  quadrants={["Fiable pour l'IA", "Strict mais complexe", "Imprévisible pour l'IA", "Simple mais risqué"]}
-  points={[
-    { label: "Go", x: 10, y: 85 },
-    { label: "Java", x: 25, y: 80 },
-    { label: "Python", x: 78, y: 24 },
-    { label: "Rust", x: 70, y: 95, color: "#f59e0b" }
-  ]}
+	xLabel="Boring → Expressif"
+	yLabel="Permissif → Strict"
+	quadrants={[
+		"Fiable pour l'IA",
+		'Strict mais complexe',
+		"Imprévisible pour l'IA",
+		'Simple mais risqué'
+	]}
+	points={[
+		{ label: 'Go', x: 10, y: 85 },
+		{ label: 'Java', x: 25, y: 80 },
+		{ label: 'Python', x: 78, y: 24 },
+		{ label: 'Rust', x: 70, y: 95, color: '#f59e0b' }
+	]}
 />
 ```
 
 ## Three Ways to Use Components
 
-| Need | Approach | Import |
-|------|----------|--------|
-| Shared component (Callout, etc.) | `<C.Callout>` | Auto-injected, no import needed |
-| Inline one-off logic | `<script>` + markup in `.svx` | N/A — write directly in the file |
-| Complex one-off component | Colocate `.svelte` file next to `content.svx` | `import Demo from './Demo.svelte'` |
+| Need                             | Approach                                      | Import                             |
+| -------------------------------- | --------------------------------------------- | ---------------------------------- |
+| Shared component (Callout, etc.) | `<C.Callout>`                                 | Auto-injected, no import needed    |
+| Inline one-off logic             | `<script>` + markup in `.svx`                 | N/A — write directly in the file   |
+| Complex one-off component        | Colocate `.svelte` file next to `content.svx` | `import Demo from './Demo.svelte'` |
 
 ### Shared components (`C.` namespace)
 
@@ -84,7 +86,7 @@ Available everywhere, no imports. See "Available Components" above.
 
 ```svelte
 <script>
-let count = $state(0);
+	let count = $state(0);
 </script>
 
 Click the button: <button onclick={() => count++}>Clicked {count} times</button>
@@ -108,7 +110,7 @@ Import with a relative path in `content.svx`:
 
 ```svelte
 <script>
-import InteractiveDemo from './InteractiveDemo.svelte';
+	import InteractiveDemo from './InteractiveDemo.svelte';
 </script>
 
 ## Try it out

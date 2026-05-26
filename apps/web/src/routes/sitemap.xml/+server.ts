@@ -19,8 +19,7 @@ function generateStaticRoutes() {
 }
 
 function generateContentRoutes() {
-	const entries: Array<{ url: string; lastmod: string; changefreq: string; priority: number }> =
-		[];
+	const entries: Array<{ url: string; lastmod: string; changefreq: string; priority: number }> = [];
 
 	const seriesMap = loadSeriesGrouped();
 	for (const [seriesSlug, seriesData] of seriesMap) {
@@ -47,9 +46,7 @@ function generateContentRoutes() {
 		}
 	}
 
-	const articles = loadAllContent().filter(
-		(i) => i.type === 'article' && i.published !== false
-	);
+	const articles = loadAllContent().filter((i) => i.type === 'article' && i.published !== false);
 	for (const article of articles) {
 		entries.push({
 			url: `${SITE_URL}/articles/${article.slug}`,

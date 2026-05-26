@@ -13,10 +13,27 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHIKI_THEMES = ['github-dark', 'github-light'];
 const SHIKI_DEFAULT_THEME = 'github-dark';
 const SHIKI_LANGS = [
-	'javascript', 'typescript', 'svelte', 'html', 'css',
-	'json', 'bash', 'shell', 'yaml', 'markdown',
-	'jsx', 'tsx', 'toml', 'dockerfile',
-	'python', 'java', 'go', 'rust', 'c', 'cpp', 'sql'
+	'javascript',
+	'typescript',
+	'svelte',
+	'html',
+	'css',
+	'json',
+	'bash',
+	'shell',
+	'yaml',
+	'markdown',
+	'jsx',
+	'tsx',
+	'toml',
+	'dockerfile',
+	'python',
+	'java',
+	'go',
+	'rust',
+	'c',
+	'cpp',
+	'sql'
 ];
 const SHIKI_TRANSFORMERS = [
 	{

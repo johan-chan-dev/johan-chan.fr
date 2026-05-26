@@ -14,10 +14,10 @@ The result: two rendering paths that coexist. Plain markdown stays simple. Rich 
 
 Each content folder contains either `content.md` or `content.svx` — never both.
 
-| File | Toolchain | Syntax highlighting | Rendered as |
-|------|-----------|---------------------|-------------|
-| `content.md` | `marked` + shiki at runtime | Request/build time | HTML string → `{@html}` |
-| `content.svx` | mdsvex at build time | Build time | Svelte component → `<Component />` |
+| File          | Toolchain                   | Syntax highlighting | Rendered as                        |
+| ------------- | --------------------------- | ------------------- | ---------------------------------- |
+| `content.md`  | `marked` + shiki at runtime | Request/build time  | HTML string → `{@html}`            |
+| `content.svx` | mdsvex at build time        | Build time          | Svelte component → `<Component />` |
 
 `renderMode` on the loaded content item indicates which path applies: `'html'` (default) or `'svx'`.
 
@@ -53,9 +53,7 @@ Both paths use shiki, but at different stages:
 All content components are auto-injected into `.svx` files under the `C` namespace. No imports needed — authors just use `<C.ComponentName>`:
 
 ```svelte
-<C.Callout type="tip" title="Example">
-Content here
-</C.Callout>
+<C.Callout type="tip" title="Example">Content here</C.Callout>
 ```
 
 This works via a preprocessor (`src/lib/preprocessors/content-components.js`) that injects `import * as C from '$lib/components/content'` into every `.svx` file before mdsvex processes it.

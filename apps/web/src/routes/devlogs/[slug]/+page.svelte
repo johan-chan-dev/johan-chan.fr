@@ -29,100 +29,100 @@
 />
 
 <PreviewGate preview={isPreview}>
-
-{#if isDraft}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<DraftBanner />
-	</div>
-{/if}
-
-{#if isPreview}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<PreviewBanner />
-	</div>
-{/if}
-
-<article class="detail-page">
-	<div class="post-topbar">
-		<nav class="breadcrumb">
-			<a href={previewHref(appHref('/devlogs'))}>← Retour aux devlogs</a>
-		</nav>
-
-		<div class="project-badge">
-			<span class="project-name">{projectInfo.name}</span>
-			<span class="post-count">{projectInfo.totalPosts} entrée{projectInfo.totalPosts > 1 ? 's' : ''}</span>
+	{#if isDraft}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<DraftBanner />
 		</div>
-	</div>
+	{/if}
 
-	<ContentDetailHeader
-		title={post.title}
-		excerpt={post.excerpt}
-		date={post.date}
-		readingTime={post.readingTime}
-		tags={post.tags}
-		heroUrl={post.heroUrl}
-		heroSrcset={post.heroSrcset}
-		coverUrl={post.coverUrl}
-		image={post.image}
-		imageFocus={post.imageFocus}
-	>
-		<div class="prose-content">
-			{#if PostComponent}
-				<PostComponent />
-			{:else}
-				{@html post.htmlContent}
-			{/if}
+	{#if isPreview}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<PreviewBanner />
+		</div>
+	{/if}
+
+	<article class="detail-page">
+		<div class="post-topbar">
+			<nav class="breadcrumb">
+				<a href={previewHref(appHref('/devlogs'))}>← Retour aux devlogs</a>
+			</nav>
+
+			<div class="project-badge">
+				<span class="project-name">{projectInfo.name}</span>
+				<span class="post-count"
+					>{projectInfo.totalPosts} entrée{projectInfo.totalPosts > 1 ? 's' : ''}</span
+				>
+			</div>
 		</div>
 
-		<!-- Post Navigation -->
-		<nav class="post-navigation">
-			{#if olderPost}
-				<a href={previewHref(appHref(`/devlogs/${olderPost.slug}`))} class="nav-link older">
-					<span class="nav-direction">← Plus ancien</span>
-					<span class="nav-title">{olderPost.title}</span>
-					<time datetime={olderPost.date}>{formatDate(olderPost.date)}</time>
-				</a>
-			{:else}
-				<div class="nav-placeholder"></div>
+		<ContentDetailHeader
+			title={post.title}
+			excerpt={post.excerpt}
+			date={post.date}
+			readingTime={post.readingTime}
+			tags={post.tags}
+			heroUrl={post.heroUrl}
+			heroSrcset={post.heroSrcset}
+			coverUrl={post.coverUrl}
+			image={post.image}
+			imageFocus={post.imageFocus}
+		>
+			<div class="prose-content">
+				{#if PostComponent}
+					<PostComponent />
+				{:else}
+					{@html post.htmlContent}
+				{/if}
+			</div>
+
+			<!-- Post Navigation -->
+			<nav class="post-navigation">
+				{#if olderPost}
+					<a href={previewHref(appHref(`/devlogs/${olderPost.slug}`))} class="nav-link older">
+						<span class="nav-direction">← Plus ancien</span>
+						<span class="nav-title">{olderPost.title}</span>
+						<time datetime={olderPost.date}>{formatDate(olderPost.date)}</time>
+					</a>
+				{:else}
+					<div class="nav-placeholder"></div>
+				{/if}
+
+				{#if newerPost}
+					<a href={previewHref(appHref(`/devlogs/${newerPost.slug}`))} class="nav-link newer">
+						<span class="nav-direction">Plus récent →</span>
+						<span class="nav-title">{newerPost.title}</span>
+						<time datetime={newerPost.date}>{formatDate(newerPost.date)}</time>
+					</a>
+				{:else}
+					<div class="nav-placeholder"></div>
+				{/if}
+			</nav>
+
+			<!-- Project Timeline -->
+			{#if projectInfo.posts.length > 1}
+				<aside class="project-timeline">
+					<h3>Timeline du projet</h3>
+					<ul class="timeline-list">
+						{#each projectInfo.posts as entry (entry.slug)}
+							<li class:current={entry.slug === post.slug}>
+								{#if entry.slug === post.slug}
+									<span class="timeline-entry current">
+										<time datetime={entry.date}>{formatDate(entry.date)}</time>
+										<span class="entry-title">{entry.title}</span>
+									</span>
+								{:else}
+									<a href={previewHref(appHref(`/devlogs/${entry.slug}`))} class="timeline-entry">
+										<time datetime={entry.date}>{formatDate(entry.date)}</time>
+										<span class="entry-title">{entry.title}</span>
+									</a>
+								{/if}
+							</li>
+						{/each}
+					</ul>
+				</aside>
 			{/if}
-
-			{#if newerPost}
-				<a href={previewHref(appHref(`/devlogs/${newerPost.slug}`))} class="nav-link newer">
-					<span class="nav-direction">Plus récent →</span>
-					<span class="nav-title">{newerPost.title}</span>
-					<time datetime={newerPost.date}>{formatDate(newerPost.date)}</time>
-				</a>
-			{:else}
-				<div class="nav-placeholder"></div>
-			{/if}
-		</nav>
-
-		<!-- Project Timeline -->
-		{#if projectInfo.posts.length > 1}
-			<aside class="project-timeline">
-				<h3>Timeline du projet</h3>
-				<ul class="timeline-list">
-					{#each projectInfo.posts as entry}
-						<li class:current={entry.slug === post.slug}>
-							{#if entry.slug === post.slug}
-								<span class="timeline-entry current">
-									<time datetime={entry.date}>{formatDate(entry.date)}</time>
-									<span class="entry-title">{entry.title}</span>
-								</span>
-							{:else}
-								<a href={previewHref(appHref(`/devlogs/${entry.slug}`))} class="timeline-entry">
-									<time datetime={entry.date}>{formatDate(entry.date)}</time>
-									<span class="entry-title">{entry.title}</span>
-								</a>
-							{/if}
-						</li>
-					{/each}
-				</ul>
-			</aside>
-		{/if}
-	</ContentDetailHeader>
-</article>
-
+		</ContentDetailHeader>
+	</article>
 </PreviewGate>
 
 <style>

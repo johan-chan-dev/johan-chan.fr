@@ -13,72 +13,72 @@
 	const { data } = $props();
 	const article = $derived(data.article);
 	const relatedArticles = $derived(data.relatedArticles);
-	const ArticleComponent = $derived((data.article as unknown as { component?: Component }).component);
+	const ArticleComponent = $derived(
+		(data.article as unknown as { component?: Component }).component
+	);
 
 	const isDraft = $derived(article.published === false);
 	const isPreview = $derived(article.preview === true);
 </script>
 
 <SEO
-	title="{article.title}"
+	title={article.title}
 	description={article.excerpt}
 	type="article"
 	image={article.ogUrl || article.coverUrl || article.image}
 />
 
 <PreviewGate preview={isPreview}>
-
-{#if isDraft}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<DraftBanner />
-	</div>
-{/if}
-
-{#if isPreview}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<PreviewBanner />
-	</div>
-{/if}
-
-<article class="detail-page">
-	<nav class="breadcrumb">
-		<a href={previewHref(appHref('/articles'))}>← Retour aux articles</a>
-	</nav>
-
-	<ContentDetailHeader
-		title={article.title}
-		excerpt={article.excerpt}
-		date={article.date}
-		readingTime={article.readingTime}
-		tags={article.tags}
-		heroUrl={article.heroUrl}
-		heroSrcset={article.heroSrcset}
-		coverUrl={article.coverUrl}
-		image={article.image}
-		imageFocus={article.imageFocus}
-		updatedAt={article.updatedAt}
-	>
-		<div class="prose-content">
-			{#if ArticleComponent}
-				<ArticleComponent />
-			{:else}
-				{@html article.htmlContent}
-			{/if}
+	{#if isDraft}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<DraftBanner />
 		</div>
+	{/if}
 
-		{#if relatedArticles.length > 0}
-			<aside class="related-articles">
-				<h3>Articles similaires</h3>
-				<div class="related-grid">
-					{#each relatedArticles as related}
-						<ContentItem item={related} />
-					{/each}
-				</div>
-			</aside>
-		{/if}
-	</ContentDetailHeader>
-</article>
+	{#if isPreview}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<PreviewBanner />
+		</div>
+	{/if}
 
+	<article class="detail-page">
+		<nav class="breadcrumb">
+			<a href={previewHref(appHref('/articles'))}>← Retour aux articles</a>
+		</nav>
+
+		<ContentDetailHeader
+			title={article.title}
+			excerpt={article.excerpt}
+			date={article.date}
+			readingTime={article.readingTime}
+			tags={article.tags}
+			heroUrl={article.heroUrl}
+			heroSrcset={article.heroSrcset}
+			coverUrl={article.coverUrl}
+			image={article.image}
+			imageFocus={article.imageFocus}
+			updatedAt={article.updatedAt}
+		>
+			<div class="prose-content">
+				{#if ArticleComponent}
+					<ArticleComponent />
+				{:else}
+					{@html article.htmlContent}
+				{/if}
+			</div>
+
+			{#if relatedArticles.length > 0}
+				<aside class="related-articles">
+					<h3>Articles similaires</h3>
+					<div class="related-grid">
+						{#each relatedArticles as related (related.slug)}
+							<ContentItem item={related} />
+						{/each}
+					</div>
+				</aside>
+			{/if}
+		</ContentDetailHeader>
+	</article>
 </PreviewGate>
 
 <style>

@@ -17,7 +17,8 @@
 	const { href, preload = $bindable('hover'), children }: Props = $props();
 
 	let currentPath = $derived(deLocalizeUrl(page.url).pathname);
-	let targetHref = $derived(() => {
+	let targetHref = $derived.by(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions -- touch page.url so the href re-resolves on navigation
 		page.url;
 		return previewHref(appHref(href));
 	});
@@ -27,9 +28,9 @@
 	data-sveltekit-preload-data={preload}
 	class="menu menu-horizontal transition flex py-2 px-4 rounded-md
 		{(href === '/' && href === currentPath) || (href !== '/' && currentPath.startsWith(href))
-			? 'nav-link-active'
-			: 'nav-link'}"
-	href={targetHref()}
+		? 'nav-link-active'
+		: 'nav-link'}"
+	href={targetHref}
 >
 	{@render children()}
 </a>

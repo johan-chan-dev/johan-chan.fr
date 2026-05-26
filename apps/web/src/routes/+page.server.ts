@@ -11,7 +11,7 @@ export const load: PageServerLoad = async () => {
 		seo: {
 			title: 'Johan Chan - Software Crafter',
 			description:
-				'Réflexions sur le craft logiciel, la pensée systémique et l\'entrepreneuriat. Articles, séries et carnets de développement par Johan Chan.'
+				"Réflexions sur le craft logiciel, la pensée systémique et l'entrepreneuriat. Articles, séries et carnets de développement par Johan Chan."
 		}
 	};
 };

@@ -69,7 +69,9 @@
 				{/if}
 				{#if updatedAt && updatedAt.slice(0, 10) !== date}
 					<span class="separator">·</span>
-					<span class="updated-at">Mis à jour le <time datetime={updatedAt}>{formatDate(updatedAt)}</time></span>
+					<span class="updated-at"
+						>Mis à jour le <time datetime={updatedAt}>{formatDate(updatedAt)}</time></span
+					>
 				{/if}
 				{#if extraMeta}
 					{@render extraMeta()}
@@ -77,7 +79,7 @@
 				{#if tags.length > 0}
 					<span class="separator">·</span>
 					<div class="tags">
-						{#each tags as tag}
+						{#each tags as tag (tag)}
 							<span class="tag">{tag}</span>
 						{/each}
 					</div>

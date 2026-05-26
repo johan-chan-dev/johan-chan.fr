@@ -35,9 +35,10 @@ const svxModules = import.meta.glob('$content/**/*.svx', {
 
 // Content directory path (for dev mode file reads)
 // In dev, DEV_CONTENT_DIR can point to le-cockpit's content (source of truth)
-const CONTENT_DIR = dev && process.env.DEV_CONTENT_DIR
-	? path.resolve(process.env.DEV_CONTENT_DIR)
-	: path.resolve(process.cwd(), '../../packages/content');
+const CONTENT_DIR =
+	dev && process.env.DEV_CONTENT_DIR
+		? path.resolve(process.env.DEV_CONTENT_DIR)
+		: path.resolve(process.cwd(), '../../packages/content');
 
 // Type directories to scan
 const TYPE_DIRS = ['articles', 'series', 'devlogs', 'posts'] as const;
@@ -47,7 +48,6 @@ interface LoadedContentItem extends ContentItem {
 	filePath: string;
 	renderMode: 'md' | 'svx';
 }
-
 
 // ============================================================================
 // Folder-based Content Scanning (no index.json needed)
@@ -102,7 +102,11 @@ function scanContentFolders(): IndexEntryWithCover[] {
 
 				// For series: check if this is a series parent folder (has meta.json but no content.md)
 				// If so, scan its subdirectories for chapters
-				if (typeDir === 'series' && !fs.existsSync(path.join(folderPath, 'content.md')) && !fs.existsSync(path.join(folderPath, 'content.svx'))) {
+				if (
+					typeDir === 'series' &&
+					!fs.existsSync(path.join(folderPath, 'content.md')) &&
+					!fs.existsSync(path.join(folderPath, 'content.svx'))
+				) {
 					const seriesSlug = entry.name;
 					const chapterEntries = fs.readdirSync(folderPath, { withFileTypes: true });
 					for (const chapterEntry of chapterEntries) {
@@ -119,7 +123,10 @@ function scanContentFolders(): IndexEntryWithCover[] {
 							const chapterMetaResult = MetaJsonSchema.safeParse(chapterMetaParsed);
 
 							if (!chapterMetaResult.success) {
-								console.error(`Validation error in ${chapterMetaPath}:`, chapterMetaResult.error.format());
+								console.error(
+									`Validation error in ${chapterMetaPath}:`,
+									chapterMetaResult.error.format()
+								);
 								continue;
 							}
 
@@ -131,7 +138,9 @@ function scanContentFolders(): IndexEntryWithCover[] {
 							// Read content for reading time (try .svx first, then .md)
 							const svxContentPath = path.join(chapterPath, 'content.svx');
 							const mdContentPath = path.join(chapterPath, 'content.md');
-							const readingContentPath = fs.existsSync(svxContentPath) ? svxContentPath : mdContentPath;
+							const readingContentPath = fs.existsSync(svxContentPath)
+								? svxContentPath
+								: mdContentPath;
 							const chapterContent = fs.existsSync(readingContentPath)
 								? fs.readFileSync(readingContentPath, 'utf-8')
 								: '';
@@ -289,9 +298,7 @@ function scanContentFolders(): IndexEntryWithCover[] {
 
 	// Filter out unpublished content in production
 	// In dev mode, show all content (including drafts) for preview
-	const filteredItems = isDevMode
-		? items
-		: items.filter((item) => item.published !== false);
+	const filteredItems = isDevMode ? items : items.filter((item) => item.published !== false);
 
 	// Cache for production
 	if (!dev) {
@@ -405,9 +412,7 @@ function _loadSeriesGroupedFrom(seriesItems: IndexEntryWithCover[]): Map<string,
 
 		if (!grouped.has(seriesSlug)) {
 			// Try to load series-level meta.json
-			const seriesMeta = isDevMode
-				? loadSeriesMetaDev(seriesSlug)
-				: loadSeriesMetaProd(seriesSlug);
+			const seriesMeta = isDevMode ? loadSeriesMetaDev(seriesSlug) : loadSeriesMetaProd(seriesSlug);
 
 			let coverUrl: string | undefined;
 			if (seriesMeta?.image) {
@@ -556,9 +561,7 @@ function readFolderContent(folderPath: string): LoadedContentItem | undefined {
 		const renderMode = hasSvx ? 'svx' : 'md';
 		const contentPath = hasSvx ? svxPath : mdPath;
 
-		let content = fs.existsSync(contentPath)
-			? fs.readFileSync(contentPath, 'utf-8').trim()
-			: '';
+		let content = fs.existsSync(contentPath) ? fs.readFileSync(contentPath, 'utf-8').trim() : '';
 
 		// Only transform image URLs for .md (mdsvex handles images differently via layout)
 		if (renderMode === 'md') {
@@ -690,9 +693,7 @@ export function getContentBySlug(slug: string): LoadedContentItem | undefined {
 	// Use building flag since dev is incorrectly true during build
 	const isDevMode = dev && !building;
 
-	const item = isDevMode
-		? readContentFromDisk(slug)
-		: readContentFromModules(slug);
+	const item = isDevMode ? readContentFromDisk(slug) : readContentFromModules(slug);
 
 	// Filter out unpublished content in production
 	if (!isDevMode && item?.published === false) {
@@ -707,12 +708,18 @@ export function getContentBySlug(slug: string): LoadedContentItem | undefined {
 // ============================================================================
 
 // Cached manifest for production
-let cachedImageManifest: Record<string, { cover?: string; optimized?: string; srcset?: string; og?: string }> | null = null;
+let cachedImageManifest: Record<
+	string,
+	{ cover?: string; optimized?: string; srcset?: string; og?: string }
+> | null = null;
 
 /**
  * Load image manifest from file (production only)
  */
-function loadImageManifest(): Record<string, { cover?: string; optimized?: string; srcset?: string; og?: string }> {
+function loadImageManifest(): Record<
+	string,
+	{ cover?: string; optimized?: string; srcset?: string; og?: string }
+> {
 	if (cachedImageManifest) return cachedImageManifest;
 
 	const manifestPath = path.join(CONTENT_DIR, '.image-manifest.json');
@@ -734,14 +741,15 @@ function resolveImageEntry(
 	slug: string,
 	image: string | undefined,
 	parentSlug?: string
-): { devUrl: string; entry: { cover?: string; optimized?: string; srcset?: string; og?: string } | undefined } | null {
+): {
+	devUrl: string;
+	entry: { cover?: string; optimized?: string; srcset?: string; og?: string } | undefined;
+} | null {
 	if (!image) return null;
 
 	const filename = image.replace(/^\.\/images\//, '');
 	const typeDir = typeToDir(type);
-	const contentPath = parentSlug
-		? `${typeDir}/${parentSlug}/${slug}`
-		: `${typeDir}/${slug}`;
+	const contentPath = parentSlug ? `${typeDir}/${parentSlug}/${slug}` : `${typeDir}/${slug}`;
 
 	const devUrl = `/@content-images/${contentPath}/${filename}`;
 
@@ -755,7 +763,12 @@ function resolveImageEntry(
 }
 
 /** Cover image URL (thumbnail for feeds). */
-export function getCoverImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): string | null {
+export function getCoverImageUrl(
+	type: ContentType,
+	slug: string,
+	image: string | undefined,
+	parentSlug?: string
+): string | null {
 	const resolved = resolveImageEntry(type, slug, image, parentSlug);
 	if (!resolved) return null;
 	if (!resolved.entry) return resolved.devUrl;
@@ -763,19 +776,31 @@ export function getCoverImageUrl(type: ContentType, slug: string, image: string 
 }
 
 /** Hero image URL + srcset (full-size for detail pages). */
-export function getHeroImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): { url: string; srcset: string } | null {
+export function getHeroImageUrl(
+	type: ContentType,
+	slug: string,
+	image: string | undefined,
+	parentSlug?: string
+): { url: string; srcset: string } | null {
 	const resolved = resolveImageEntry(type, slug, image, parentSlug);
 	if (!resolved) return null;
 	if (!resolved.entry) return { url: resolved.devUrl, srcset: '' };
 	if (!resolved.entry.optimized) return null;
 	return {
 		url: `${base}${resolved.entry.optimized}`,
-		srcset: resolved.entry.srcset ? resolved.entry.srcset.replace(/(\/images\/)/g, `${base}/images/`) : ''
+		srcset: resolved.entry.srcset
+			? resolved.entry.srcset.replace(/(\/images\/)/g, `${base}/images/`)
+			: ''
 	};
 }
 
 /** OG image URL (social sharing). No base path — used in absolute URLs. */
-export function getOGImageUrl(type: ContentType, slug: string, image: string | undefined, parentSlug?: string): string | null {
+export function getOGImageUrl(
+	type: ContentType,
+	slug: string,
+	image: string | undefined,
+	parentSlug?: string
+): string | null {
 	const resolved = resolveImageEntry(type, slug, image, parentSlug);
 	if (!resolved) return null;
 	if (!resolved.entry) return resolved.devUrl;

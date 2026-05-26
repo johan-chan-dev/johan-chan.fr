@@ -28,9 +28,10 @@
 	const href = $derived.by(() => {
 		if (item.external_url) return item.external_url;
 		if (!item.slug) return '#';
-		const path = item.type === 'série' && item.parentSlug
-			? `/series/${item.parentSlug}/${item.slug}`
-			: `/${typeToDir(item.type)}/${item.slug}`;
+		const path =
+			item.type === 'série' && item.parentSlug
+				? `/series/${item.parentSlug}/${item.slug}`
+				: `/${typeToDir(item.type)}/${item.slug}`;
 		return previewHref(appHref(path));
 	});
 </script>
@@ -41,7 +42,9 @@
 	target={isExternal ? '_blank' : undefined}
 	rel={isExternal ? 'noopener noreferrer' : undefined}
 >
-	<article class="card bg-base-100/30 backdrop-blur-md border border-base-300/20 hover:bg-base-100/50 hover:border-primary/40 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/5">
+	<article
+		class="card bg-base-100/30 backdrop-blur-md border border-base-300/20 hover:bg-base-100/50 hover:border-primary/40 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/5"
+	>
 		<div class="card-body p-4 sm:p-6">
 			<div class="flex items-start gap-3">
 				<!-- Type badge -->
@@ -78,7 +81,12 @@
 
 				<!-- External link indicator -->
 				{#if isExternal}
-					<Icon icon="mdi:open-in-new" width="16" height="16" class="text-base-content/40 ml-auto shrink-0" />
+					<Icon
+						icon="mdi:open-in-new"
+						width="16"
+						height="16"
+						class="text-base-content/40 ml-auto shrink-0"
+					/>
 				{/if}
 			</div>
 
@@ -109,7 +117,7 @@
 				<!-- Tags (optional, shown on larger screens) -->
 				{#if item.tags && item.tags.length > 0}
 					<div class="flex flex-wrap gap-1 hidden sm:flex">
-						{#each item.tags.slice(0, 3) as tag}
+						{#each item.tags.slice(0, 3) as tag (tag)}
 							<span class="badge badge-ghost badge-sm">{tag}</span>
 						{/each}
 					</div>

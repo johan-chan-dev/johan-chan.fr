@@ -1,5 +1,9 @@
 import { error } from '@sveltejs/kit';
-import { loadSeriesBySlug, loadSeriesGroupedForPrerender, getCoverImageUrl } from '$lib/utils/content';
+import {
+	loadSeriesBySlug,
+	loadSeriesGroupedForPrerender,
+	getCoverImageUrl
+} from '$lib/utils/content';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
 export const prerender = true;

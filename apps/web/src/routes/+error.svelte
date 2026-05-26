@@ -5,8 +5,6 @@
 	import * as m from '$lib/paraglide/messages';
 	import { appHref } from '$lib/utils/href';
 
-	const { error } = $props();
-
 	// Get SEO data for 404 page
 	const seoData = getSEOData('/404');
 
@@ -77,9 +75,9 @@
 			</div>
 
 			<div class="error-text">
-				<h1 class="error-title">Erreur {error?.status || 'Inconnue'}</h1>
+				<h1 class="error-title">Erreur {page.status || 'Inconnue'}</h1>
 				<p class="error-message">
-					{error?.message || "Une erreur inattendue s'est produite."}
+					{page.error?.message || "Une erreur inattendue s'est produite."}
 				</p>
 				<p class="error-suggestion">Veuillez réessayer ou retourner à l'accueil.</p>
 			</div>

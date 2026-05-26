@@ -14,7 +14,9 @@
 	const seriesInfo = $derived(data.seriesInfo);
 	const prevChapter = $derived(data.prevChapter);
 	const nextChapter = $derived(data.nextChapter);
-	const ChapterComponent = $derived((data.chapter as unknown as { component?: Component }).component);
+	const ChapterComponent = $derived(
+		(data.chapter as unknown as { component?: Component }).component
+	);
 
 	const isDraft = $derived(chapter.published === false);
 	const isPreview = $derived(chapter.preview === true);
@@ -28,100 +30,109 @@
 />
 
 <PreviewGate preview={isPreview}>
-
-{#if isDraft}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<DraftBanner />
-	</div>
-{/if}
-
-{#if isPreview}
-	<div class="max-w-4xl mx-auto px-4 pt-8">
-		<PreviewBanner />
-	</div>
-{/if}
-
-<article class="detail-page">
-	<div class="chapter-topbar">
-		<nav class="breadcrumb">
-			<a href={previewHref(appHref(`/series/${seriesInfo.slug}`))}>← {seriesInfo.title}</a>
-		</nav>
-
-		<div class="series-badge">
-			<a href={previewHref(appHref(`/series/${seriesInfo.slug}`))} class="series-name">{seriesInfo.title}</a>
-			<span class="chapter-progress">
-				Chapitre {seriesInfo.currentIndex}
-			</span>
+	{#if isDraft}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<DraftBanner />
 		</div>
-	</div>
+	{/if}
 
-	<ContentDetailHeader
-		title={chapter.title}
-		excerpt={chapter.excerpt}
-		date={chapter.date}
-		readingTime={chapter.readingTime}
-		tags={chapter.tags}
-		heroUrl={chapter.heroUrl}
-		heroSrcset={chapter.heroSrcset}
-		coverUrl={chapter.coverUrl}
-		image={chapter.image}
-		imageFocus={chapter.imageFocus}
-	>
-		<div class="prose-content">
-			{#if ChapterComponent}
-				<ChapterComponent />
-			{:else}
-				{@html chapter.htmlContent}
-			{/if}
+	{#if isPreview}
+		<div class="max-w-4xl mx-auto px-4 pt-8">
+			<PreviewBanner />
+		</div>
+	{/if}
+
+	<article class="detail-page">
+		<div class="chapter-topbar">
+			<nav class="breadcrumb">
+				<a href={previewHref(appHref(`/series/${seriesInfo.slug}`))}>← {seriesInfo.title}</a>
+			</nav>
+
+			<div class="series-badge">
+				<a href={previewHref(appHref(`/series/${seriesInfo.slug}`))} class="series-name"
+					>{seriesInfo.title}</a
+				>
+				<span class="chapter-progress">
+					Chapitre {seriesInfo.currentIndex}
+				</span>
+			</div>
 		</div>
 
-		<!-- Chapter Navigation -->
-		<nav class="chapter-navigation">
-			{#if prevChapter}
-				<a href={previewHref(appHref(`/series/${seriesInfo.slug}/${prevChapter.slug}`))} class="nav-link prev">
-					<span class="nav-direction">← Chapitre précédent</span>
-					<span class="nav-title">{prevChapter.title}</span>
-				</a>
-			{:else}
-				<div class="nav-placeholder"></div>
+		<ContentDetailHeader
+			title={chapter.title}
+			excerpt={chapter.excerpt}
+			date={chapter.date}
+			readingTime={chapter.readingTime}
+			tags={chapter.tags}
+			heroUrl={chapter.heroUrl}
+			heroSrcset={chapter.heroSrcset}
+			coverUrl={chapter.coverUrl}
+			image={chapter.image}
+			imageFocus={chapter.imageFocus}
+		>
+			<div class="prose-content">
+				{#if ChapterComponent}
+					<ChapterComponent />
+				{:else}
+					{@html chapter.htmlContent}
+				{/if}
+			</div>
+
+			<!-- Chapter Navigation -->
+			<nav class="chapter-navigation">
+				{#if prevChapter}
+					<a
+						href={previewHref(appHref(`/series/${seriesInfo.slug}/${prevChapter.slug}`))}
+						class="nav-link prev"
+					>
+						<span class="nav-direction">← Chapitre précédent</span>
+						<span class="nav-title">{prevChapter.title}</span>
+					</a>
+				{:else}
+					<div class="nav-placeholder"></div>
+				{/if}
+
+				{#if nextChapter}
+					<a
+						href={previewHref(appHref(`/series/${seriesInfo.slug}/${nextChapter.slug}`))}
+						class="nav-link next"
+					>
+						<span class="nav-direction">Chapitre suivant →</span>
+						<span class="nav-title">{nextChapter.title}</span>
+					</a>
+				{:else}
+					<div class="nav-placeholder"></div>
+				{/if}
+			</nav>
+
+			<!-- Series Overview -->
+			{#if seriesInfo.chapters.length > 1}
+				<aside class="series-overview">
+					<h3>Tous les chapitres</h3>
+					<ol class="chapters-list">
+						{#each seriesInfo.chapters as ch, i (ch.slug)}
+							<li class:current={ch.slug === chapter.slug}>
+								{#if ch.slug === chapter.slug}
+									<span class="chapter-link current">
+										<span class="chapter-number">{i + 1}.</span>
+										{ch.title}
+									</span>
+								{:else}
+									<a
+										href={previewHref(appHref(`/series/${seriesInfo.slug}/${ch.slug}`))}
+										class="chapter-link"
+									>
+										<span class="chapter-number">{i + 1}.</span>
+										{ch.title}
+									</a>
+								{/if}
+							</li>
+						{/each}
+					</ol>
+				</aside>
 			{/if}
-
-			{#if nextChapter}
-				<a href={previewHref(appHref(`/series/${seriesInfo.slug}/${nextChapter.slug}`))} class="nav-link next">
-					<span class="nav-direction">Chapitre suivant →</span>
-					<span class="nav-title">{nextChapter.title}</span>
-				</a>
-			{:else}
-				<div class="nav-placeholder"></div>
-			{/if}
-		</nav>
-
-		<!-- Series Overview -->
-		{#if seriesInfo.chapters.length > 1}
-			<aside class="series-overview">
-				<h3>Tous les chapitres</h3>
-				<ol class="chapters-list">
-					{#each seriesInfo.chapters as ch, i}
-						<li class:current={ch.slug === chapter.slug}>
-							{#if ch.slug === chapter.slug}
-								<span class="chapter-link current">
-									<span class="chapter-number">{i + 1}.</span>
-									{ch.title}
-								</span>
-							{:else}
-								<a href={previewHref(appHref(`/series/${seriesInfo.slug}/${ch.slug}`))} class="chapter-link">
-									<span class="chapter-number">{i + 1}.</span>
-									{ch.title}
-								</a>
-							{/if}
-						</li>
-					{/each}
-				</ol>
-			</aside>
-		{/if}
-	</ContentDetailHeader>
-</article>
-
+		</ContentDetailHeader>
+	</article>
 </PreviewGate>
 
 <style>

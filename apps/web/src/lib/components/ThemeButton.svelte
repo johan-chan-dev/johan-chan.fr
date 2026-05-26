@@ -22,6 +22,6 @@
 	aria-label="Changer de thème"
 >
 	{#key icon}
-		<Icon {icon} height={'1.75rem'} />
+		<Icon {icon} height="1.75rem" />
 	{/key}
 </button>

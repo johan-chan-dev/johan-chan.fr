@@ -1,3 +1,5 @@
+import type { ShikiTransformer } from 'shiki';
+
 /** Shiki themes used across both rendering pipelines */
 export const SHIKI_THEMES = ['github-dark', 'github-light'] as const;
 
@@ -39,12 +41,12 @@ export const SHIKI_LANG_ALIASES: Record<string, string> = {
 };
 
 /** Shared transformers for consistent <pre>/<code> output */
-export const SHIKI_TRANSFORMERS = [
+export const SHIKI_TRANSFORMERS: ShikiTransformer[] = [
 	{
-		pre(node: any) {
+		pre(node) {
 			node.properties.class = 'shiki-pre overflow-x-auto rounded-lg p-4 my-4';
 		},
-		code(node: any) {
+		code(node) {
 			node.properties.class = 'shiki-code';
 		}
 	}

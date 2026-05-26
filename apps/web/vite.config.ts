@@ -33,7 +33,7 @@ export default defineConfig({
 	plugins,
 	resolve: {
 		alias: {
-			'$content': contentDir
+			$content: contentDir
 		}
 	},
 	server: {

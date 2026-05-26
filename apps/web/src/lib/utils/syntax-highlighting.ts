@@ -29,7 +29,7 @@ export async function createShikiRenderer() {
 	const shiki = await initHighlighter();
 
 	return {
-		code(token: any): string {
+		code(token: { text: string; lang?: string }): string {
 			const code = token.text;
 			const lang = token.lang;
 

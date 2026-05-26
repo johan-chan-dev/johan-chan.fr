@@ -16,7 +16,7 @@
 	const { baseRadius = 20, fill = 'var(--color-primary, #6366f1)' }: Props = $props();
 </script>
 
-{#each $data as d}
+{#each $data as d, i (i)}
 	{@const size = (d.size as number) ?? 1}
 	{@const opacity = (d.opacity as number) ?? 0.25}
 	<circle

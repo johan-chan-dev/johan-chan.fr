@@ -10,21 +10,17 @@
 
 	const { items, emptyMessage = 'Aucun contenu pour le moment.' }: Props = $props();
 
-	// Group items by month/year
-	const groupedItems = $derived(() => {
-		const grouped = new Map<string, IndexEntryWithCover[]>();
+	// Group items by month/year, preserving the (date-sorted) input order.
+	const groupedItems = $derived.by(() => {
 		const locale = 'fr-FR';
+		const groups: Record<string, IndexEntryWithCover[]> = {};
 
 		for (const item of items) {
 			const monthYear = formatMonthYear(item.date, locale);
-
-			if (!grouped.has(monthYear)) {
-				grouped.set(monthYear, []);
-			}
-			grouped.get(monthYear)!.push(item);
+			(groups[monthYear] ??= []).push(item);
 		}
 
-		return grouped;
+		return Object.entries(groups);
 	});
 </script>
 
@@ -34,7 +30,7 @@
 			<p>{emptyMessage}</p>
 		</div>
 	{:else}
-		{#each [...groupedItems().entries()] as [monthYear, monthItems]}
+		{#each groupedItems as [monthYear, monthItems] (monthYear)}
 			<section>
 				<!-- Month/Year header -->
 				<h2
@@ -45,7 +41,7 @@
 
 				<!-- Items for this month - grid layout -->
 				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-					{#each monthItems as item}
+					{#each monthItems as item (`${item.type}-${item.slug}`)}
 						<ContentItemCard {item} />
 					{/each}
 				</div>

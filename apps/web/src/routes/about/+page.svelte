@@ -45,15 +45,21 @@
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
 			<div class="p-4 bg-base-200 rounded-lg flex flex-col">
 				<h3 class="font-semibold mb-2">{m['about.pillar_simplicity']()}</h3>
-				<p class="text-sm text-base-content/70 leading-relaxed flex-1">{m['about.pillar_simplicity_desc']()}</p>
+				<p class="text-sm text-base-content/70 leading-relaxed flex-1">
+					{m['about.pillar_simplicity_desc']()}
+				</p>
 			</div>
 			<div class="p-4 bg-base-200 rounded-lg flex flex-col">
 				<h3 class="font-semibold mb-2">{m['about.pillar_coherence']()}</h3>
-				<p class="text-sm text-base-content/70 leading-relaxed flex-1">{m['about.pillar_coherence_desc']()}</p>
+				<p class="text-sm text-base-content/70 leading-relaxed flex-1">
+					{m['about.pillar_coherence_desc']()}
+				</p>
 			</div>
 			<div class="p-4 bg-base-200 rounded-lg flex flex-col">
 				<h3 class="font-semibold mb-2">{m['about.pillar_durability']()}</h3>
-				<p class="text-sm text-base-content/70 leading-relaxed flex-1">{m['about.pillar_durability_desc']()}</p>
+				<p class="text-sm text-base-content/70 leading-relaxed flex-1">
+					{m['about.pillar_durability_desc']()}
+				</p>
 			</div>
 		</div>
 	</section>
@@ -79,7 +85,10 @@
 			<p class="text-base-content/80 leading-relaxed mb-3">
 				{m['about.augmented_text']()}
 			</p>
-			<a href={appHref('/articles/ce-que-augmente-veut-dire')} class="text-sm text-primary hover:underline">
+			<a
+				href={appHref('/articles/ce-que-augmente-veut-dire')}
+				class="text-sm text-primary hover:underline"
+			>
 				{m['about.augmented_link']()}
 			</a>
 		</div>
@@ -91,7 +100,9 @@
 			<h2 class="text-sm uppercase tracking-wider text-base-content/50 font-medium mb-4">
 				{m['about.business_heading']()}
 			</h2>
-			<div class="p-4 bg-base-200 rounded-lg flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+			<div
+				class="p-4 bg-base-200 rounded-lg flex flex-col md:flex-row md:items-center md:justify-between gap-6"
+			>
 				<p class="text-base-content/80">{m['about.business_text']()}</p>
 				<div class="flex flex-wrap gap-3 shrink-0">
 					<a
