@@ -16,9 +16,7 @@
 </script>
 
 <header class="sticky top-0 z-50 bg-base-100/90 shadow-xs backdrop-blur-lg">
-	<nav
-		class="navbar max-w-3xl md:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto py-2 px-4"
-	>
+	<nav class="navbar max-w-3xl md:max-w-4xl xl:max-w-6xl 2xl:max-w-7xl mx-auto py-2 px-4">
 		<div class="navbar-start">
 			<div class="dropdown">
 				<HamburgerButton />

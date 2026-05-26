@@ -1,6 +1,5 @@
 import type { LayoutServerLoad } from './$types';
 import { loadContentByType } from '$lib/utils/content';
-import type { ContentType } from '@johan-chan/content/schema';
 
 interface ContentCounts {
 	articles: number;

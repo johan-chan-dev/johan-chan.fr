@@ -25,7 +25,9 @@ export default [
 		}
 	},
 	{
-		files: ['**/*.svelte'],
+		// Include .svelte.ts/.svelte.js rune modules so the svelte parser gets its
+		// TypeScript sub-parser (otherwise type annotations fail to parse).
+		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
 		languageOptions: {
 			parserOptions: {
 				parser: ts.parser,
@@ -37,12 +39,30 @@ export default [
 		files: ['**/*.ts'],
 		languageOptions: {
 			parserOptions: {
-				projectService: true,
+				// Config files aren't in any tsconfig include; let the project
+				// service fall back to an inferred default project for them.
+				projectService: {
+					allowDefaultProject: ['vitest.config.ts', 'playwright.config.ts']
+				},
 				tsconfigRootDir: __dirname
 			}
 		}
 	},
 	{
-		ignores: ['build/', '.svelte-kit/', 'dist/']
+		files: ['**/*.svelte'],
+		rules: {
+			// Internal links go through the appHref() helper (src/lib/utils/href.ts),
+			// which centralizes locale + base-path resolution via $app/paths `resolve()`.
+			// This rule is a per-call-site syntactic check and can't see through the
+			// helper, so it's disabled in favour of the single resolution point.
+			'svelte/no-navigation-without-resolve': 'off',
+			// Every {@html} in this app renders trusted build-time markdown (marked
+			// output from the read-only content mirror); no user input is rendered.
+			'svelte/no-at-html-tags': 'off'
+		}
+	},
+	{
+		// Generated code — not hand-maintained, don't lint.
+		ignores: ['build/', '.svelte-kit/', 'dist/', 'src/lib/paraglide/', 'src/lib/ROUTES.ts']
 	}
 ];

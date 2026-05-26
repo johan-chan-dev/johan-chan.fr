@@ -1,4 +1,21 @@
-# Ignore files for PNPM, NPM and YARN
+# Package manager lockfiles
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+
+# Build & framework output
+.svelte-kit/
+build/
+
+# Generated code (do not hand-format)
+src/lib/paraglide/
+src/lib/ROUTES.ts
+
+# inlang machine-managed dir (settings.json is the only hand-edited file)
+project.inlang/
+
+# Test & tooling reports
+playwright-report/
+test-results/
+.playwright/
+.playwright-cli/

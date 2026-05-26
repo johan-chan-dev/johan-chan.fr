@@ -26,7 +26,7 @@
 		</div>
 	{:else}
 		<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-			{#each data.devlogs as project}
+			{#each data.devlogs as project (project.title)}
 				<article class="card bg-base-100 border border-base-300 h-fit">
 					<div class="card-body">
 						<div class="flex items-start justify-between gap-4">
@@ -38,19 +38,22 @@
 								{#if project.latestPost.title}
 									<p class="text-base-content/60 mt-2">
 										{m['devlogs.latest']()}: {project.latestPost.title}
-										<span class="text-base-content/40">· {formatDate(project.latestPost.date, locale)}</span>
+										<span class="text-base-content/40"
+											>· {formatDate(project.latestPost.date, locale)}</span
+										>
 									</p>
 								{/if}
 							</div>
 							<span class="badge badge-accent shrink-0">
-								{project.posts.length} {m['devlogs.posts']()}
+								{project.posts.length}
+								{m['devlogs.posts']()}
 							</span>
 						</div>
 
 						<!-- Recent posts -->
 						{#if project.posts.length > 0}
 							<div class="mt-4 space-y-2">
-								{#each project.posts.slice(0, 3) as post}
+								{#each project.posts.slice(0, 3) as post (post.slug ?? post.title)}
 									<a
 										href={post.slug ? appHref(`/devlogs/${post.slug}`) : post.external_url || '#'}
 										target={post.external_url ? '_blank' : undefined}
@@ -60,7 +63,12 @@
 										<div class="flex items-center gap-2">
 											<span class="text-base-content/80">{post.title}</span>
 											{#if post.external_url}
-												<Icon icon="mdi:open-in-new" width="12" height="12" class="text-base-content/40" />
+												<Icon
+													icon="mdi:open-in-new"
+													width="12"
+													height="12"
+													class="text-base-content/40"
+												/>
 											{/if}
 										</div>
 										<p class="text-sm text-base-content/50 line-clamp-1">{post.excerpt}</p>

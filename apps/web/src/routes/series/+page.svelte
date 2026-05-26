@@ -24,7 +24,7 @@
 		</div>
 	{:else}
 		<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-			{#each data.series as series}
+			{#each data.series as series (series.slug)}
 				<article class="series-card">
 					{#if series.coverUrl}
 						<a href={appHref(`/series/${series.slug}`)} class="series-cover-link">
@@ -41,13 +41,14 @@
 								<p class="text-base-content/70 mt-1">{series.description}</p>
 							</div>
 							<span class="badge badge-secondary shrink-0">
-								{series.items.length} {m['series.chapters']()}
+								{series.items.length}
+								{m['series.chapters']()}
 							</span>
 						</div>
 
 						<!-- Chapter progress -->
 						<div class="flex flex-wrap gap-2 mt-4">
-							{#each series.items as item, index}
+							{#each series.items as item, index (item.slug)}
 								<a
 									href={appHref(`/series/${series.slug}/${item.slug}`)}
 									class="btn btn-sm btn-outline gap-1"

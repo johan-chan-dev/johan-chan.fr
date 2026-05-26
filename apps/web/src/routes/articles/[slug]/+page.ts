@@ -11,7 +11,5 @@ export const load: PageLoad = async ({ data }) => {
 		import.meta.glob('$content/articles/*/content.svx')
 	);
 
-	return component
-		? { ...data, article: { ...data.article, component } }
-		: data;
+	return component ? { ...data, article: { ...data.article, component } } : data;
 };

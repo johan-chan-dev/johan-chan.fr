@@ -12,13 +12,15 @@
 </script>
 
 <div class="labels" bind:clientWidth={containerWidth}>
-	{#each $data as d}
+	{#each $data as d, i (i)}
 		{@const xPx = $xGet(d)}
 		{@const yPx = $yGet(d)}
 		{@const flipLeft = xPx > containerWidth * 0.6}
 		<div
 			class="label"
-			style="left: {xPx}px; top: {yPx}px; transform: translate({flipLeft ? 'calc(-100% - 8px)' : '8px'}, -50%);"
+			style="left: {xPx}px; top: {yPx}px; transform: translate({flipLeft
+				? 'calc(-100% - 8px)'
+				: '8px'}, -50%);"
 		>
 			{d.label as string}
 		</div>
@@ -39,6 +41,8 @@
 		color: var(--color-base-content, #333);
 		white-space: nowrap;
 		pointer-events: none;
-		text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5), 0 0 8px rgba(0, 0, 0, 0.3);
+		text-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.5),
+			0 0 8px rgba(0, 0, 0, 0.3);
 	}
 </style>

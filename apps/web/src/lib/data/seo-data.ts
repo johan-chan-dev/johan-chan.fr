@@ -22,13 +22,13 @@ export const seoData: Record<string, SEOData> = {
 	'/articles': {
 		title: 'Articles - Johan Chan',
 		description:
-			'Réflexions sur le craft logiciel, l\'architecture durable et la philosophie du code.',
+			"Réflexions sur le craft logiciel, l'architecture durable et la philosophie du code.",
 		type: 'website'
 	},
 	'/404': {
 		title: 'Page introuvable - Johan Chan',
 		description:
-			'La page que vous recherchez est introuvable. Retournez à l\'accueil ou explorez les autres sections du site.',
+			"La page que vous recherchez est introuvable. Retournez à l'accueil ou explorez les autres sections du site.",
 		type: 'website'
 	},
 	'/call': {

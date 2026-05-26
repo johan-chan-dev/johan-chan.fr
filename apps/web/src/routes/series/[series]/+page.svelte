@@ -10,7 +10,7 @@
 </script>
 
 <SEO
-	title="{series.title}"
+	title={series.title}
 	description={series.description}
 	type="article"
 	image={series.coverUrl || undefined}
@@ -27,11 +27,7 @@
 		<header class="series-header" class:has-cover={series.coverUrl}>
 			{#if series.coverUrl}
 				<div class="hero-background">
-					<img
-						src={series.coverUrl}
-						alt=""
-						class="hero-bg-image"
-					/>
+					<img src={series.coverUrl} alt="" class="hero-bg-image" />
 					<div class="hero-gradient"></div>
 				</div>
 			{/if}
@@ -51,12 +47,9 @@
 		<div class="chapters-list">
 			<h2 class="chapters-heading">Chapitres</h2>
 			<ol class="chapters">
-				{#each chapters as chapter, i}
+				{#each chapters as chapter, i (chapter.slug)}
 					<li>
-						<a
-							href={appHref(`/series/${series.slug}/${chapter.slug}`)}
-							class="chapter-card"
-						>
+						<a href={appHref(`/series/${series.slug}/${chapter.slug}`)} class="chapter-card">
 							{#if chapter.coverUrl}
 								<div class="chapter-cover">
 									<img src={chapter.coverUrl} alt="" />

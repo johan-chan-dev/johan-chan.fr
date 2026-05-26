@@ -10,7 +10,8 @@
 	<!-- Hero section -->
 	<header class="text-center py-12 md:py-20 mb-12">
 		<h1 class="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-4">
-			<span class="inline-block">Software</span>{' '}
+			<span class="inline-block">Software</span>
+
 			<span class="relative inline-block"
 				><span
 					class="hero-shimmer text-[0.5em] font-bold absolute -top-[0.8em] right-0 inline-block rotate-3 pb-1 whitespace-nowrap"
@@ -19,12 +20,13 @@
 			>
 		</h1>
 		<p class="text-xl md:text-2xl font-medium tracking-wide">
-			<span class="tagline-ai">Make it work.</span>{' '}
-			<span class="text-base-content">Make it right.</span>{' '}
+			<span class="tagline-ai">Make it work.</span>
+
+			<span class="text-base-content">Make it right.</span>
+
 			<span class="tagline-blend">Make it fast.</span>
 		</p>
-
-			</header>
+	</header>
 
 	<!-- Activity Feed -->
 	<section>

@@ -1,5 +1,9 @@
 import { error } from '@sveltejs/kit';
-import { getContentBySlug, loadContentByType, loadContentByTypeForPrerender } from '$lib/utils/content';
+import {
+	getContentBySlug,
+	loadContentByType,
+	loadContentByTypeForPrerender
+} from '$lib/utils/content';
 import { prepareContentDetail } from '$lib/utils/content-detail';
 import type { PageServerLoad, EntryGenerator } from './$types';
 

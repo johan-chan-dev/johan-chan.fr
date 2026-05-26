@@ -1,7 +1,11 @@
 import { dev } from '$app/environment';
 import { building } from '$app/environment';
 import { error } from '@sveltejs/kit';
-import { getContentBySlug, loadContentByType, loadSeriesGroupedForPrerender } from '$lib/utils/content';
+import {
+	getContentBySlug,
+	loadContentByType,
+	loadSeriesGroupedForPrerender
+} from '$lib/utils/content';
 import { prepareContentDetail } from '$lib/utils/content-detail';
 import type { PageServerLoad, EntryGenerator } from './$types';
 
@@ -37,7 +41,9 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	// Get all chapters in the same series
 	const allSeriesItems = loadContentByType('série').filter(
-		(s) => (s.parentSlug === seriesSlug || s.parent === item.parent) && (isDevMode || s.published !== false)
+		(s) =>
+			(s.parentSlug === seriesSlug || s.parent === item.parent) &&
+			(isDevMode || s.published !== false)
 	);
 
 	// Sort by order
@@ -46,7 +52,8 @@ export const load: PageServerLoad = async ({ params }) => {
 	// Find current, previous, and next chapters
 	const currentIndex = allSeriesItems.findIndex((s) => s.slug === chapterSlug);
 	const prevChapter = currentIndex > 0 ? allSeriesItems[currentIndex - 1] : null;
-	const nextChapter = currentIndex < allSeriesItems.length - 1 ? allSeriesItems[currentIndex + 1] : null;
+	const nextChapter =
+		currentIndex < allSeriesItems.length - 1 ? allSeriesItems[currentIndex + 1] : null;
 
 	return {
 		chapter: {

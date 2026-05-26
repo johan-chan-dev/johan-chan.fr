@@ -27,11 +27,11 @@
 		{/if}
 		<div class="chart-container">
 			<div class="grid">
-				{#each quadrants as q, i}
+				{#each quadrants as q, i (q.title)}
 					<div class="quadrant" style="background: {fills[i]}">
 						<div class="quadrant-title">{q.title}</div>
 						<div class="quadrant-items">
-							{#each q.items as item}
+							{#each q.items as item (item)}
 								<span class="item-tag">{item}</span>
 							{/each}
 						</div>
@@ -96,7 +96,8 @@
 	}
 
 	/* Crosshair lines */
-	.crosshair-h, .crosshair-v {
+	.crosshair-h,
+	.crosshair-v {
 		position: absolute;
 		pointer-events: none;
 	}

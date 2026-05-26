@@ -55,11 +55,7 @@
 
 {#if !prefersReducedMotion}
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div
-		class="particle-container"
-		onmousemove={handleMouseMove}
-		onmouseleave={handleMouseLeave}
-	>
+	<div class="particle-container" onmousemove={handleMouseMove} onmouseleave={handleMouseLeave}>
 		<canvas bind:this={canvas}></canvas>
 	</div>
 {/if}

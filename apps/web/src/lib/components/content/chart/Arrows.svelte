@@ -30,7 +30,7 @@
 	</marker>
 </defs>
 
-{#each arrows as arrow}
+{#each arrows as arrow (`${arrow.from}-${arrow.to}`)}
 	{@const from = findPoint(arrow.from)}
 	{@const to = findPoint(arrow.to)}
 	{#if from && to}

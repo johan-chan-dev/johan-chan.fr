@@ -16,11 +16,11 @@
 	const { r = 6, fill = 'var(--color-primary, #6366f1)' }: Props = $props();
 </script>
 
-{#each $data as d}
+{#each $data as d, i (i)}
 	<circle
 		cx={$xGet(d)}
 		cy={$yGet(d)}
-		r={r}
+		{r}
 		fill={(d.color as string | undefined) || fill}
 		stroke="var(--color-base-100, #fff)"
 		stroke-width="2"

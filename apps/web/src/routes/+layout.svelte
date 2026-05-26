@@ -13,14 +13,22 @@
 	const { children, data } = $props();
 
 	// Get SEO data for current page — skip for content pages that render their own SEO
-	const contentRoutes = ['/articles/[slug]', '/devlogs/[slug]', '/series/[series]', '/series/[series]/[chapter]'];
+	const contentRoutes = [
+		'/articles/[slug]',
+		'/devlogs/[slug]',
+		'/series/[series]',
+		'/series/[series]/[chapter]'
+	];
 	const hasOwnSEO = $derived(contentRoutes.includes(page.route.id ?? ''));
 	const seoData = $derived(getSEOData(page.url.pathname));
 </script>
 
-
 {#if data.env === 'production'}
-	<script defer src="https://umami.lagraineducraft.fr/script.js" data-website-id="7c5359c8-d52b-49c2-b780-caf6ff990668"></script>
+	<script
+		defer
+		src="https://umami.lagraineducraft.fr/script.js"
+		data-website-id="7c5359c8-d52b-49c2-b780-caf6ff990668"
+	></script>
 {/if}
 
 <!-- SEO Component (only for pages that don't render their own) -->

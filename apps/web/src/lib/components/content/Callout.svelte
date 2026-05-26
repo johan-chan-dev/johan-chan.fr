@@ -27,7 +27,9 @@
 <aside class="callout border-l-4 rounded-lg p-4 my-6 {styles[type]}">
 	{#if title}
 		<p class="font-bold mb-2">
-			<span class="inline-block w-6 h-6 rounded-full bg-current/20 text-center mr-2">{icons[type]}</span>
+			<span class="inline-block w-6 h-6 rounded-full bg-current/20 text-center mr-2"
+				>{icons[type]}</span
+			>
 			{title}
 		</p>
 	{/if}
