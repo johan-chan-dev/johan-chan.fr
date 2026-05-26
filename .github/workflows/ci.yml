@@ -1,22 +1,19 @@
-name: Deploy to GitHub Pages
+name: CI
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
+# Cancel superseded runs when a PR is pushed to repeatedly.
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  verify:
+    name: Lint, type-check & build
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v6
 
@@ -41,25 +38,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Quality gate: a lint/check failure fails this job, so the dependent
-      # `deploy` job never runs. One turbo invocation shares the build.
       - name: Lint, type-check & build
         run: pnpm turbo run lint check build --filter=@johan-chan/web
         env:
           PUBLIC_PREVIEW_KEY: ${{ secrets.PUBLIC_PREVIEW_KEY }}
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: apps/web/build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
