@@ -7,7 +7,10 @@ export default defineConfig({
 		include: ['src/**/*.{test,spec}.{js,ts}', 'tests/unit/**/*.{test,spec}.{js,ts}'],
 		exclude: ['tests/integration/**/*', 'tests/e2e/**/*', 'tests/performance/**/*'],
 		environment: 'jsdom',
-		setupFiles: ['tests/setup/vitest.setup.ts'],
+		// No setupFiles or coverage thresholds yet — there are no unit tests.
+		// When the first test lands, add a setup file (e.g. @testing-library/jest-dom
+		// matchers + afterEach cleanup) and a realistic threshold, and install a
+		// coverage provider (@vitest/coverage-v8) to use the `coverage` block below.
 		coverage: {
 			reporter: ['text', 'json', 'html'],
 			exclude: [
@@ -17,15 +20,7 @@ export default defineConfig({
 				'**/*.config.*',
 				'src/app.html',
 				'src/lib/paraglide/**/*'
-			],
-			thresholds: {
-				global: {
-					branches: 80,
-					functions: 80,
-					lines: 80,
-					statements: 80
-				}
-			}
+			]
 		},
 		globals: true,
 		testTimeout: 10000
