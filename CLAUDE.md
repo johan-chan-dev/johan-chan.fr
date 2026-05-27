@@ -47,7 +47,7 @@ pnpm --filter @johan-chan/web check         # svelte-check type checking
 - **Svelte 5** with runes (`$state`, `$derived`, `$props`)
 - **Vite 7** — requires Node ^20.19.0 or >=22.12.0 (see `.nvmrc`: 22.12.0)
 - **Tailwind CSS 4** + **DaisyUI 5** (themes: `autumn` light, `abyss` dark)
-- **Paraglide JS** — i18n (FR primary, EN secondary); FR at `/`, EN at `/en/`
+- **Paraglide JS** — i18n; currently FR only (`fr` locale, served at `/`). EN (`/en/`) is planned but not yet configured.
 - **mdsvex** — Markdown in Svelte (`.svx` extension supported)
 - **Zod 4** — content schema validation
 - **vite-plugin-kit-routes** — type-safe routes (`$lib/ROUTES`)
@@ -116,7 +116,7 @@ Two rendering paths, selected per content item by which file exists:
 - **`content.md`** — plain markdown rendered by `marked` + shiki at runtime → `{@html}`. Default for all content.
 - **`content.svx`** — markdown with Svelte components, compiled by mdsvex at build time → dynamic Svelte component. Used when content needs interactive elements.
 
-Content components are auto-injected under the `C` namespace — authors write `<C.Callout>` with no imports needed. Components live in `$lib/components/content/` and are exported from the barrel file (`index.ts`). Component reference: `packages/content/CLAUDE.md`.
+Content components are auto-injected under the `C` namespace — authors write `<C.Callout>` with no imports needed. Components live in `$lib/components/content/` and are exported from the barrel file (`index.ts`). Component reference: `apps/web/src/lib/components/content/CLAUDE.md`.
 
 Full documentation: `apps/web/docs/rendering-pipeline.md`
 
@@ -133,6 +133,7 @@ Full documentation: `apps/web/docs/rendering-pipeline.md`
 /devlogs                    Devlogs grouped view
 /devlogs/[slug]             Devlog detail
 /about                      About page
+/call                       Unlisted booking page (Cal.com embed, not in nav)
 /sitemap.xml                Dynamic sitemap
 ```
 
@@ -150,9 +151,9 @@ Full documentation: `apps/web/docs/rendering-pipeline.md`
 - `$lib/ROUTES.ts` — generated type-safe route helpers
 
 ### i18n
-- Messages in `apps/web/messages/fr.json` (FR only currently)
+- Messages in `apps/web/messages/fr.json` (only the `fr` locale is configured)
 - Usage: `import * as m from '$lib/paraglide/messages'`
-- FR at `/`, EN at `/en/` prefix
+- FR served at `/`. EN (`/en/`) is planned — not yet enabled (no `en` locale/messages exist).
 
 ## Deployment
 

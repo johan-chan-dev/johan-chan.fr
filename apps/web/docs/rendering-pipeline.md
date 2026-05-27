@@ -19,7 +19,7 @@ Each content folder contains either `content.md` or `content.svx` — never both
 | `content.md`  | `marked` + shiki at runtime | Request/build time  | HTML string → `{@html}`            |
 | `content.svx` | mdsvex at build time        | Build time          | Svelte component → `<Component />` |
 
-`renderMode` on the loaded content item indicates which path applies: `'html'` (default) or `'svx'`.
+`renderMode` on the loaded content item indicates which path applies: `'md'` (default) or `'svx'`.
 
 ## How
 
@@ -35,8 +35,8 @@ Image URLs are transformed by `transformImageUrls()` at load time to resolve aga
 
 1. `content.ts` detects `content.svx` in the folder, sets `renderMode: 'svx'` on the loaded item.
 2. `+page.server.ts` detects `renderMode === 'svx'`, skips `marked`, passes `renderMode` through to the client.
-3. `+page.ts` (universal load function) dynamically imports the `.svx` file via `import.meta.glob` — Vite compiles it through the mdsvex preprocessor at build time, producing a Svelte component.
-4. `+page.svelte` renders with `<svelte:component this={component} />` (Svelte 5 dynamic component syntax).
+3. `+page.ts` (universal load function) resolves the `.svx` module via `loadSvxComponent()` (`$lib/utils/svx-loader.ts`), passing it an `import.meta.glob` map — Vite compiles the file through the mdsvex preprocessor at build time, producing a Svelte component.
+4. `+page.svelte` renders the imported value directly as `<Component />` (Svelte 5 dynamic component syntax — `<svelte:component>` is deprecated).
 
 **Why `+page.ts` for the import:**
 Svelte components are not JSON-serializable. `+page.server.ts` can only return data that crosses the server/client boundary as JSON. The component must be imported in a universal load function (`+page.ts`) which runs on both server and client and can return non-serializable values.
@@ -60,13 +60,13 @@ This works via a preprocessor (`src/lib/preprocessors/content-components.js`) th
 
 ### Available components
 
-See `packages/content/CLAUDE.md` for the full component reference (props, variants, examples). That file is the contract between studio and the web app.
+See `apps/web/src/lib/components/content/CLAUDE.md` for the full component reference (props, variants, examples). That file is the contract between studio and the web app.
 
 ### Adding a new custom component
 
 1. Create the component in `$lib/components/content/`.
 2. Export it from `$lib/components/content/index.ts` (barrel file).
-3. Document it in `packages/content/CLAUDE.md`.
+3. Document it in `apps/web/src/lib/components/content/CLAUDE.md`.
 
 It becomes available as `C.ComponentName` in all `.svx` files automatically.
 

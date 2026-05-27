@@ -12,7 +12,7 @@ A space for thinking out loud about software craft in the age of AI — articles
 - **SvelteKit 5** with `adapter-static` + **Svelte 5** runes
 - **Vite 7** (Node `^20.19.0` or `>=22.12.0` — see `.nvmrc`)
 - **Tailwind CSS 4** + **DaisyUI 5** (themes: `autumn` / `abyss`)
-- **Paraglide JS** for i18n — FR at `/`, EN at `/en/`
+- **Paraglide JS** for i18n — currently FR only (EN `/en/` planned)
 - **mdsvex** for `.svx` content with embedded Svelte components
 - **marked** + **shiki** for plain `.md` content rendering
 - **Zod 4** for content schema validation
@@ -101,10 +101,11 @@ Preview access is controlled by the `PUBLIC_PREVIEW_KEY` env var.
 /devlogs                    Devlogs grouped view
 /devlogs/[slug]             Devlog detail
 /about                      About page
+/call                       Unlisted booking page (Cal.com embed, not in nav)
 /sitemap.xml                Dynamic sitemap
 ```
 
-FR at `/`, EN at `/en/` via Paraglide URL rewriting in `hooks.ts`.
+FR is served at `/` via Paraglide URL rewriting in `hooks.ts`. EN (`/en/`) is planned but not yet configured — only the `fr` locale exists.
 
 ## Image Pipeline
 
