@@ -13,6 +13,7 @@ import { dev, building } from '$app/environment';
 import fs from 'fs';
 import path from 'path';
 import { transformImageUrls } from '../../../vite-plugins/content-images';
+import { estimateReadingTime } from './reading-time';
 
 // For production: import all content files at build time
 // This includes both legacy .md files and new folder-based content.md files
@@ -61,14 +62,6 @@ export interface IndexEntryWithCover extends IndexEntry {
 	coverUrl?: string;
 	parentSlug?: string;
 	readingTime?: number;
-}
-
-/**
- * Estimate reading time in minutes from markdown text (~250 words/min for French)
- */
-function estimateReadingTime(text: string): number {
-	const words = text.trim().split(/\s+/).filter(Boolean).length;
-	return Math.max(1, Math.ceil(words / 250));
 }
 
 /**
