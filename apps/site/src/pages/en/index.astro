@@ -1,14 +1,14 @@
 ---
-import Base from '../layouts/Base.astro';
-import ThemeToggle from '../components/ThemeToggle.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/utils';
+import Base from '../../layouts/Base.astro';
+import ThemeToggle from '../../components/ThemeToggle.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 ---
 <Base lang={lang}>
   <main class="mx-auto max-w-4xl p-8">
     <nav class="flex justify-between items-center mb-8">
-      <a href="/about" class="link" data-testid="nav-about">{t('nav.about')}</a>
+      <a href="/en/about" class="link" data-testid="nav-about">{t('nav.about')}</a>
       <ThemeToggle />
     </nav>
     <h1 class="text-primary text-4xl font-bold" data-testid="tagline">{t('site.tagline')}</h1>
