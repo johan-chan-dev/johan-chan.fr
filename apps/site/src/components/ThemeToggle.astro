@@ -1,0 +1,14 @@
+<button type="button" class="btn btn-sm btn-ghost" data-testid="theme-toggle" aria-label="Basculer le thème">
+  🌓
+</button>
+<script>
+  const LIGHT = 'autumn';
+  const DARK = 'abyss';
+  const btn = document.querySelector('[data-testid="theme-toggle"]');
+  btn?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === DARK ? LIGHT : DARK;
+    root.dataset.theme = next;
+    localStorage.setItem('theme', next);
+  });
+</script>

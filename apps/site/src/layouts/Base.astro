@@ -1,0 +1,21 @@
+---
+import '../styles/global.css';
+interface Props { lang?: 'fr' | 'en'; title?: string }
+const { lang = 'fr', title = 'johan-chan' } = Astro.props;
+---
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <script is:inline>
+      // Set theme before paint to avoid FOUC.
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = saved ?? (prefersDark ? 'abyss' : 'autumn');
+    </script>
+  </head>
+  <body class="bg-base-100 text-base-content min-h-screen">
+    <slot />
+  </body>
+</html>
