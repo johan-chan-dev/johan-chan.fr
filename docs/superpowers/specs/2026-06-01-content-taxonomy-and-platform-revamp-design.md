@@ -164,6 +164,26 @@ Ordre proposé (chacun aura son propre cycle réflexion → spec → plan le mom
 5. **Home H2**.
 6. *(différé)* **Keystatic**, seulement si l'édition devient une douleur.
 
+## Stratégie d'exécution
+
+**Option retenue : nouvelle app coexistante.** Ajouter une 2ᵉ app Astro (`apps/site`) à côté
+de la SvelteKit (`apps/web`), développée sur branches incrémentales. Le monorepo (Turbo +
+pnpm) est fait pour ça.
+
+- Les deux apps coexistent : `apps/web` (SvelteKit) reste la prod sur GitHub Pages,
+  **intouchée** ; `apps/site` (Astro) mûrit sur **Vercel previews**.
+- Chaque tranche merge dans `main` sans risque — la nouvelle app n'affecte pas la prod tant
+  qu'on n'a pas basculé.
+- **Cutover** quand la parité est atteinte : pointer `johan-chan.fr` vers Vercel (app Astro)
+  + retirer GitHub Pages. Puis commit de nettoyage : supprimer `apps/web` (SvelteKit) et le
+  miroir `packages/content`.
+- **Rejeté** : réécriture en place de `apps/web` sur une branche longue durée — branche
+  divergente + app cassée pendant tout le rewrite + merge big-bang, sans comparaison
+  ancien/nouveau possible. On protège le *trajet*, pas seulement l'état final.
+
+Pendant la coexistence : `apps/web` garde `packages/content` (miroir) ; `apps/site` a son
+contenu migré dans ses content collections. Le pont est géré au moment de la migration.
+
 ## Hors périmètre (sous-projet distinct)
 
 **Réorganiser le second cerveau / PKM** : NON. Le réorganiser pour matcher les registres du
