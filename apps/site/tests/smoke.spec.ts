@@ -23,3 +23,9 @@ test('theme toggle switches and persists across reload', async ({ page }) => {
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', after!);
 });
+
+test('demo MDX page renders the Callout component', async ({ page }) => {
+  await page.goto('/demo');
+  await expect(page.getByRole('heading', { name: 'Démo MDX', level: 1 })).toBeVisible();
+  await expect(page.getByTestId('callout')).toBeVisible();
+});
