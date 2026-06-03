@@ -19,6 +19,7 @@ test('theme toggle switches and persists across reload', async ({ page }) => {
   await page.getByTestId('theme-toggle').click();
   const after = await html.getAttribute('data-theme');
   expect(after).not.toBe(before);
+  expect(after, 'theme-toggle must set a data-theme value').toBeTruthy();
   await page.reload();
   await expect(html).toHaveAttribute('data-theme', after!);
 });
