@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-interface Props { lang?: 'fr' | 'en'; title?: string }
+import type { Lang } from '../i18n/ui';
+interface Props { lang?: Lang; title?: string }
 const { lang = 'fr', title = 'johan-chan' } = Astro.props;
 ---
 <html lang={lang}>
