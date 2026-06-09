@@ -4,12 +4,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Proof from '../components/Proof.astro';
 import PieceRow from '../components/PieceRow.astro';
-import { copy, piecesByDate } from '../data/atelier';
+import { copy } from '../lib/copy';
+import { getArticles } from '../lib/content';
 import type { Lang } from '../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang];
 const N = C.now;
-const preview = piecesByDate().slice(0, 3);
+const preview = (await getArticles()).slice(0, 3);
 const base = lang === 'fr' ? '' : '/en';
 ---
 <Base lang={lang} title={`${C.name} — ${C.hero.kicker}`}>
@@ -46,7 +47,7 @@ const base = lang === 'fr' ? '' : '/en';
           <span class="atl-meta mr-2.5 align-middle text-accent" style="font-size:12px">02</span>{C.journal.title}
         </h2>
       </div>
-      {preview.map((p) => <PieceRow piece={p} lang={lang} />)}
+      {preview.map((a) => <PieceRow article={a} lang={lang} />)}
       <div class="border-t border-line"></div>
       <a href={`${base}/journal`} class="atl-meta mt-5 inline-flex items-center gap-2 border-b border-accent pb-0.5 text-[13px] text-accent">{C.journal.seeAll} →</a>
     </section>

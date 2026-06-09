@@ -1,12 +1,11 @@
 ---
 import type { Lang } from '../i18n/ui';
-import type { Project } from '../data/atelier';
-import { copy } from '../data/atelier';
+import type { Project } from '../lib/content-utils';
+import { copy } from '../lib/copy';
 interface Props { project: Project; lang: Lang }
 const { project, lang } = Astro.props;
-const c = project[lang]; const C = copy[lang];
-const base = lang === 'fr' ? '' : '/en';
-const href = `${base}/projets/${project.slug}`;
+const C = copy[lang];
+const href = `/projets/${project.slug}`;
 ---
 <a href={href} data-testid="project-card"
   class="atl-row mb-4 block rounded-[14px] border border-line bg-surf p-5 md:p-[26px]">
@@ -14,8 +13,8 @@ const href = `${base}/projets/${project.slug}`;
     <span class="atl-meta rounded-full border border-accent px-2.5 uppercase text-accent" style="font-size:10.5px;letter-spacing:.1em">{C.projects.badge}</span>
     <span class="atl-meta text-faint">{project.year}</span>
   </div>
-  <h3 class="font-display text-[23px] font-bold leading-[1.06] tracking-[-.025em] text-ink md:text-[30px]">{c.name}</h3>
-  <p class="atl-body mt-2.5 max-w-[620px] text-ink2">{c.oneliner}</p>
+  <h3 class="font-display text-[23px] font-bold leading-[1.06] tracking-[-.025em] text-ink md:text-[30px]">{project.name}</h3>
+  <p class="atl-body mt-2.5 max-w-[620px] text-ink2">{project.oneliner}</p>
   <div class="mt-4 flex flex-wrap items-center gap-2">
     {project.stack.map((s) => <span class="atl-meta rounded-full border border-line px-2.5 text-ink2">{s}</span>)}
     <span class="atl-meta ml-auto text-accent">{C.projects.viewCase} →</span>

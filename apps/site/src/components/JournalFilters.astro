@@ -1,11 +1,10 @@
 ---
 import type { Lang } from '../i18n/ui';
-import { copy, allTags, kindClass, type Kind } from '../data/atelier';
-interface Props { lang: Lang; total: number }
-const { lang, total } = Astro.props;
+import { copy, kindClass, type Registre } from '../lib/copy';
+interface Props { lang: Lang; total: number; tags: string[] }
+const { lang, total, tags } = Astro.props;
 const C = copy[lang];
-const tags = allTags(lang);
-const regs: Kind[] = ['refl', 'design', 'impl'];
+const regs: Registre[] = ['refl', 'design', 'impl'];
 ---
 <div data-filters class="mt-6 flex flex-wrap items-center gap-x-[22px] gap-y-3 md:mt-8">
   <div class="flex flex-wrap items-center gap-2">
