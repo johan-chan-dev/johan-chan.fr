@@ -1,0 +1,22 @@
+---
+import { Code } from 'astro:components';
+interface Props { framework: 'svelte' | 'vue' | 'react'; source: string; label?: string }
+const { framework, source, label } = Astro.props;
+const lang = (framework === 'react' ? 'tsx' : framework) as 'svelte' | 'vue' | 'tsx';
+const ext = framework === 'react' ? 'tsx' : framework;
+const file = label ?? `counter.${ext}`;
+const name = { svelte: 'Svelte', vue: 'Vue', react: 'React' }[framework];
+---
+<div data-demo data-framework={framework} class="atl-demo overflow-hidden rounded-[12px] border border-line">
+  <div class="atl-meta flex items-center justify-between border-b border-line bg-bg2 px-3.5 py-2 text-faint" style="font-size:10.5px">
+    <span class="uppercase" style="letter-spacing:.1em">{name}</span>
+    <span>{file}</span>
+  </div>
+  <div class="atl-demo-code overflow-x-auto text-[12.5px] [&_pre]:m-0 [&_pre]:p-3.5">
+    <Code code={source} lang={lang} theme="vitesse-dark" />
+  </div>
+  <div class="atl-demo-live flex items-center gap-3 border-t border-line bg-surf px-3.5 py-3">
+    <span class="atl-meta uppercase text-faint" style="font-size:10px;letter-spacing:.1em">live</span>
+    <div class="atl-demo-island flex items-center gap-2"><slot /></div>
+  </div>
+</div>
