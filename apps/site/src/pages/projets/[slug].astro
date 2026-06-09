@@ -2,37 +2,38 @@
 import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import Proof from '../../components/Proof.astro';
-import { projects, pieces, copy, kindClass } from '../../data/atelier';
+import { copy, kindClass } from '../../lib/copy';
+import { getProjects, getProjectEntry, getArticles } from '../../lib/content';
+import { articlesBySlugs } from '../../lib/content-utils';
 import type { Lang } from '../../i18n/ui';
 
-export function getStaticPaths() {
-  return projects.map((pr) => ({ params: { slug: pr.slug }, props: { id: pr.id } }));
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ params: { slug: p.slug } }));
 }
 const lang: Lang = 'fr';
-const { id } = Astro.props;
-const project = projects.find((p) => p.id === id)!;
-const c = project[lang]; const C = copy[lang];
-const base = lang === 'fr' ? '' : '/en';
-const related = project.relatedIds.map((rid) => pieces.find((p) => p.id === rid)!).filter(Boolean);
+const { slug } = Astro.params;
+const { project, Content } = await getProjectEntry(slug!);
+const C = copy[lang];
+const related = articlesBySlugs(project.relatedArticles, await getArticles());
 ---
-<Base lang={lang} title={`${c.name} — ${C.name}`}>
+<Base lang={lang} title={`${project.name} — ${C.name}`}>
   <Header lang={lang} current="work" />
   <main class="atl-container atl-rise pb-16 md:pb-24">
     <article class="mx-auto max-w-[880px] pt-8 md:pt-10">
       <div class="mb-6 flex items-center justify-between">
-        <a href={`${base}/projets`} class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.caseStudy.back}</a>
+        <a href="/projets" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.caseStudy.back}</a>
         <span class="atl-meta rounded-full border border-accent px-2.5 uppercase text-accent" style="font-size:10.5px;letter-spacing:.12em">{C.projects.badge}</span>
       </div>
-      <h1 class="font-display text-[32px] font-bold leading-[1.02] tracking-[-.03em] text-ink md:text-[46px]">{c.name}</h1>
-      <p class="atl-body mt-3.5 mb-6 max-w-[620px] text-ink2 md:text-[19px]" style="line-height:1.5">{c.oneliner}</p>
+      <h1 class="font-display text-[32px] font-bold leading-[1.02] tracking-[-.03em] text-ink md:text-[46px]">{project.name}</h1>
+      <p class="atl-body mt-3.5 mb-6 max-w-[620px] text-ink2 md:text-[19px]" style="line-height:1.5">{project.oneliner}</p>
       <div class="flex flex-wrap gap-x-10 gap-y-4 border-y border-line py-4">
         <div>
-          <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">{lang === 'fr' ? 'rôle' : 'role'}</div>
-          <div class="atl-meta text-ink" style="font-size:12.5px">{c.role}</div>
+          <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">rôle</div>
+          <div class="atl-meta text-ink" style="font-size:12.5px">{project.role}</div>
         </div>
         <div>
-          <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">{lang === 'fr' ? 'année' : 'year'}</div>
+          <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">année</div>
           <div class="atl-meta text-ink" style="font-size:12.5px">{project.year}</div>
         </div>
         <div>
@@ -42,32 +43,22 @@ const related = project.relatedIds.map((rid) => pieces.find((p) => p.id === rid)
       </div>
       <div class="mt-6 flex h-[180px] items-end rounded-[12px] border border-line bg-bg2 p-3 md:h-[300px]"
         style="background-image: repeating-linear-gradient(135deg, var(--hair) 0 1px, transparent 1px 9px)">
-        <span class="atl-meta uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">{lang === 'fr' ? 'visuel du projet' : 'project visual'}</span>
+        <span class="atl-meta uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">visuel du projet</span>
       </div>
-      <div class="mt-7">
-        {c.story.map((para, i) => (
-          <p class={`mb-4 max-w-[660px] font-text text-[16.5px] leading-[1.7] md:text-[18px] ${i === 0 ? 'font-medium text-ink' : 'text-ink2'}`}>{para}</p>
-        ))}
+      <div class="atl-prose mt-7 font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[18px]">
+        <Content />
       </div>
-      {project.demo && (
-        <figure class="mt-7 overflow-hidden rounded-[14px] border border-line bg-surf">
-          <figcaption class="atl-meta flex items-center gap-2 border-b border-line px-3.5 py-2.5 text-ink2" style="font-size:11px">
-            <span class="h-[7px] w-[7px] rounded-full bg-accent" style="box-shadow:0 0 7px var(--accent)"></span>{C.caseStudy.demo}
-          </figcaption>
-          <div class="p-4"><Proof lang={lang} /></div>
-        </figure>
-      )}
       {related.length > 0 && (
         <div class="mt-9 border-t border-line pt-5">
           <div class="atl-meta mb-1.5 uppercase text-ink2" style="font-size:11px;letter-spacing:.12em">{C.caseStudy.whatHelped}</div>
           <p class="font-text text-[14px] text-faint" style="margin:0 0 16px">{C.caseStudy.whatHelpedSub}</p>
           <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
             {related.map((rp) => (
-              <a href={`${base}/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
-                <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.kind]}`} style="font-size:10px;letter-spacing:.08em">
-                  <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.kind]}
+              <a href={`/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
+                <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.registre]}`} style="font-size:10px;letter-spacing:.08em">
+                  <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.registre]}
                 </span>
-                <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp[lang].title}</span>
+                <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp.title}</span>
               </a>
             ))}
           </div>
