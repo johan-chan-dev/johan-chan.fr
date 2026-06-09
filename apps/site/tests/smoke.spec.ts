@@ -36,25 +36,31 @@ test('journal list renders all pieces and filters by register', async ({ page })
   const rows = page.getByTestId('piece-row');
   await expect(rows.first()).toBeVisible();
   const total = await rows.count();
-  expect(total).toBeGreaterThanOrEqual(5);
+  expect(total).toBeGreaterThanOrEqual(15); // 15 imported articles + showcase
   await page.locator('[data-reg="design"]').click();
   const visible = await page.locator('[data-testid="piece-row"]:visible').count();
   expect(visible).toBeLessThan(total);
 });
 
-test('article detail renders title, rendered body, and back link', async ({ page }) => {
-  await page.goto('/journal/editeur-code-navigateur-zero-dependance');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('éditeur');
-  await expect(page.locator('article')).toContainText('le journal');
-  // body rendered from MDX (not a placeholder), incl. the inline Proof island
-  await expect(page.locator('.atl-prose')).toContainText('navigateur');
-  await expect(page.locator('[data-proof]')).toBeVisible();
+test('imported article renders title, body, hero image, and back link', async ({ page }) => {
+  await page.goto('/journal/boring-languages-win');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Boring languages win');
+  await expect(page.locator('article')).toContainText('le journal'); // back link
+  await expect(page.locator('.atl-prose')).toContainText('Python');
+  // optimized hero <img> rendered from the article's image
+  await expect(page.locator('article figure img')).toBeVisible();
 });
 
-test('case study renders récit from MDX', async ({ page }) => {
-  await page.goto('/projets/atelier-wasm');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Atelier WASM');
-  await expect(page.locator('.atl-prose')).toContainText('frustration');
+test('series chapter shows the series thread line', async ({ page }) => {
+  await page.goto('/journal/le-code-propre-n-est-pas-le-craft');
+  await expect(page.locator('body')).toContainText('Le monde du dev sous choc');
+  await expect(page.locator('body')).toContainText('chap. 2');
+});
+
+test('projets page shows the empty state (no real projects yet)', async ({ page }) => {
+  await page.goto('/projets');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await expect(page.locator('body')).toContainText('Rien ici pour l’instant');
 });
 
 test('demo MDX page still renders the Callout component', async ({ page }) => {
@@ -89,25 +95,32 @@ test('view transitions: interactivity + theme survive in-app navigation', async 
   expect(visible).toBeLessThan(total);
 });
 
-test('EN journal lists English articles', async ({ page }) => {
+test('EN journal lists the English (bilingual) articles', async ({ page }) => {
   await page.goto('/en/journal');
   const rows = page.getByTestId('piece-row');
   await expect(rows.first()).toBeVisible();
-  expect(await rows.count()).toBeGreaterThanOrEqual(5);
-  await expect(page.locator('body')).toContainText('code editor in the browser');
+  // imported content is FR-only; only the bilingual showcase appears in EN
+  expect(await rows.count()).toBeGreaterThanOrEqual(1);
+  await expect(page.locator('body')).toContainText('Reactivity');
 });
 
 test('EN article renders English title + body', async ({ page }) => {
-  await page.goto('/en/journal/editeur-code-navigateur-zero-dependance');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('code editor in the browser');
-  await expect(page.locator('.atl-prose')).toContainText('entirely in the browser');
+  await page.goto('/en/journal/reactivite-trois-frameworks');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Reactivity, from one framework to another');
+  await expect(page.locator('.atl-prose')).toContainText('A counter is trivial');
 });
 
-test('language switch from a FR article lands on its EN translation', async ({ page }) => {
-  await page.goto('/journal/editeur-code-navigateur-zero-dependance');
+test('lang switch is hidden on a FR-only imported article', async ({ page }) => {
+  await page.goto('/journal/boring-languages-win');
+  await expect(page.getByTestId('lang-switch')).toHaveCount(0);
+});
+
+test('language switch from a bilingual article lands on its EN translation', async ({ page }) => {
+  await page.goto('/journal/reactivite-trois-frameworks');
+  await expect(page.getByTestId('lang-switch')).toBeVisible();
   await page.getByTestId('lang-switch').click();
-  await expect(page).toHaveURL('/en/journal/editeur-code-navigateur-zero-dependance');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('code editor in the browser');
+  await expect(page).toHaveURL('/en/journal/reactivite-trois-frameworks');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Reactivity');
 });
 
 test('framework showcase: code panel, live island, compare mode', async ({ page }) => {
