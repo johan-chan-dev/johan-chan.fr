@@ -11,7 +11,7 @@ const articles = defineCollection({
     generateId: ({ entry }) =>
       entry.replace(/\/index\.en\.mdx?$/, '/en').replace(/\/index\.mdx?$/, ''),
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     title: z.string().min(1),
     registre,
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -22,6 +22,9 @@ const articles = defineCollection({
     order: z.number().int().positive().optional(),
     repo: z.string().optional(),
     translationId: z.string().optional(),
+    image: image().optional(),
+    imageFocus: z.enum(['center', 'top', 'bottom']).default('center'),
+    excerpt: z.string().optional(),
   }),
 });
 

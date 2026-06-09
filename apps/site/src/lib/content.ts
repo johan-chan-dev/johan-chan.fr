@@ -19,6 +19,7 @@ async function toArticle(entry: ArticleEntry): Promise<Article> {
     slug: slugOf(entry.id), title: d.title, registre: d.registre, date: d.date,
     tags: d.tags, readingTime: d.readingTime, live: d.live,
     series, order: d.order, repo: d.repo,
+    image: d.image, imageFocus: d.imageFocus, excerpt: d.excerpt,
   };
 }
 
@@ -56,4 +57,9 @@ export async function getProjectEntry(slug: string, lang: Lang) {
 export async function getSeries(id: string): Promise<Series | undefined> {
   const entry = await getEntry('series', id);
   return entry?.data;
+}
+
+export async function hasTranslation(slug: string, lang: Lang, collection: 'articles' | 'projects'): Promise<boolean> {
+  const otherId = lang === 'fr' ? `${slug}/en` : slug;
+  return Boolean(await getEntry(collection, otherId));
 }
