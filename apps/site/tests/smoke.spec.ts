@@ -102,6 +102,11 @@ test('framework showcase: code panel, live island, compare mode', async ({ page 
   await expect(svelteDemo.locator('output')).toHaveText('1');
   // in focus, other frameworks' demos are hidden
   await expect(page.locator('[data-demo][data-framework="react"]')).toBeHidden();
+  // switching tabs in focus shows the picked framework and hides the others
+  await page.getByRole('button', { name: 'Vue', exact: true }).click();
+  await expect(page.locator('[data-demo][data-framework="vue"]')).toBeVisible();
+  await expect(svelteDemo).toBeHidden();
+  await expect(page.locator('[data-demo][data-framework="react"]')).toBeHidden();
   // compare toggle reveals all three
   await page.getByRole('button', { name: 'Comparer' }).click();
   await expect(showcase).toHaveAttribute('data-mode', 'compare');

@@ -40,7 +40,10 @@
         cmp.textContent = mode === 'compare' ? 'Focus' : 'Comparer';
         cmp.setAttribute('aria-pressed', String(mode === 'compare'));
         demos.forEach((d) => {
-          d.style.display = mode === 'compare' || d.dataset.framework === active ? '' : 'none';
+          // In focus, the active demo needs an explicit 'block' to override the
+          // CSS `:not(:first-child){display:none}` rule; '' would let CSS re-hide it.
+          // In compare, clear it so the grid layout controls visibility.
+          d.style.display = mode === 'compare' ? '' : d.dataset.framework === active ? 'block' : 'none';
         });
         frameworks.forEach((fw) => {
           const on = mode === 'focus' && fw === active;
