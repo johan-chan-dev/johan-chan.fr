@@ -1,0 +1,27 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { copy, projects } from '../../data/atelier';
+import type { Lang } from '../../i18n/ui';
+const lang: Lang = 'fr';
+const C = copy[lang];
+const n = projects.length;
+const word = n > 1 ? 'projets' : 'projet';
+---
+<Base lang={lang} title={`${C.projects.title} — ${C.name}`}>
+  <Header lang={lang} current="work" />
+  <main class="atl-container pb-16 md:pb-24">
+    <section class="pt-9 md:pt-14">
+      <h1 class="atl-page-title m-0 text-ink">{C.projects.title}</h1>
+      <p class="atl-body mt-3.5 max-w-[620px] text-ink2 md:text-[16.5px]">{C.projects.sub}</p>
+      <span class="atl-meta mt-6 block text-faint md:mt-8" style="font-size:11.5px">{n} {word}</span>
+      <div class="mt-3.5">
+        {projects.map((pr) => <ProjectCard project={pr} lang={lang} />)}
+        {n === 0 && <p class="atl-body py-9 text-ink2">{C.projects.none}</p>}
+      </div>
+    </section>
+  </main>
+  <Footer lang={lang} />
+</Base>
