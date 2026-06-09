@@ -1,0 +1,65 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { copy, fmtDate, kindClass } from '../../../lib/copy';
+import { getArticles, getArticleEntry } from '../../../lib/content';
+import { relatedArticles } from '../../../lib/content-utils';
+import type { Lang } from '../../../i18n/ui';
+
+export async function getStaticPaths() {
+  const articles = await getArticles('en');
+  return articles.map((a) => ({ params: { slug: a.slug } }));
+}
+const lang: Lang = 'en';
+const { slug } = Astro.params;
+const { article, Content } = await getArticleEntry(slug!, 'en');
+const C = copy[lang];
+const hue = kindClass[article.registre];
+const all = await getArticles('en');
+const related = relatedArticles(article, all);
+---
+<PageLayout lang={lang} current="journal" title={`${article.title} — ${C.name}`} width="reading">
+  <div class="mb-6 flex items-center justify-between">
+    <a href="/en/journal" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.reader.back}</a>
+    <span class={`atl-meta inline-flex items-center gap-2 uppercase ${hue}`} style="font-size:11px;letter-spacing:.1em">
+      <span class="h-[7px] w-[7px] rounded-full" style="background: currentColor"></span>{C.kind[article.registre]}
+    </span>
+  </div>
+  {article.series && (
+    <div class={`atl-meta mb-3.5 uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</div>
+  )}
+  <h1 class="font-display text-[30px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[42px]" style="text-wrap:balance">{article.title}</h1>
+  <div class="atl-meta my-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px">
+    <span>{fmtDate(article.date, lang)}</span><span>·</span><span>{article.readingTime} {C.read}</span><span>·</span>
+    <span class="flex gap-2">{article.tags.map((tg) => <span class="text-ink2">#{tg.toLowerCase()}</span>)}</span>
+  </div>
+  <div class="atl-prose font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[17.5px]">
+    <Content />
+  </div>
+  {article.repo && (
+    <div class="mt-7 flex items-center justify-between gap-3 rounded-[12px] border border-line bg-surf px-4 py-4">
+      <span class="flex min-w-0 items-center gap-3">
+        <span class="font-mono text-[17px] text-ink2">{'{ }'}</span>
+        <span class="min-w-0">
+          <span class="atl-meta block uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">{C.reader.source}</span>
+          <span class="mt-0.5 block font-mono text-[13.5px] text-ink">github.com/johanchan/{article.repo}</span>
+        </span>
+      </span>
+      <span class="atl-meta whitespace-nowrap text-accent" style="font-size:12px">git clone →</span>
+    </div>
+  )}
+  {related.length > 0 && (
+    <div class="mt-9 border-t border-line pt-5">
+      <div class="atl-meta mb-3.5 uppercase text-ink2" style="font-size:11px;letter-spacing:.12em">{C.reader.readNext}</div>
+      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+        {related.map((rp) => (
+          <a href={`/en/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
+            <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.registre]}`} style="font-size:10px;letter-spacing:.08em">
+              <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.registre]}
+            </span>
+            <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp.title}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  )}
+</PageLayout>
