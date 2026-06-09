@@ -1,0 +1,109 @@
+---
+import type { Lang } from '../i18n/ui';
+import { copy, allTags, kindClass, type Kind } from '../data/atelier';
+interface Props { lang: Lang; total: number }
+const { lang, total } = Astro.props;
+const C = copy[lang];
+const tags = allTags(lang);
+const regs: Kind[] = ['refl', 'design', 'impl'];
+---
+<div data-filters class="mt-6 flex flex-wrap items-center gap-x-[22px] gap-y-3 md:mt-8">
+  <div class="flex flex-wrap items-center gap-2">
+    {regs.map((r) => (
+      <button type="button" data-reg={r} aria-pressed="false"
+        class="atl-meta inline-flex items-center gap-[7px] rounded-full border border-line px-3 py-1.5 text-[12px] text-ink2">
+        <span class={`h-[7px] w-[7px] rounded-full ${kindClass[r]}`} style="background: currentColor"></span>{C.kind[r]}
+      </button>
+    ))}
+    <span data-tagsep hidden class="mx-1 h-5 w-px bg-line"></span>
+    <span data-activetags class="contents"></span>
+    <button type="button" data-tagopen
+      class="atl-meta inline-flex items-center gap-[7px] whitespace-nowrap rounded-full border border-dashed border-line bg-surf px-3 py-1.5 text-[12px] text-ink2">
+      <span style="font-size:13px;line-height:1">＋</span><span data-tagopenlabel>{lang === 'fr' ? 'Sélectionner des tags' : 'Select tags'}</span>
+    </button>
+  </div>
+  <span data-count class="atl-meta text-faint md:ml-auto" style="font-size:11.5px">{total} {lang === 'fr' ? 'articles' : 'articles'}</span>
+</div>
+
+<div data-picker hidden class="fixed inset-0 z-[70] bg-black/45 md:bg-transparent">
+  <div data-pickerbox class="atl-sheet absolute inset-x-0 bottom-0 flex max-h-[82%] flex-col rounded-t-[20px] border-t border-line bg-bg
+    md:inset-auto md:left-[56px] md:top-[200px] md:max-h-[420px] md:w-[320px] md:rounded-[14px] md:border md:shadow-[0_24px_60px_-20px_#000c]">
+    <div class="flex items-center justify-between border-b border-line px-4 py-3.5">
+      <span class="atl-meta uppercase text-ink2" style="letter-spacing:.12em">tags</span>
+      <button type="button" data-pickerdone class="atl-meta rounded-full bg-accent px-4 py-1.5 text-accent-ink">{lang === 'fr' ? 'Terminé' : 'Done'}</button>
+    </div>
+    <div class="flex flex-wrap content-start gap-2 overflow-y-auto p-4">
+      {tags.map((tg) => (
+        <button type="button" data-tag={tg} aria-pressed="false"
+          class="atl-meta inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-[12px] text-ink2">#{tg.toLowerCase()}</button>
+      ))}
+    </div>
+  </div>
+</div>
+<script is:inline define:vars={{ lang }}>
+  const root = document.querySelector('[data-filters]');
+  if (root) {
+    const rows = [...document.querySelectorAll('[data-testid="piece-row"]')];
+    const countEl = root.querySelector('[data-count]');
+    const picker = document.querySelector('[data-picker]');
+    const sel = new Set();
+    let reg = null;
+    const word = (n) => lang === 'fr' ? (n > 1 ? 'articles' : 'article') : (n === 1 ? 'article' : 'articles');
+
+    const apply = () => {
+      let n = 0;
+      rows.forEach((row) => {
+        const k = row.getAttribute('data-kind');
+        const tgs = (row.getAttribute('data-tags') || '').split('|');
+        const okReg = !reg || k === reg;
+        const okTag = sel.size === 0 || tgs.some((t) => sel.has(t));
+        const show = okReg && okTag;
+        row.style.display = show ? '' : 'none';
+        if (show) n++;
+      });
+      if (countEl) countEl.textContent = `${n} ${word(n)}`;
+      root.querySelectorAll('[data-reg]').forEach((b) => {
+        const on = b.getAttribute('data-reg') === reg;
+        b.setAttribute('aria-pressed', String(on));
+        b.style.opacity = reg && !on ? '.5' : '1';
+        b.style.background = on ? 'var(--ink)' : 'transparent';
+        b.style.color = on ? 'var(--bg)' : 'var(--ink2)';
+        b.style.borderColor = on ? 'var(--ink)' : 'var(--line)';
+      });
+    };
+    root.querySelectorAll('[data-reg]').forEach((b) =>
+      b.addEventListener('click', () => { const r = b.getAttribute('data-reg'); reg = reg === r ? null : r; apply(); }));
+
+    const sep = root.querySelector('[data-tagsep]');
+    const active = root.querySelector('[data-activetags]');
+    const renderActive = () => {
+      active.innerHTML = '';
+      sep.toggleAttribute('hidden', sel.size === 0);
+      sel.forEach((tg) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'atl-meta inline-flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1.5 text-[12px] text-accent-ink';
+        b.innerHTML = `#${tg.toLowerCase()} <span style="opacity:.7">✕</span>`;
+        b.addEventListener('click', () => { sel.delete(tg); syncPicker(); renderActive(); apply(); });
+        active.appendChild(b);
+      });
+    };
+    const syncPicker = () => picker?.querySelectorAll('[data-tag]').forEach((b) =>
+      b.setAttribute('aria-pressed', String(sel.has(b.getAttribute('data-tag')))));
+    picker?.querySelectorAll('[data-tag]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const tg = b.getAttribute('data-tag');
+        sel.has(tg) ? sel.delete(tg) : sel.add(tg);
+        b.setAttribute('aria-pressed', String(sel.has(tg)));
+        b.style.background = sel.has(tg) ? 'var(--ink)' : 'transparent';
+        b.style.color = sel.has(tg) ? 'var(--accent-ink)' : 'var(--ink2)';
+        renderActive(); apply();
+      }));
+    const open = (o) => picker?.toggleAttribute('hidden', !o);
+    root.querySelector('[data-tagopen]')?.addEventListener('click', () => open(true));
+    picker?.querySelector('[data-pickerdone]')?.addEventListener('click', () => open(false));
+    picker?.addEventListener('click', (e) => { if (e.target === picker) open(false); });
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape') open(false); });
+    apply();
+  }
+</script>
