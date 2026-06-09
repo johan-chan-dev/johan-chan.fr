@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/ui';
-import { copy, CONTACT_EMAIL } from '../data/atelier';
+import { copy, CONTACT_EMAIL } from '../lib/copy';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const c = copy[lang].footer;
