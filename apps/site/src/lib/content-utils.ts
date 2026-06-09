@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro';
+
 export type Registre = 'refl' | 'design' | 'impl';
 
 export interface Article {
@@ -11,6 +13,9 @@ export interface Article {
   series?: { id: string; title: string };
   order?: number;
   repo?: string;
+  image?: ImageMetadata;
+  imageFocus?: 'center' | 'top' | 'bottom';
+  excerpt?: string;
 }
 export interface Project {
   slug: string;
