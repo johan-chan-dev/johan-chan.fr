@@ -1,7 +1,5 @@
 ---
-import Base from '../../layouts/Base.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
+import PageLayout from '../../layouts/PageLayout.astro';
 import PieceRow from '../../components/PieceRow.astro';
 import JournalFilters from '../../components/JournalFilters.astro';
 import { copy } from '../../lib/copy';
@@ -13,18 +11,14 @@ const C = copy[lang];
 const list = await getArticles();
 const tags = allTags(list);
 ---
-<Base lang={lang} title={`${C.journal.title} — ${C.name}`}>
-  <Header lang={lang} current="journal" />
-  <main class="atl-container pb-16 md:pb-24">
-    <section class="pt-9 md:pt-14">
-      <h1 class="atl-page-title m-0 text-ink">{C.journal.title}</h1>
-      <p class="atl-body mt-3.5 max-w-[620px] text-ink2 md:text-[16.5px]">{C.journal.sub}</p>
-      <JournalFilters lang={lang} total={list.length} tags={tags} />
-      <div class="mt-2.5 md:mt-3.5">
-        {list.map((a) => <PieceRow article={a} lang={lang} />)}
-        <div class="border-t border-line"></div>
-      </div>
-    </section>
-  </main>
-  <Footer lang={lang} />
-</Base>
+<PageLayout lang={lang} current="journal" title={`${C.journal.title} — ${C.name}`}>
+  <section class="pt-9 md:pt-14">
+    <h1 class="atl-page-title m-0 text-ink">{C.journal.title}</h1>
+    <p class="atl-body mt-3.5 max-w-[620px] text-ink2 md:text-[16.5px]">{C.journal.sub}</p>
+    <JournalFilters lang={lang} total={list.length} tags={tags} />
+    <div class="mt-2.5 md:mt-3.5">
+      {list.map((a) => <PieceRow article={a} lang={lang} />)}
+      <div class="border-t border-line"></div>
+    </div>
+  </section>
+</PageLayout>
