@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { copy } from '../data/atelier';
+import { copy } from '../lib/copy';
 import type { Lang } from '../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang]; const A = C.about;
