@@ -1,0 +1,85 @@
+---
+import Base from '../../layouts/Base.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Proof from '../../components/Proof.astro';
+import Ph from '../../components/Ph.astro';
+import { pieces, copy, fmtDate, relatedPieces, kindClass } from '../../data/atelier';
+import type { Lang } from '../../i18n/ui';
+
+export function getStaticPaths() {
+  return pieces.map((p) => ({ params: { slug: p.slug }, props: { id: p.id } }));
+}
+const lang: Lang = 'fr';
+const { id } = Astro.props;
+const piece = pieces.find((p) => p.id === id)!;
+const c = piece[lang]; const C = copy[lang];
+const hue = kindClass[piece.kind];
+const isImpl = piece.kind === 'impl';
+const related = relatedPieces(piece, lang);
+const base = lang === 'fr' ? '' : '/en';
+const lede = 'Le quoi, le pourquoi, puis le comment, jusqu’au code. Pour les implémentations, une démo qu’on manipule sans quitter la lecture.';
+const para2 = 'On manipule, on comprend, on continue. C’est le moteur qui tourne aussi dans le produit livré.';
+const repo = piece.fil ? piece.fil.en.toLowerCase().replace(/\s+/g, '-') : 'project';
+---
+<Base lang={lang} title={`${c.title} — ${C.name}`}>
+  <Header lang={lang} current="journal" />
+  <main class="atl-container atl-rise pb-16 md:pb-24">
+    <article class="mx-auto max-w-[880px] pt-8 md:pt-10">
+      <div class="mb-6 flex items-center justify-between">
+        <a href={`${base}/journal`} class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.reader.back}</a>
+        <span class={`atl-meta inline-flex items-center gap-2 uppercase ${hue}`} style="font-size:11px;letter-spacing:.1em">
+          <span class="h-[7px] w-[7px] rounded-full" style="background: currentColor"></span>{C.kind[piece.kind]}
+        </span>
+      </div>
+      {piece.fil && (
+        <div class={`atl-meta mb-3.5 uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {piece.fil[lang]}, {C.chapter} {piece.filPart}</div>
+      )}
+      <h1 class="font-display text-[30px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[42px]" style="text-wrap:balance">{c.title}</h1>
+      <div class="atl-meta my-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px">
+        <span>{fmtDate(piece.date, lang)}</span><span>·</span><span>{piece.read} {C.read}</span><span>·</span>
+        <span class="flex gap-2">{c.tags.map((tg) => <span class="text-ink2">#{tg.toLowerCase()}</span>)}</span>
+      </div>
+      <p class="m-0 mb-1.5 font-text text-[17px] font-medium leading-[1.55] text-ink md:text-[19px]">{lede}</p>
+      <Ph n={3} />
+      {isImpl && (
+        <figure class="my-7 overflow-hidden rounded-[14px] border border-line bg-surf">
+          <figcaption class="atl-meta flex items-center gap-2 border-b border-line px-3.5 py-2.5 text-ink2" style="font-size:11px">
+            <span class="h-[7px] w-[7px] rounded-full bg-accent" style="box-shadow:0 0 7px var(--accent)"></span>{C.reader.demoInline}
+          </figcaption>
+          <div class="p-4"><Proof lang={lang} /></div>
+        </figure>
+      )}
+      <p class="mt-1 font-text text-[15.5px] leading-[1.7] text-ink2 md:text-[16.5px]">{para2}</p>
+      <Ph n={2} w="48%" />
+      {isImpl && (
+        <div class="mt-7 flex items-center justify-between gap-3 rounded-[12px] border border-line bg-surf px-4 py-4">
+          <span class="flex min-w-0 items-center gap-3">
+            <span class="font-mono text-[17px] text-ink2">{'{ }'}</span>
+            <span class="min-w-0">
+              <span class="atl-meta block uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">{C.reader.source}</span>
+              <span class="mt-0.5 block font-mono text-[13.5px] text-ink">github.com/johanchan/{repo}</span>
+            </span>
+          </span>
+          <span class="atl-meta whitespace-nowrap text-accent" style="font-size:12px">git clone →</span>
+        </div>
+      )}
+      {related.length > 0 && (
+        <div class="mt-9 border-t border-line pt-5">
+          <div class="atl-meta mb-3.5 uppercase text-ink2" style="font-size:11px;letter-spacing:.12em">{C.reader.readNext}</div>
+          <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+            {related.map((rp) => (
+              <a href={`${base}/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
+                <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.kind]}`} style="font-size:10px;letter-spacing:.08em">
+                  <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.kind]}
+                </span>
+                <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp[lang].title}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </article>
+  </main>
+  <Footer lang={lang} />
+</Base>
