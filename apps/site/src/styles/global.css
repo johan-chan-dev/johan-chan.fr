@@ -83,3 +83,12 @@ html { background: var(--bg); color: var(--ink); font-family: var(--font-text); 
 
 .atl-prose > p { margin: 0 0 18px; max-width: 660px; }
 .atl-prose > p:first-child { font-weight: 500; color: var(--ink); }
+
+/* ---- framework showcase ---- */
+.atl-showcase[data-mode="focus"] .atl-showcase-demos > [data-demo]:not(:first-child) { display: none; }
+.atl-showcase-tab.is-active { color: var(--ink); border-color: var(--ink); }
+.atl-showcase[data-mode="compare"] .atl-showcase-demos { display: grid; gap: 16px; }
+@media (min-width: 768px) {
+  .atl-showcase[data-mode="compare"] { position: relative; left: 50%; transform: translateX(-50%); width: min(94vw, 1200px); }
+  .atl-showcase[data-mode="compare"] .atl-showcase-demos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

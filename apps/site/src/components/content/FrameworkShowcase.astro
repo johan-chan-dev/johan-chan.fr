@@ -1,0 +1,55 @@
+---
+// Wraps N <Demo> children. data-mode drives focus(tabs)/compare(grid) via CSS.
+// The controls bar (tabs + Comparer) is built client-side from the rendered demos.
+---
+<div class="atl-showcase my-7" data-showcase data-mode="focus">
+  <div class="atl-showcase-controls flex flex-wrap items-center gap-2" data-controls></div>
+  <div class="atl-showcase-demos mt-3 flex flex-col gap-4"><slot /></div>
+</div>
+<noscript><style>{`.atl-showcase[data-mode="focus"] [data-demo]{display:block!important}`}</style></noscript>
+<script>
+  type Mode = 'focus' | 'compare';
+  const NAMES: Record<string, string> = { svelte: 'Svelte', vue: 'Vue', react: 'React' };
+  function initShowcases() {
+    document.querySelectorAll<HTMLElement>('[data-showcase]').forEach((root) => {
+      const controls = root.querySelector<HTMLElement>('[data-controls]');
+      const demos = [...root.querySelectorAll<HTMLElement>('[data-demo]')];
+      if (!controls || !demos.length || controls.childElementCount) return;
+      const frameworks = demos.map((d) => d.dataset.framework || '');
+      let active = frameworks[0];
+      let mode: Mode = 'focus';
+
+      const tabs: Record<string, HTMLButtonElement> = {};
+      frameworks.forEach((fw) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = NAMES[fw] || fw;
+        b.className = 'atl-showcase-tab atl-meta rounded-full border border-line px-3 py-1 text-[12px] text-ink2';
+        b.addEventListener('click', () => { active = fw; mode = 'focus'; render(); });
+        tabs[fw] = b;
+        controls.appendChild(b);
+      });
+      const cmp = document.createElement('button');
+      cmp.type = 'button';
+      cmp.className = 'atl-showcase-compare atl-meta ml-auto rounded-full border border-dashed border-line px-3 py-1 text-[12px] text-ink2';
+      cmp.addEventListener('click', () => { mode = mode === 'compare' ? 'focus' : 'compare'; render(); });
+      controls.appendChild(cmp);
+
+      const render = () => {
+        root.dataset.mode = mode;
+        cmp.textContent = mode === 'compare' ? 'Focus' : 'Comparer';
+        cmp.setAttribute('aria-pressed', String(mode === 'compare'));
+        demos.forEach((d) => {
+          d.style.display = mode === 'compare' || d.dataset.framework === active ? '' : 'none';
+        });
+        frameworks.forEach((fw) => {
+          const on = mode === 'focus' && fw === active;
+          tabs[fw].setAttribute('aria-pressed', String(on));
+          tabs[fw].classList.toggle('is-active', on);
+        });
+      };
+      render();
+    });
+  }
+  document.addEventListener('astro:page-load', initShowcases);
+</script>
