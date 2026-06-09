@@ -89,6 +89,27 @@ test('view transitions: interactivity + theme survive in-app navigation', async 
   expect(visible).toBeLessThan(total);
 });
 
+test('EN journal lists English articles', async ({ page }) => {
+  await page.goto('/en/journal');
+  const rows = page.getByTestId('piece-row');
+  await expect(rows.first()).toBeVisible();
+  expect(await rows.count()).toBeGreaterThanOrEqual(5);
+  await expect(page.locator('body')).toContainText('code editor in the browser');
+});
+
+test('EN article renders English title + body', async ({ page }) => {
+  await page.goto('/en/journal/editeur-code-navigateur-zero-dependance');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('code editor in the browser');
+  await expect(page.locator('.atl-prose')).toContainText('entirely in the browser');
+});
+
+test('language switch from a FR article lands on its EN translation', async ({ page }) => {
+  await page.goto('/journal/editeur-code-navigateur-zero-dependance');
+  await page.getByTestId('lang-switch').click();
+  await expect(page).toHaveURL('/en/journal/editeur-code-navigateur-zero-dependance');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('code editor in the browser');
+});
+
 test('framework showcase: code panel, live island, compare mode', async ({ page }) => {
   await page.goto('/journal/reactivite-trois-frameworks');
   const showcase = page.locator('[data-showcase]');
