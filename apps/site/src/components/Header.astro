@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/ui';
-import { copy } from '../data/atelier';
+import { copy } from '../lib/copy';
 import ThemeToggle from './ThemeToggle.astro';
 import LangSwitch from './LangSwitch.astro';
 import MobileNav from './MobileNav.astro';
@@ -9,8 +9,8 @@ const { lang, current } = Astro.props;
 const c = copy[lang];
 const base = lang === 'fr' ? '' : '/en';
 const links: { key: Props['current']; href: string; label: string }[] = [
-  { key: 'work', href: `${base}/projets`, label: c.nav.work },
-  { key: 'journal', href: `${base}/journal`, label: c.nav.journal },
+  { key: 'work', href: '/projets', label: c.nav.work },
+  { key: 'journal', href: '/journal', label: c.nav.journal },
   { key: 'about', href: `${base}/about`, label: c.nav.about },
 ];
 ---

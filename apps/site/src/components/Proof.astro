@@ -1,6 +1,6 @@
 ---
 import type { Lang } from '../i18n/ui';
-import { copy } from '../data/atelier';
+import { copy } from '../lib/copy';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const p = copy[lang].proof;
