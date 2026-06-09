@@ -6,9 +6,10 @@ const registre = z.enum(['refl', 'design', 'impl']);
 
 const articles = defineCollection({
   loader: glob({
-    pattern: '*/index.{md,mdx}',
+    pattern: '*/index*.{md,mdx}',
     base: './src/content/articles',
-    generateId: ({ entry }) => entry.replace(/\/index\.mdx?$/, ''),
+    generateId: ({ entry }) =>
+      entry.replace(/\/index\.en\.mdx?$/, '/en').replace(/\/index\.mdx?$/, ''),
   }),
   schema: z.object({
     title: z.string().min(1),
@@ -26,9 +27,10 @@ const articles = defineCollection({
 
 const projects = defineCollection({
   loader: glob({
-    pattern: '*/index.{md,mdx}',
+    pattern: '*/index*.{md,mdx}',
     base: './src/content/projects',
-    generateId: ({ entry }) => entry.replace(/\/index\.mdx?$/, ''),
+    generateId: ({ entry }) =>
+      entry.replace(/\/index\.en\.mdx?$/, '/en').replace(/\/index\.mdx?$/, ''),
   }),
   schema: z.object({
     name: z.string().min(1),
