@@ -19,7 +19,7 @@ export interface Copy {
   caseStudy: { back: string; demo: string; whatHelped: string; whatHelpedSub: string };
   about: {
     kicker: string; lede: string; intro: string; portrait: string;
-    defTitle: string; def: [string, string, string, string][];
+    defTitle: string; def: [string, string, string?, string?][];
     aiTitle: string; ai: string; openTitle: string; open: string; readMore: string;
   };
   footer: { kicker: string; line: string; sub: string };
@@ -76,9 +76,9 @@ export const copy: Record<Lang, Copy> = {
       portrait: 'portrait',
       defTitle: 'Concrètement',
       def: [
-        ['Je tiens toute la chaîne', 'De ce que voit l’utilisateur jusqu’au système qui encaisse derrière. Garder les deux cohérents, c’est là que ça se joue.', 'editeur-code-navigateur-zero-dependance', 'Voir : l’éditeur WASM'],
-        ['Je creuse les sujets qui le méritent', 'Systèmes résilients, performance, architecture. Quand un problème le demande, je vais au fond.', 'animations-60fps-timeline', 'Voir : les animations 60 fps'],
-        ['J’écris du code qui dure', 'Éprouvé par les tests, qui tient en production, qui ne vous enferme pas.', 'invalider-cache-par-evenements', 'Voir : invalider un cache par événements'],
+        ['Je tiens toute la chaîne', 'De ce que voit l’utilisateur jusqu’au système qui encaisse derrière. Garder les deux cohérents, c’est là que ça se joue.'],
+        ['Je creuse les sujets qui le méritent', 'Systèmes résilients, performance, architecture. Quand un problème le demande, je vais au fond.'],
+        ['J’écris du code qui dure', 'Éprouvé par les tests, qui tient en production, qui ne vous enferme pas.'],
       ],
       aiTitle: 'Comment je travaille avec l’IA',
       ai: 'Je ne confie pas mon jugement à l’IA, je m’en sers pour aller plus loin. Elle explore, elle propose, elle accélère l’écriture du code. Les choix d’architecture et les arbitrages restent les miens, et je vérifie ce qui sort. Mon métier n’est pas de produire du code, c’est de savoir lequel est bon.',
@@ -119,9 +119,9 @@ export const copy: Record<Lang, Copy> = {
       portrait: 'portrait',
       defTitle: 'Concretely',
       def: [
-        ['I hold the full chain', 'From what the user sees down to the system that takes the load behind it. Keeping both coherent is where it’s won or lost.', 'editeur-code-navigateur-zero-dependance', 'See: the WASM editor'],
-        ['I dig into the subjects that deserve it', 'Resilient systems, performance, architecture. When a problem calls for it, I go deep.', 'animations-60fps-timeline', 'See: the 60 fps animations'],
-        ['I write code that lasts', 'Test-proven, holds in production, doesn’t lock you in.', 'invalider-cache-par-evenements', 'See: invalidating a cache by events'],
+        ['I hold the full chain', 'From what the user sees down to the system that takes the load behind it. Keeping both coherent is where it’s won or lost.'],
+        ['I dig into the subjects that deserve it', 'Resilient systems, performance, architecture. When a problem calls for it, I go deep.'],
+        ['I write code that lasts', 'Test-proven, holds in production, doesn’t lock you in.'],
       ],
       aiTitle: 'How I work with AI',
       ai: 'I don’t hand my judgment to AI, I use it to go further. It explores, it proposes, it speeds up writing code. The architecture choices and the trade-offs stay mine, and I check what comes out. My job isn’t to produce code, it’s to know which code is good.',
