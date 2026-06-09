@@ -9,5 +9,5 @@ const href = getSiblingLocalePath(Astro.url, other);
 <a href={href} hreflang={other} data-testid="lang-switch"
   class="atl-meta inline-flex items-center gap-1.5 rounded-full border border-line bg-surf px-[11px] py-[5px] uppercase tracking-[.05em] text-ink"
   aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}>
-  {other}
+  {lang}
 </a>
