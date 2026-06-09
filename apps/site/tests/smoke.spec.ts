@@ -95,32 +95,32 @@ test('view transitions: interactivity + theme survive in-app navigation', async 
   expect(visible).toBeLessThan(total);
 });
 
-test('EN journal lists the English (bilingual) articles', async ({ page }) => {
+test('EN journal lists the translated articles', async ({ page }) => {
   await page.goto('/en/journal');
   const rows = page.getByTestId('piece-row');
   await expect(rows.first()).toBeVisible();
-  // imported content is FR-only; only the bilingual showcase appears in EN
-  expect(await rows.count()).toBeGreaterThanOrEqual(1);
-  await expect(page.locator('body')).toContainText('Reactivity');
+  // 14 imported articles now translated + the bilingual showcase
+  expect(await rows.count()).toBeGreaterThanOrEqual(14);
+  await expect(page.locator('body')).toContainText('Clean Code Isn’t the Craft');
 });
 
 test('EN article renders English title + body', async ({ page }) => {
-  await page.goto('/en/journal/reactivite-trois-frameworks');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Reactivity, from one framework to another');
-  await expect(page.locator('.atl-prose')).toContainText('A counter is trivial');
+  await page.goto('/en/journal/le-code-propre-n-est-pas-le-craft');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Clean Code Isn’t the Craft');
+  await expect(page.locator('.atl-prose')).toContainText('craft');
 });
 
-test('lang switch is hidden on a FR-only imported article', async ({ page }) => {
+test('lang switch is hidden on a FR-only article (boring-languages-win, not yet translated)', async ({ page }) => {
   await page.goto('/journal/boring-languages-win');
   await expect(page.getByTestId('lang-switch')).toHaveCount(0);
 });
 
-test('language switch from a bilingual article lands on its EN translation', async ({ page }) => {
-  await page.goto('/journal/reactivite-trois-frameworks');
+test('language switch from a translated imported article lands on its EN sibling', async ({ page }) => {
+  await page.goto('/journal/le-code-propre-n-est-pas-le-craft');
   await expect(page.getByTestId('lang-switch')).toBeVisible();
   await page.getByTestId('lang-switch').click();
-  await expect(page).toHaveURL('/en/journal/reactivite-trois-frameworks');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Reactivity');
+  await expect(page).toHaveURL('/en/journal/le-code-propre-n-est-pas-le-craft');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Clean Code');
 });
 
 test('framework showcase: code panel, live island, compare mode', async ({ page }) => {
