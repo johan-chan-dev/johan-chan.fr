@@ -1,13 +1,15 @@
 ---
 import type { Lang } from '../i18n/ui';
 import { getSiblingLocalePath } from '../i18n/utils';
-interface Props { lang: Lang }
-const { lang } = Astro.props;
+interface Props { lang: Lang; hasTranslation?: boolean }
+const { lang, hasTranslation = true } = Astro.props;
 const other: Lang = lang === 'fr' ? 'en' : 'fr';
 const href = getSiblingLocalePath(Astro.url, other);
 ---
-<a href={href} hreflang={other} data-testid="lang-switch"
-  class="atl-meta inline-flex items-center gap-1.5 rounded-full border border-line bg-surf px-[11px] py-[5px] uppercase tracking-[.05em] text-ink"
-  aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}>
-  {lang}
-</a>
+{hasTranslation && (
+  <a href={href} hreflang={other} data-testid="lang-switch"
+    class="atl-meta inline-flex items-center gap-1.5 rounded-full border border-line bg-surf px-[11px] py-[5px] uppercase tracking-[.05em] text-ink"
+    aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}>
+    {lang}
+  </a>
+)}

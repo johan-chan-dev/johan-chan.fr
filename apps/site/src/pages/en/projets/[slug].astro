@@ -1,7 +1,7 @@
 ---
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { copy, kindClass } from '../../../lib/copy';
-import { getProjects, getProjectEntry, getArticles } from '../../../lib/content';
+import { getProjects, getProjectEntry, getArticles, hasTranslation } from '../../../lib/content';
 import { articlesBySlugs } from '../../../lib/content-utils';
 import type { Lang } from '../../../i18n/ui';
 
@@ -12,10 +12,11 @@ export async function getStaticPaths() {
 const lang: Lang = 'en';
 const { slug } = Astro.params;
 const { project, Content } = await getProjectEntry(slug!, 'en');
+const translated = await hasTranslation(slug!, 'en', 'projects');
 const C = copy[lang];
 const related = articlesBySlugs(project.relatedArticles, await getArticles('en'));
 ---
-<PageLayout lang={lang} current="work" title={`${project.name} — ${C.name}`} width="reading">
+<PageLayout lang={lang} current="work" title={`${project.name} — ${C.name}`} width="reading" hasTranslation={translated}>
   <div class="mb-6 flex items-center justify-between">
     <a href="/en/projets" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.caseStudy.back}</a>
     <span class="atl-meta rounded-full border border-accent px-2.5 uppercase text-accent" style="font-size:10.5px;letter-spacing:.12em">{C.projects.badge}</span>
