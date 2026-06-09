@@ -1,0 +1,26 @@
+---
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { Lang } from '../i18n/ui';
+interface Props {
+  lang: Lang;
+  current: 'home' | 'work' | 'journal' | 'about';
+  title?: string;
+  width?: 'wide' | 'reading';
+}
+const { lang, current, title, width = 'wide' } = Astro.props;
+---
+<Base lang={lang} title={title}>
+  <Header lang={lang} current={current} />
+  <main class:list={["atl-container pb-16 md:pb-24", width === 'reading' && 'atl-rise']}>
+    {width === 'reading' ? (
+      <article class="mx-auto max-w-[880px] pt-8 md:pt-10">
+        <slot />
+      </article>
+    ) : (
+      <slot />
+    )}
+  </main>
+  <Footer lang={lang} />
+</Base>
