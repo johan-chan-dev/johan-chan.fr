@@ -8,7 +8,7 @@ import { allTags } from '../../lib/content-utils';
 import type { Lang } from '../../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang];
-const list = await getArticles();
+const list = await getArticles('fr');
 const tags = allTags(list);
 ---
 <PageLayout lang={lang} current="journal" title={`${C.journal.title} — ${C.name}`}>

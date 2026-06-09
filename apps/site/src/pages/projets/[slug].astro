@@ -6,14 +6,14 @@ import { articlesBySlugs } from '../../lib/content-utils';
 import type { Lang } from '../../i18n/ui';
 
 export async function getStaticPaths() {
-  const projects = await getProjects();
+  const projects = await getProjects('fr');
   return projects.map((p) => ({ params: { slug: p.slug } }));
 }
 const lang: Lang = 'fr';
 const { slug } = Astro.params;
-const { project, Content } = await getProjectEntry(slug!);
+const { project, Content } = await getProjectEntry(slug!, 'fr');
 const C = copy[lang];
-const related = articlesBySlugs(project.relatedArticles, await getArticles());
+const related = articlesBySlugs(project.relatedArticles, await getArticles('fr'));
 ---
 <PageLayout lang={lang} current="work" title={`${project.name} — ${C.name}`} width="reading">
   <div class="mb-6 flex items-center justify-between">

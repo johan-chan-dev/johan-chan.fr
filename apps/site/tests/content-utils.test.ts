@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { byDateDesc, allTags, relatedArticles, articlesBySlugs, type Article } from '../src/lib/content-utils';
+import { byDateDesc, allTags, relatedArticles, articlesBySlugs, localeOf, slugOf, type Article } from '../src/lib/content-utils';
 
 const A = (over: Partial<Article>): Article => ({
   slug: 'x', title: 't', registre: 'refl', date: '2026-01-01', tags: [], readingTime: 5, live: false, ...over,
@@ -32,5 +32,16 @@ describe('articlesBySlugs', () => {
   it('resolves in given order, skips missing', () => {
     const all = [A({ slug: 'a' }), A({ slug: 'b' })];
     expect(articlesBySlugs(['b', 'zzz', 'a'], all).map((x) => x.slug)).toEqual(['b', 'a']);
+  });
+});
+
+describe('localeOf / slugOf', () => {
+  it('FR id → fr + same slug', () => {
+    expect(localeOf('editeur-wasm')).toBe('fr');
+    expect(slugOf('editeur-wasm')).toBe('editeur-wasm');
+  });
+  it('EN id → en + stripped slug', () => {
+    expect(localeOf('editeur-wasm/en')).toBe('en');
+    expect(slugOf('editeur-wasm/en')).toBe('editeur-wasm');
   });
 });
