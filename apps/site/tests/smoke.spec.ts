@@ -59,3 +59,29 @@ test('demo MDX page still renders the Callout component', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Démo MDX', level: 1 })).toBeVisible();
   await expect(page.getByTestId('callout')).toBeVisible();
 });
+
+test('view transitions: interactivity + theme survive in-app navigation', async ({ page }) => {
+  await page.goto('/');
+  // navigate to an article by clicking a feed row (client-side swap, not a full load)
+  await page.getByTestId('piece-row').first().click();
+  await expect(page).toHaveURL(/\/journal\/.+/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+
+  // theme toggle must still work after the swap (re-init on astro:page-load)
+  const beforeTheme = await page.locator('html').getAttribute('data-theme');
+  await page.getByTestId('theme-toggle').click();
+  const afterTheme = await page.locator('html').getAttribute('data-theme');
+  expect(afterTheme).not.toBe(beforeTheme);
+
+  // navigate again via the nav; theme must persist across the swap (astro:after-swap)
+  await page.getByTestId('nav-desktop').getByText('Journal').click();
+  await expect(page).toHaveURL(/\/journal\/?$/);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', afterTheme!);
+
+  // filters must re-initialise on the swapped-in journal page
+  const rows = page.getByTestId('piece-row');
+  const total = await rows.count();
+  await page.locator('[data-reg="design"]').click();
+  const visible = await page.locator('[data-testid="piece-row"]:visible').count();
+  expect(visible).toBeLessThan(total);
+});

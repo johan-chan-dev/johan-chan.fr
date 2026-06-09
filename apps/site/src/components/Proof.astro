@@ -64,7 +64,8 @@ const uid = 'proof-' + Math.random().toString(36).slice(2, 8);
     fr: ['ajouter au panier', 'valider l’e-mail', 'publier l’article', 'régler la facture'],
     en: ['add to cart', 'verify email', 'publish post', 'settle invoice'],
   };
-  document.querySelectorAll('[data-proof]').forEach((root) => {
+  function initProofs() {
+    document.querySelectorAll('[data-proof]').forEach((root) => {
     const lang: 'fr' | 'en' = root.getAttribute('data-lang') === 'en' ? 'en' : 'fr';
     const samples = SAMPLES[lang];
     const lanes = [...root.querySelectorAll<HTMLElement>('[data-lane]')];
@@ -108,6 +109,7 @@ const uid = 'proof-' + Math.random().toString(36).slice(2, 8);
     });
     let last = performance.now(); let acc = 0; let emitAcc = 0;
     const loop = (now: number) => {
+      if (lanes[0] && !lanes[0].isConnected) return; // stop stale loop after a view-transition swap
       const dt = now - last; last = now; acc += dt; emitAcc += dt;
       if (acc > 360) { acc = 0; events = events.map((e) => ({ ...e, stage: Math.min(4, e.stage + 1) })).filter((e) => e.stage < 4 || now - e.born < 2600); render(); }
       if (auto && emitAcc > 1500) { emitAcc = 0; fire(); }
@@ -115,4 +117,6 @@ const uid = 'proof-' + Math.random().toString(36).slice(2, 8);
     };
     requestAnimationFrame(loop);
   });
+  }
+  document.addEventListener('astro:page-load', initProofs);
 </script>
