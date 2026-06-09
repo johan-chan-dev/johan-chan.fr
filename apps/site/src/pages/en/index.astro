@@ -1,16 +1,55 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ThemeToggle from '../../components/ThemeToggle.astro';
-import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import Proof from '../../components/Proof.astro';
+import PieceRow from '../../components/PieceRow.astro';
+import { copy, piecesByDate } from '../../data/atelier';
+import type { Lang } from '../../i18n/ui';
+const lang: Lang = 'en';
+const C = copy[lang];
+const N = C.now;
+const preview = piecesByDate().slice(0, 3);
+const base = '/en';
 ---
-<Base lang={lang}>
-  <main class="mx-auto max-w-4xl p-8">
-    <nav class="flex justify-between items-center mb-8">
-      <a href="/en/about" class="link" data-testid="nav-about">{t('nav.about')}</a>
-      <ThemeToggle />
-    </nav>
-    <h1 class="text-primary text-4xl font-bold" data-testid="tagline">{t('site.tagline')}</h1>
+<Base lang={lang} title={`${C.name} — ${C.hero.kicker}`}>
+  <Header lang={lang} current="home" />
+  <main class="atl-container pb-16 md:pb-24">
+    <section class="pt-10 md:pt-[60px]">
+      <div class="atl-kicker mb-[18px] inline-flex items-center gap-2.5 text-ink2 md:mb-[26px]" style="letter-spacing:.1em">
+        <span class="h-[7px] w-[7px] rounded-full bg-accent"></span>{C.hero.kicker}
+      </div>
+      <h1 class="atl-h1 m-0 max-w-[880px] text-ink" data-testid="hero">{C.hero.line}</h1>
+      <p class="atl-body mt-4 max-w-[600px] text-ink2 md:mt-[22px] md:text-[18px]">{C.hero.sub}</p>
+      <div class="mt-5 flex max-w-[720px] items-start gap-3.5 rounded-[12px] border border-line bg-surf p-4 md:mt-8 md:px-[22px] md:py-[18px]">
+        <span class="atl-meta whitespace-nowrap pt-[3px] uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">{N.status}</span>
+        <div class="flex min-w-0 flex-col gap-1.5">
+          <p class="m-0 font-text text-[15px] font-medium leading-[1.4] text-ink md:text-[17px]">{N.line}</p>
+          <span class="atl-meta text-faint">{N.meta}</span>
+        </div>
+      </div>
+    </section>
+    <section class="pt-12 md:pt-16">
+      <div class="grid grid-cols-1 items-center gap-6 md:grid-cols-[0.8fr_1.2fr] md:gap-11">
+        <div class="min-w-0">
+          <span class="atl-meta uppercase text-accent" style="letter-spacing:.16em">{C.proof.eyebrow}</span>
+          <h2 class="atl-h2 mb-3 mt-3.5 max-w-none text-ink md:text-[34px]">{C.proof.title}</h2>
+          <p class="atl-body m-0 max-w-[380px] text-ink2">{C.proof.sub}</p>
+          <p class="atl-meta mt-4 text-faint" style="font-size:12px;line-height:1.6">{C.proof.hint}</p>
+        </div>
+        <div class="min-w-0"><Proof lang={lang} /></div>
+      </div>
+    </section>
+    <section class="pt-[52px] md:pt-[74px]">
+      <div class="mb-3 flex items-baseline justify-between md:mb-4">
+        <h2 class="atl-h2 m-0 text-ink">
+          <span class="atl-meta mr-2.5 align-middle text-accent" style="font-size:12px">02</span>{C.journal.title}
+        </h2>
+      </div>
+      {preview.map((p) => <PieceRow piece={p} lang={lang} />)}
+      <div class="border-t border-line"></div>
+      <a href={`${base}/journal`} class="atl-meta mt-5 inline-flex items-center gap-2 border-b border-accent pb-0.5 text-[13px] text-accent">{C.journal.seeAll} →</a>
+    </section>
   </main>
+  <Footer lang={lang} />
 </Base>
