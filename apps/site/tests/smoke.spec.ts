@@ -42,16 +42,19 @@ test('journal list renders all pieces and filters by register', async ({ page })
   expect(visible).toBeLessThan(total);
 });
 
-test('article detail page renders title and back link', async ({ page }) => {
+test('article detail renders title, rendered body, and back link', async ({ page }) => {
   await page.goto('/journal/editeur-code-navigateur-zero-dependance');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('éditeur');
   await expect(page.locator('article')).toContainText('le journal');
+  // body rendered from MDX (not a placeholder), incl. the inline Proof island
+  await expect(page.locator('.atl-prose')).toContainText('navigateur');
+  await expect(page.locator('[data-proof]')).toBeVisible();
 });
 
-test('case study page renders story and demo', async ({ page }) => {
+test('case study renders récit from MDX', async ({ page }) => {
   await page.goto('/projets/atelier-wasm');
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Atelier WASM');
-  await expect(page.locator('[data-proof]')).toBeVisible();
+  await expect(page.locator('.atl-prose')).toContainText('frustration');
 });
 
 test('demo MDX page still renders the Callout component', async ({ page }) => {
