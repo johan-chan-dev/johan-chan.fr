@@ -1,10 +1,5 @@
 [
   {
-    "id": "atelier-wasm",
-    "title": "Atelier WASM",
-    "description": "La construction d’un éditeur de code zéro-dépendance, chapitre par chapitre."
-  },
-  {
     "id": "le-monde-du-dev-sous-choc",
     "title": "Le monde du dev sous choc",
     "description": "L’IA débarque dans le software. Les devs, les équipes, les boîtes — tout le monde encaisse. Une série pour regarder honnêtement ce que ça change vraiment."
