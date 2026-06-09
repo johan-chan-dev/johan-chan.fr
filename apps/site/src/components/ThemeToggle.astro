@@ -4,12 +4,15 @@
     style="background: linear-gradient(90deg, var(--ink2) 0 50%, transparent 50%)"></span>
 </button>
 <script>
-  const LIGHT = 'atelier-light';
-  const DARK = 'atelier-dark';
-  document.querySelector('[data-testid="theme-toggle"]')?.addEventListener('click', () => {
-    const root = document.documentElement;
-    const next = root.dataset.theme === DARK ? LIGHT : DARK;
-    root.dataset.theme = next;
-    localStorage.setItem('theme', next);
-  });
+  function initThemeToggle() {
+    const btn = document.querySelector('[data-testid="theme-toggle"]');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const root = document.documentElement;
+      const next = root.dataset.theme === 'atelier-dark' ? 'atelier-light' : 'atelier-dark';
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+  }
+  document.addEventListener('astro:page-load', initThemeToggle);
 </script>

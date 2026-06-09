@@ -32,18 +32,22 @@ const items: { key: Props['current']; href: string; label: string }[] = [
   </nav>
 </div>
 <script>
-  const toggle = document.querySelector('[data-mnav-toggle]');
-  const panel = document.querySelector('[data-mnav-panel]');
-  const backdrop = document.querySelector('[data-mnav-backdrop]');
-  const bars = document.querySelectorAll('[data-mnav-toggle] [data-bar]');
-  const setOpen = (open: boolean) => {
-    panel?.toggleAttribute('hidden', !open);
-    backdrop?.toggleAttribute('hidden', !open);
-    toggle?.setAttribute('aria-expanded', String(open));
-    if (bars[0] instanceof HTMLElement) bars[0].style.transform = open ? 'translateY(2.8px) rotate(45deg)' : '';
-    if (bars[1] instanceof HTMLElement) bars[1].style.transform = open ? 'translateY(-2.8px) rotate(-45deg)' : '';
-  };
-  toggle?.addEventListener('click', () => setOpen(panel?.hasAttribute('hidden') ?? true));
-  backdrop?.addEventListener('click', () => setOpen(false));
-  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  function initMobileNav() {
+    const toggle = document.querySelector('[data-mnav-toggle]');
+    const panel = document.querySelector('[data-mnav-panel]');
+    const backdrop = document.querySelector('[data-mnav-backdrop]');
+    const bars = document.querySelectorAll('[data-mnav-toggle] [data-bar]');
+    if (!toggle || !panel) return;
+    const setOpen = (open: boolean) => {
+      panel.toggleAttribute('hidden', !open);
+      backdrop?.toggleAttribute('hidden', !open);
+      toggle.setAttribute('aria-expanded', String(open));
+      if (bars[0] instanceof HTMLElement) bars[0].style.transform = open ? 'translateY(2.8px) rotate(45deg)' : '';
+      if (bars[1] instanceof HTMLElement) bars[1].style.transform = open ? 'translateY(-2.8px) rotate(-45deg)' : '';
+    };
+    toggle.addEventListener('click', () => setOpen(panel.hasAttribute('hidden')));
+    backdrop?.addEventListener('click', () => setOpen(false));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+  }
+  document.addEventListener('astro:page-load', initMobileNav);
 </script>

@@ -40,8 +40,11 @@ const regs: Kind[] = ['refl', 'design', 'impl'];
     </div>
   </div>
 </div>
-<script is:inline define:vars={{ lang }}>
-  const start = () => {
+<script is:inline>
+  if (!window.__atlFiltersHook) {
+    window.__atlFiltersHook = true;
+    document.addEventListener('astro:page-load', () => {
+    const lang = document.documentElement.lang === 'en' ? 'en' : 'fr';
     const root = document.querySelector('[data-filters]');
     if (!root) return;
     const rows = [...document.querySelectorAll('[data-testid="piece-row"]')];
@@ -106,7 +109,6 @@ const regs: Kind[] = ['refl', 'design', 'impl'];
     picker?.addEventListener('click', (e) => { if (e.target === picker) open(false); });
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') open(false); });
     apply();
-  };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
-  else start();
+    });
+  }
 </script>
