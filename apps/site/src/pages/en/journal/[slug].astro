@@ -1,5 +1,6 @@
 ---
 import PageLayout from '../../../layouts/PageLayout.astro';
+import { Image, getImage } from 'astro:assets';
 import { copy, fmtDate, kindClass } from '../../../lib/copy';
 import { getArticles, getArticleEntry } from '../../../lib/content';
 import { relatedArticles } from '../../../lib/content-utils';
@@ -16,8 +17,11 @@ const C = copy[lang];
 const hue = kindClass[article.registre];
 const all = await getArticles('en');
 const related = relatedArticles(article, all);
+const ogImage = article.image
+  ? new URL((await getImage({ src: article.image, format: 'webp', width: 1200 })).src, Astro.site).href
+  : undefined;
 ---
-<PageLayout lang={lang} current="journal" title={`${article.title} — ${C.name}`} width="reading">
+<PageLayout lang={lang} current="journal" title={`${article.title} — ${C.name}`} description={article.excerpt} ogImage={ogImage} width="reading">
   <div class="mb-6 flex items-center justify-between">
     <a href="/en/journal" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.reader.back}</a>
     <span class={`atl-meta inline-flex items-center gap-2 uppercase ${hue}`} style="font-size:11px;letter-spacing:.1em">
@@ -32,6 +36,13 @@ const related = relatedArticles(article, all);
     <span>{fmtDate(article.date, lang)}</span><span>·</span><span>{article.readingTime} {C.read}</span><span>·</span>
     <span class="flex gap-2">{article.tags.map((tg) => <span class="text-ink2">#{tg.toLowerCase()}</span>)}</span>
   </div>
+  {article.image && (
+    <figure class="mb-7 overflow-hidden rounded-[14px] border border-line">
+      <Image src={article.image} alt={article.title} widths={[480, 800, 1200]}
+        sizes="(min-width: 768px) 880px, 100vw"
+        class="h-auto w-full" style={`object-position: ${article.imageFocus ?? 'center'}`} />
+    </figure>
+  )}
   <div class="atl-prose font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[17.5px]">
     <Content />
   </div>

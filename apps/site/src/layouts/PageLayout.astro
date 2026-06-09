@@ -7,11 +7,13 @@ interface Props {
   lang: Lang;
   current: 'home' | 'work' | 'journal' | 'about';
   title?: string;
+  description?: string;
+  ogImage?: string;
   width?: 'wide' | 'reading';
 }
-const { lang, current, title, width = 'wide' } = Astro.props;
+const { lang, current, title, description, ogImage, width = 'wide' } = Astro.props;
 ---
-<Base lang={lang} title={title}>
+<Base lang={lang} title={title} description={description} ogImage={ogImage}>
   <Header lang={lang} current={current} />
   <main class:list={["atl-container pb-16 md:pb-24", width === 'reading' && 'atl-rise']}>
     {width === 'reading' ? (
