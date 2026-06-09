@@ -1,11 +1,12 @@
-<button type="button" class="btn btn-sm btn-ghost" data-testid="theme-toggle" aria-label="Basculer le thème">
-  🌓
+<button type="button" class="grid h-[30px] w-[30px] place-items-center rounded-full border border-line bg-surf"
+  data-testid="theme-toggle" aria-label="Basculer le thème">
+  <span class="h-[13px] w-[13px] rounded-full border-[1.5px] border-ink2"
+    style="background: linear-gradient(90deg, var(--ink2) 0 50%, transparent 50%)"></span>
 </button>
 <script>
-  const LIGHT = 'autumn';
-  const DARK = 'abyss';
-  const btn = document.querySelector('[data-testid="theme-toggle"]');
-  btn?.addEventListener('click', () => {
+  const LIGHT = 'atelier-light';
+  const DARK = 'atelier-dark';
+  document.querySelector('[data-testid="theme-toggle"]')?.addEventListener('click', () => {
     const root = document.documentElement;
     const next = root.dataset.theme === DARK ? LIGHT : DARK;
     root.dataset.theme = next;
