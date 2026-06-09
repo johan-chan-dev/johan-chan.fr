@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check && svelte-check",
+    "check": "astro check && svelte-check && vue-tsc --noEmit -p tsconfig.vue.json && tsc -p tsconfig.demos.json",
     "test:unit": "vitest run",
     "test:e2e": "playwright test"
   },
