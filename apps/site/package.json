@@ -41,6 +41,7 @@
     "@types/node": "25.0.10",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "sharp": "^0.34.3",
     "svelte-check": "^4.3.5",
     "tailwindcss": "4.3.0",
     "typescript": "5.9.3",
