@@ -88,3 +88,23 @@ test('view transitions: interactivity + theme survive in-app navigation', async 
   const visible = await page.locator('[data-testid="piece-row"]:visible').count();
   expect(visible).toBeLessThan(total);
 });
+
+test('framework showcase: code panel, live island, compare mode', async ({ page }) => {
+  await page.goto('/journal/reactivite-trois-frameworks');
+  const showcase = page.locator('[data-showcase]');
+  await expect(showcase).toBeVisible();
+  // Shiki-rendered source visible (Svelte uses $state)
+  await expect(showcase).toContainText('$state');
+  // focus mode: the Svelte demo is shown and interactive
+  const svelteDemo = page.locator('[data-demo][data-framework="svelte"]');
+  await expect(svelteDemo).toBeVisible();
+  await svelteDemo.getByRole('button', { name: 'plus' }).click();
+  await expect(svelteDemo.locator('output')).toHaveText('1');
+  // in focus, other frameworks' demos are hidden
+  await expect(page.locator('[data-demo][data-framework="react"]')).toBeHidden();
+  // compare toggle reveals all three
+  await page.getByRole('button', { name: 'Comparer' }).click();
+  await expect(showcase).toHaveAttribute('data-mode', 'compare');
+  await expect(page.locator('[data-demo][data-framework="vue"]')).toBeVisible();
+  await expect(page.locator('[data-demo][data-framework="react"]')).toBeVisible();
+});
