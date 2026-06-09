@@ -1,0 +1,19 @@
+---
+name: WASM Workshop
+year: "2026"
+role: Design and build, end to end
+oneliner: A code editor that runs entirely in the browser, no server, no heavy dependencies.
+stack: [Rust, WebAssembly, TypeScript]
+demo: true
+relatedArticles:
+  - editeur-code-navigateur-zero-dependance
+  - invalider-cache-par-evenements
+  - versionner-ses-decisions
+---
+It started as a small frustration: I wanted a little editor to try out code, and everything I found needed a server behind it to compile and highlight. Heavy, slow on first load, and a cost that climbs with every visitor.
+
+I wondered how far you could go with no server at all. I pulled out a Rust kernel, compiled to WebAssembly, that does the analysis right in the browser. No network round-trip. The interface stayed deliberately thin; the system carries the weight, where it belongs.
+
+Along the way I had to rethink a couple of things I thought were settled — mainly how to keep the display fast while you type. I wrote about it as the work happened, which is more honest than pretending it was obvious.
+
+In the end it starts instantly, costs nothing per session, and the base held without a rewrite. One engine serves both what you see and what computes. That’s the kind of result I like: quiet, but solid.

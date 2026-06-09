@@ -1,8 +1,8 @@
 ---
-title: La réactivité, d’un framework à l’autre
+title: Reactivity, from one framework to another
 registre: design
 date: "2026-06-09"
-tags: [Réactivité, Frameworks]
+tags: [Reactivity, Frameworks]
 readingTime: 7
 ---
 import FrameworkShowcase from '../../../components/content/FrameworkShowcase.astro';
@@ -12,7 +12,7 @@ import Vue from './counter.vue';        import vueSrc from './counter.vue?raw';
 import React from './counter.tsx';      import reactSrc from './counter.tsx?raw';
 import { NgCounter } from './counter.angular';  import ngSrc from './counter.angular.ts?raw';
 
-Un compteur, c’est trivial — mais la façon d’y arriver dit beaucoup de la philosophie de chaque framework. Le même pattern, quatre fois :
+A counter is trivial — but how you get there says a lot about each framework’s philosophy. The same pattern, four times:
 
 <FrameworkShowcase>
   <Demo framework="svelte" source={svelteSrc}><Svelte client:visible /></Demo>
@@ -21,4 +21,4 @@ Un compteur, c’est trivial — mais la façon d’y arriver dit beaucoup de la
   <Demo framework="angular" source={ngSrc}><NgCounter client:load /></Demo>
 </FrameworkShowcase>
 
-Côté Svelte, la réactivité est implicite : on déclare `count`, on l’utilise, et l’affichage suit. Côté Vue, elle passe par une `ref` et un `.value` masqué par le template. Côté React, l’état est explicite et le rendu se relance à chaque `setCount` — plus de cérémonie, plus de contrôle. Côté Angular, la détection de changements la suit à travers le composant. Quatre réponses à la même question.
+In Svelte, reactivity is implicit: you declare `count`, you use it, and the view follows. In Vue it goes through a `ref` and a `.value` the template hides. In React, state is explicit and the render re-runs on every `setCount` — more ceremony, more control. In Angular, change detection tracks it through the component. Four answers to the same question.
