@@ -1,11 +1,11 @@
 ---
 import { Code } from 'astro:components';
-interface Props { framework: 'svelte' | 'vue' | 'react'; source: string; label?: string }
+interface Props { framework: 'svelte' | 'vue' | 'react' | 'angular'; source: string; label?: string }
 const { framework, source, label } = Astro.props;
-const lang = (framework === 'react' ? 'tsx' : framework) as 'svelte' | 'vue' | 'tsx';
-const ext = framework === 'react' ? 'tsx' : framework;
+const lang = (framework === 'react' ? 'tsx' : framework === 'angular' ? 'ts' : framework) as 'svelte' | 'vue' | 'tsx' | 'ts';
+const ext = framework === 'react' ? 'tsx' : framework === 'angular' ? 'angular.ts' : framework;
 const file = label ?? `counter.${ext}`;
-const name = { svelte: 'Svelte', vue: 'Vue', react: 'React' }[framework];
+const name = { svelte: 'Svelte', vue: 'Vue', react: 'React', angular: 'Angular' }[framework];
 ---
 <div data-demo data-framework={framework} class="atl-demo overflow-hidden rounded-[12px] border border-line">
   <div class="atl-meta flex items-center justify-between border-b border-line bg-bg2 px-3.5 py-2 text-faint" style="font-size:10.5px">

@@ -8,7 +8,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://www.johan-chan.fr',
-  integrations: [mdx(), svelte(), vue(), react(), angular()],
+  integrations: [mdx(), svelte(), vue(), react(), angular({ vite: { disableTypeChecking: false } })],
   i18n: {
     locales: ['fr', 'en'],
     defaultLocale: 'fr',

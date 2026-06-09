@@ -10,6 +10,7 @@ import Demo from '../../../components/content/Demo.astro';
 import Svelte from './counter.svelte';  import svelteSrc from './counter.svelte?raw';
 import Vue from './counter.vue';        import vueSrc from './counter.vue?raw';
 import React from './counter.tsx';      import reactSrc from './counter.tsx?raw';
+import { NgCounter } from './counter.angular';  import ngSrc from './counter.angular.ts?raw';
 
 Un compteur, c’est trivial — mais la façon d’y arriver dit beaucoup de la philosophie de chaque framework. Le même pattern, trois fois :
 
@@ -17,6 +18,7 @@ Un compteur, c’est trivial — mais la façon d’y arriver dit beaucoup de la
   <Demo framework="svelte" source={svelteSrc}><Svelte client:visible /></Demo>
   <Demo framework="vue" source={vueSrc}><Vue client:visible /></Demo>
   <Demo framework="react" source={reactSrc}><React client:visible /></Demo>
+  <Demo framework="angular" source={ngSrc}><NgCounter client:load /></Demo>
 </FrameworkShowcase>
 
 Côté Svelte, la réactivité est implicite : on déclare `count`, on l’utilise, et l’affichage suit. Côté Vue, elle passe par une `ref` et un `.value` masqué par le template. Côté React, l’état est explicite et le rendu se relance à chaque `setCount` — plus de cérémonie, plus de contrôle. Trois réponses à la même question.
