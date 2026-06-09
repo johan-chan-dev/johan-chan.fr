@@ -38,7 +38,7 @@
   --font-mono: var(--font-mono);
 }
 
-html { background: var(--bg); color: var(--ink); font-family: var(--font-text); }
+html { background: var(--bg); color: var(--ink); font-family: var(--font-text); scrollbar-gutter: stable; }
 * { box-sizing: border-box; }
 
 /* ---- register hues ---- */
