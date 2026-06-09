@@ -1,4 +1,82 @@
 @import "tailwindcss";
-@plugin "daisyui" {
-  themes: autumn --default, abyss --prefersdark;
+
+/* ---- Atelier palette (handoff §Design tokens) ---- */
+[data-theme="atelier-light"] {
+  --bg: #f4f1ea; --bg2: #eae5d9; --surf: #fbf9f4;
+  --ink: #1b1a17; --ink2: #56524a; --faint: #8a8478;
+  --line: rgba(27,26,23,.14); --hair: rgba(27,26,23,.07);
+  --accent: #c8521b; --accent-ink: #fbf9f4; --live: #2f7d54;
+}
+[data-theme="atelier-dark"] {
+  --bg: #15170f; --bg2: #1c1f15; --surf: #1f2218;
+  --ink: #eef0e6; --ink2: #a7ab98; --faint: #787c6b;
+  --line: rgba(238,240,230,.15); --hair: rgba(238,240,230,.07);
+  --accent: #ed7d3a; --accent-ink: #15170f; --live: #5bbd84;
+}
+:root {
+  --font-display: "Bricolage Grotesque", "Hanken Grotesk", sans-serif;
+  --font-text: "Hanken Grotesk", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --hdr-h: 56px;
+}
+
+/* ---- expose palette + fonts to Tailwind utilities ---- */
+@theme {
+  --color-bg: var(--bg);
+  --color-bg2: var(--bg2);
+  --color-surf: var(--surf);
+  --color-ink: var(--ink);
+  --color-ink2: var(--ink2);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-hair: var(--hair);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-live: var(--live);
+  --font-display: var(--font-display);
+  --font-text: var(--font-text);
+  --font-mono: var(--font-mono);
+}
+
+html { background: var(--bg); color: var(--ink); font-family: var(--font-text); }
+* { box-sizing: border-box; }
+
+/* ---- register hues ---- */
+.kind-impl { color: var(--accent); }
+.kind-design { color: var(--live); }
+.kind-refl { color: var(--ink2); }
+
+/* ---- layout primitive: 1080 max, 56/22 padding ---- */
+.atl-container { max-width: 1080px; margin-inline: auto; padding-inline: 22px; }
+@media (min-width: 768px) { .atl-container { padding-inline: 56px; } }
+
+/* ---- type scale (handoff §Typographie) : mobile base, desktop ≥768 ---- */
+.atl-h1 { font-family: var(--font-display); font-weight: 700; font-size: 36px; line-height: 1.02; letter-spacing: -.035em; text-wrap: balance; }
+.atl-page-title { font-family: var(--font-display); font-weight: 700; font-size: 31px; line-height: 1.04; letter-spacing: -.03em; }
+.atl-lede { font-family: var(--font-display); font-weight: 700; font-size: 29px; line-height: 1.06; letter-spacing: -.03em; text-wrap: balance; }
+.atl-h2 { font-family: var(--font-display); font-weight: 600; font-size: 22px; line-height: 1.08; letter-spacing: -.02em; }
+.atl-piece-title { font-family: var(--font-display); font-weight: 500; font-size: 21px; line-height: 1.12; letter-spacing: -.02em; text-wrap: pretty; }
+.atl-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.atl-meta { font-family: var(--font-mono); font-size: 11px; }
+.atl-body { font-family: var(--font-text); font-size: 15.5px; line-height: 1.55; }
+@media (min-width: 768px) {
+  .atl-h1 { font-size: 60px; }
+  .atl-page-title { font-size: 46px; }
+  .atl-lede { font-size: 44px; }
+  .atl-h2 { font-size: 28px; }
+  .atl-piece-title { font-size: 27px; }
+  .atl-body { font-size: 16px; }
+}
+
+/* ---- motion ---- */
+@keyframes atl-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.82)} }
+.atl-livedot { animation: atl-pulse 2s ease-in-out infinite; }
+@keyframes atl-rise { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+.atl-rise { animation: atl-rise .45s cubic-bezier(.2,.8,.3,1) both; }
+@keyframes atl-sheetup { from{transform:translateY(100%)} to{transform:none} }
+.atl-sheet { animation: atl-sheetup .28s cubic-bezier(.2,.8,.3,1) both; }
+.atl-row { transition: transform .16s ease; }
+.atl-row:hover { transform: translateX(4px); }
+@media (prefers-reduced-motion: reduce) {
+  .atl-livedot, .atl-rise, .atl-sheet, .atl-row { animation: none; transition: none; }
 }
