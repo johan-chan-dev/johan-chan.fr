@@ -107,6 +107,12 @@ test('framework showcase: code panel, live island, compare mode', async ({ page 
   await expect(page.locator('[data-demo][data-framework="vue"]')).toBeVisible();
   await expect(svelteDemo).toBeHidden();
   await expect(page.locator('[data-demo][data-framework="react"]')).toBeHidden();
+  // switching to the Angular tab shows its hydrated island
+  await page.getByRole('button', { name: 'Angular', exact: true }).click();
+  const ngDemo = page.locator('[data-demo][data-framework="angular"]');
+  await expect(ngDemo).toBeVisible();
+  await ngDemo.getByRole('button', { name: 'plus' }).click();
+  await expect(ngDemo.locator('output')).toHaveText('1');
   // compare toggle reveals all three
   await page.getByRole('button', { name: 'Comparer' }).click();
   await expect(showcase).toHaveAttribute('data-mode', 'compare');
