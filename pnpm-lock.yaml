@@ -102,9 +102,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.17)
-      daisyui:
-        specifier: 5.5.20
-        version: 5.5.20
       svelte-check:
         specifier: ^4.3.5
         version: 4.3.5(picomatch@4.0.4)(svelte@5.48.0)(typescript@5.9.3)
@@ -3284,9 +3281,6 @@ packages:
 
   daisyui@5.5.14:
     resolution: {integrity: sha512-L47rvw7I7hK68TA97VB8Ee0woHew+/ohR6Lx6Ah/krfISOqcG4My7poNpX5Mo5/ytMxiR40fEaz6njzDi7cuSg==}
-
-  daisyui@5.5.20:
-    resolution: {integrity: sha512-HemJcjl0Gk9rQ8BcgofN6p+EURrqftQG9wK1Hkxs98i49xe68+QxpNvry+PyxwkIUgrbMpNmZ5ZWjmtffAjfhQ==}
 
   data-urls@6.0.1:
     resolution: {integrity: sha512-euIQENZg6x8mj3fO6o9+fOW8MimUI4PpD/fZBhJfeioZVy9TUpM4UY7KjQNVZFlqwJ0UdzRDzkycB997HEq1BQ==}
@@ -8855,8 +8849,6 @@ snapshots:
       d3-array: 3.2.4
 
   daisyui@5.5.14: {}
-
-  daisyui@5.5.20: {}
 
   data-urls@6.0.1:
     dependencies:
