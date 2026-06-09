@@ -4,8 +4,8 @@ import { copy } from '../lib/copy';
 import ThemeToggle from './ThemeToggle.astro';
 import LangSwitch from './LangSwitch.astro';
 import MobileNav from './MobileNav.astro';
-interface Props { lang: Lang; current: 'home' | 'work' | 'journal' | 'about' }
-const { lang, current } = Astro.props;
+interface Props { lang: Lang; current: 'home' | 'work' | 'journal' | 'about'; hasTranslation?: boolean }
+const { lang, current, hasTranslation = true } = Astro.props;
 const c = copy[lang];
 const base = lang === 'fr' ? '' : '/en';
 const links: { key: Props['current']; href: string; label: string }[] = [
@@ -28,7 +28,7 @@ const links: { key: Props['current']; href: string; label: string }[] = [
       ))}
     </nav>
     <div class="flex items-center gap-3.5">
-      <LangSwitch lang={lang} />
+      <LangSwitch lang={lang} hasTranslation={hasTranslation} />
       <ThemeToggle />
       <MobileNav lang={lang} current={current} />
     </div>

@@ -10,11 +10,12 @@ interface Props {
   description?: string;
   ogImage?: string;
   width?: 'wide' | 'reading';
+  hasTranslation?: boolean;
 }
-const { lang, current, title, description, ogImage, width = 'wide' } = Astro.props;
+const { lang, current, title, description, ogImage, width = 'wide', hasTranslation = true } = Astro.props;
 ---
 <Base lang={lang} title={title} description={description} ogImage={ogImage}>
-  <Header lang={lang} current={current} />
+  <Header lang={lang} current={current} hasTranslation={hasTranslation} />
   <main class:list={["atl-container pb-16 md:pb-24", width === 'reading' && 'atl-rise']}>
     {width === 'reading' ? (
       <article class="mx-auto max-w-[880px] pt-8 md:pt-10">

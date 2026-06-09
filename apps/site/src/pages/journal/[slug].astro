@@ -2,7 +2,7 @@
 import PageLayout from '../../layouts/PageLayout.astro';
 import { Image, getImage } from 'astro:assets';
 import { copy, fmtDate, kindClass } from '../../lib/copy';
-import { getArticles, getArticleEntry } from '../../lib/content';
+import { getArticles, getArticleEntry, hasTranslation } from '../../lib/content';
 import { relatedArticles } from '../../lib/content-utils';
 import type { Lang } from '../../i18n/ui';
 
@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 const lang: Lang = 'fr';
 const { slug } = Astro.params;
 const { article, Content } = await getArticleEntry(slug!, 'fr');
+const translated = await hasTranslation(slug!, 'fr', 'articles');
 const C = copy[lang];
 const hue = kindClass[article.registre];
 const all = await getArticles('fr');
@@ -21,7 +22,7 @@ const ogImage = article.image
   ? new URL((await getImage({ src: article.image, format: 'webp', width: 1200 })).src, Astro.site).href
   : undefined;
 ---
-<PageLayout lang={lang} current="journal" title={`${article.title} — ${C.name}`} description={article.excerpt} ogImage={ogImage} width="reading">
+<PageLayout lang={lang} current="journal" title={`${article.title} — ${C.name}`} description={article.excerpt} ogImage={ogImage} width="reading" hasTranslation={translated}>
   <div class="mb-6 flex items-center justify-between">
     <a href="/journal" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.reader.back}</a>
     <span class={`atl-meta inline-flex items-center gap-2 uppercase ${hue}`} style="font-size:11px;letter-spacing:.1em">
