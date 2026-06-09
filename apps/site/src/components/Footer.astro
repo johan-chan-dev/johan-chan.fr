@@ -1,0 +1,24 @@
+---
+import type { Lang } from '../i18n/ui';
+import { copy, CONTACT_EMAIL } from '../data/atelier';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const c = copy[lang].footer;
+const year = new Date().getFullYear();
+---
+<footer class="mt-16 border-t border-line bg-bg2 md:mt-24">
+  <div class="atl-container py-11 md:py-16">
+    <div class="flex flex-wrap items-center justify-between gap-6 rounded-[18px] border border-line bg-surf p-[28px] md:p-[40px]">
+      <div class="min-w-0 max-w-[560px]">
+        <span class="atl-kicker text-accent" style="letter-spacing:.14em">{c.kicker}</span>
+        <p class="atl-h2 mt-3 mb-2.5 text-ink" style="font-weight:600;letter-spacing:-.025em;line-height:1.05">{c.line}</p>
+        <p class="atl-body text-ink2">{c.sub}</p>
+      </div>
+      <a href={`mailto:${CONTACT_EMAIL}`} class="atl-meta whitespace-nowrap rounded-full bg-accent px-[22px] py-[13px] text-[13px] text-accent-ink">{CONTACT_EMAIL} →</a>
+    </div>
+    <div class="mt-7 flex flex-wrap items-center justify-between gap-4 md:mt-10">
+      <span class="font-display text-[16px] font-bold tracking-[-.02em] text-ink">{copy[lang].name}<span class="text-accent">.</span></span>
+      <span class="atl-meta text-faint">© {year}</span>
+    </div>
+  </div>
+</footer>

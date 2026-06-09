@@ -1,0 +1,49 @@
+---
+import type { Lang } from '../i18n/ui';
+import { copy } from '../data/atelier';
+interface Props { lang: Lang; current: 'home' | 'work' | 'journal' | 'about' }
+const { lang, current } = Astro.props;
+const c = copy[lang];
+const base = lang === 'fr' ? '' : '/en';
+const items: { key: Props['current']; href: string; label: string }[] = [
+  { key: 'work', href: `${base}/projets`, label: c.nav.work },
+  { key: 'journal', href: `${base}/journal`, label: c.nav.journal },
+  { key: 'about', href: `${base}/about`, label: c.nav.about },
+];
+---
+<div class="md:hidden">
+  <button type="button" data-mnav-toggle aria-expanded="false" aria-label="menu"
+    class="relative z-[60] flex h-[34px] w-[34px] flex-col items-center justify-center gap-1 rounded-full border border-line bg-surf">
+    <span data-bar class="h-[1.6px] w-[15px] rounded bg-ink transition-transform"></span>
+    <span data-bar class="h-[1.6px] w-[15px] rounded bg-ink transition-transform"></span>
+  </button>
+  <div data-mnav-backdrop hidden
+    class="fixed inset-0 top-[var(--hdr-h,56px)] z-40 bg-black/50 backdrop-blur-[4px]"></div>
+  <nav data-mnav-panel hidden aria-label="menu"
+    class="fixed inset-x-0 top-[var(--hdr-h,56px)] z-[45] border-b border-line bg-bg shadow-[0_28px_56px_-20px_#000d]">
+    {items.map((it, i) => (
+      <a href={it.key === current ? undefined : it.href}
+        class={`flex items-center gap-3.5 px-[22px] py-[17px] ${i < items.length - 1 ? 'border-b border-line' : ''}`}>
+        <span class="atl-meta w-[22px] text-faint">{String(i).padStart(2, '0')}</span>
+        <span class={`atl-h2 ${it.key === current ? 'text-accent' : 'text-ink'}`} style="font-size:22px">{it.label}</span>
+        {it.key === current && <span class="ml-auto h-[7px] w-[7px] rounded-full bg-accent"></span>}
+      </a>
+    ))}
+  </nav>
+</div>
+<script>
+  const toggle = document.querySelector('[data-mnav-toggle]');
+  const panel = document.querySelector('[data-mnav-panel]');
+  const backdrop = document.querySelector('[data-mnav-backdrop]');
+  const bars = document.querySelectorAll('[data-mnav-toggle] [data-bar]');
+  const setOpen = (open: boolean) => {
+    panel?.toggleAttribute('hidden', !open);
+    backdrop?.toggleAttribute('hidden', !open);
+    toggle?.setAttribute('aria-expanded', String(open));
+    if (bars[0] instanceof HTMLElement) bars[0].style.transform = open ? 'translateY(2.8px) rotate(45deg)' : '';
+    if (bars[1] instanceof HTMLElement) bars[1].style.transform = open ? 'translateY(-2.8px) rotate(-45deg)' : '';
+  };
+  toggle?.addEventListener('click', () => setOpen(panel?.hasAttribute('hidden') ?? true));
+  backdrop?.addEventListener('click', () => setOpen(false));
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+</script>
