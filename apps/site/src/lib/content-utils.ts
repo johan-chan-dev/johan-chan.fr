@@ -51,3 +51,6 @@ export function relatedArticles(src: Article, all: Article[]): Article[] {
 export function articlesBySlugs(slugs: string[], all: Article[]): Article[] {
   return slugs.map((s) => all.find((a) => a.slug === s)).filter((a): a is Article => Boolean(a));
 }
+
+export const localeOf = (id: string): 'fr' | 'en' => (id.endsWith('/en') ? 'en' : 'fr');
+export const slugOf = (id: string): string => id.replace(/\/en$/, '');

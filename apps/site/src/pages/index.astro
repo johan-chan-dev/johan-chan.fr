@@ -8,7 +8,7 @@ import type { Lang } from '../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang];
 const N = C.now;
-const preview = (await getArticles()).slice(0, 3);
+const preview = (await getArticles('fr')).slice(0, 3);
 const base = lang === 'fr' ? '' : '/en';
 ---
 <PageLayout lang={lang} current="home" title={`${C.name} — ${C.hero.kicker}`}>

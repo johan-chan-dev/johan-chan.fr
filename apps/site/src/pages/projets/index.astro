@@ -6,7 +6,7 @@ import { getProjects } from '../../lib/content';
 import type { Lang } from '../../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang];
-const projects = await getProjects();
+const projects = await getProjects('fr');
 const n = projects.length;
 const word = n > 1 ? 'projets' : 'projet';
 ---
