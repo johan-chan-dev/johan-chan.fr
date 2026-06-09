@@ -7,6 +7,8 @@ readingTime: 7
 image: ./images/hero.webp
 excerpt: "L’IA se plante deux fois plus en JavaScript qu’en Java. Le problème c’est pas le modèle, c’est le langage."
 ---
+import Callout from '../../../components/Callout.astro';
+import BubbleChart from '../../../components/content/BubbleChart.astro';
 
 Python est le langage le plus utilisé pour faire de l’IA. C’est aussi un des pires langages pour l’IA qui code.
 
@@ -28,9 +30,9 @@ JavaScript a plus de données que Go. Et les agents produisent du Go valide en o
 
 Le volume de données joue, mais pas comme on le pense. Le corpus détermine quel pattern le LLM va choisir : le plus fréquent. La sémantique du langage détermine combien de patterns sont valides. Dans un langage boring, y’a un seul chemin, donc le plus fréquent est aussi le bon. Dans un langage expressif, le plus fréquent c’est pas forcément le plus adapté au contexte. Le training data ne rend pas le LLM meilleur sur un langage. Il détermine quel chemin le LLM prend quand il y en a plusieurs.
 
-<C.Callout type="note" title="Sur la méthode">
+<Callout type="note" title="Sur la méthode">
 Il n’existe pas d’étude qui corrèle formellement l’expressivité d’un langage au taux d’erreur LLM. Les chiffres cités viennent de benchmarks indépendants (Copilot 2022, Gemini 2026, ETH Zurich 2025). Le lien expressivité → fiabilité est une inférence, pas une mesure directe.
-</C.Callout>
+</Callout>
 
 ---
 
@@ -74,7 +76,7 @@ Les deux comptent. Mais pas pour le même utilisateur. L’humain expert profite
 
 ## La carte des langages
 
-<C.BubbleChart
+<BubbleChart
   xLabel="Boring → Expressif"
   yLabel="Permissif → Strict"
   quadrants={["Fiable pour l’IA", "Strict mais coûteux", "Imprévisible pour l’IA", "Simple mais risqué"]}

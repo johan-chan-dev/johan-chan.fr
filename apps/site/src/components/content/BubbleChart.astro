@@ -1,0 +1,95 @@
+---
+/**
+ * Quadrant scatter plot for content. Coordinates are 0–100 on both axes.
+ * `quadrants` are labelled clockwise from the top-left: [TL, TR, BR, BL].
+ */
+interface Bubble { label: string; x: number; y: number; size?: number }
+interface Arrow { from: string; to: string }
+interface Props {
+  xLabel: string;
+  yLabel: string;
+  quadrants: [string, string, string, string];
+  bubbles: Bubble[];
+  arrows?: Arrow[];
+}
+const { xLabel, yLabel, quadrants, bubbles, arrows = [] } = Astro.props;
+
+const W = 380, H = 360;
+const m = { top: 24, right: 18, bottom: 38, left: 36 };
+const plotW = W - m.left - m.right;
+const plotH = H - m.top - m.bottom;
+const px = (x: number) => m.left + (x / 100) * plotW;
+const py = (y: number) => m.top + ((100 - y) / 100) * plotH; // y inverted (100 = top)
+const r = (b: Bubble) => (b.size ?? 1) * 6.5;
+const find = (label: string) => bubbles.find((b) => b.label === label);
+
+const segments = arrows.flatMap((a) => {
+  const f = find(a.from), t = find(a.to);
+  if (!f || !t) return [];
+  const fx = px(f.x), fy = py(f.y), tx = px(t.x), ty = py(t.y);
+  const dx = tx - fx, dy = ty - fy;
+  const len = Math.hypot(dx, dy) || 1;
+  const ux = dx / len, uy = dy / len;
+  return [{
+    x1: fx + ux * (r(f) + 2), y1: fy + uy * (r(f) + 2),
+    x2: tx - ux * (r(t) + 7), y2: ty - uy * (r(t) + 7),
+  }];
+});
+
+// precompute bubble geometry here (template expressions can't use `<`/`>`)
+const points = bubbles.map((b) => {
+  const cx = px(b.x), cy = py(b.y), rad = r(b);
+  const right = b.x <= 66;
+  return {
+    label: b.label, cx, cy, rad,
+    lx: right ? cx + rad + 4 : cx - rad - 4,
+    ly: cy + 3.5,
+    anchor: right ? 'start' : 'end',
+  };
+});
+---
+<figure class="atl-bubblechart my-7 overflow-hidden rounded-[14px] border border-line bg-surf p-3 md:p-5">
+  <svg viewBox={`0 0 ${W} ${H}`} class="h-auto w-full" role="img"
+    aria-label={`${xLabel} vs ${yLabel} — ${bubbles.map((b) => b.label).join(', ')}`}>
+    <defs>
+      <marker id="bc-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 z" fill="var(--faint)" />
+      </marker>
+    </defs>
+
+    <!-- plot frame + centre cross -->
+    <rect x={m.left} y={m.top} width={plotW} height={plotH} fill="none" stroke="var(--line)" rx="6" />
+    <line x1={px(50)} y1={m.top} x2={px(50)} y2={m.top + plotH} stroke="var(--line)" stroke-dasharray="3 4" />
+    <line x1={m.left} y1={py(50)} x2={m.left + plotW} y2={py(50)} stroke="var(--line)" stroke-dasharray="3 4" />
+
+    <!-- quadrant labels (clockwise from top-left) -->
+    <text x={m.left + 7} y={m.top + 14} text-anchor="start" class="bc-quad">{quadrants[0]}</text>
+    <text x={m.left + plotW - 7} y={m.top + 14} text-anchor="end" class="bc-quad">{quadrants[1]}</text>
+    <text x={m.left + plotW - 7} y={m.top + plotH - 8} text-anchor="end" class="bc-quad">{quadrants[2]}</text>
+    <text x={m.left + 7} y={m.top + plotH - 8} text-anchor="start" class="bc-quad">{quadrants[3]}</text>
+
+    <!-- arrows -->
+    {segments.map((s) => (
+      <line x1={s.x1} y1={s.y1} x2={s.x2} y2={s.y2} stroke="var(--faint)" stroke-width="1.2" marker-end="url(#bc-arrow)" />
+    ))}
+
+    <!-- bubbles -->
+    {points.map((p) => (
+      <g>
+        <circle cx={p.cx} cy={p.cy} r={p.rad}
+          fill="color-mix(in srgb, var(--accent) 20%, transparent)" stroke="var(--accent)" stroke-width="1.3" />
+        <text x={p.lx} y={p.ly} text-anchor={p.anchor} class="bc-label">{p.label}</text>
+      </g>
+    ))}
+
+    <!-- axis labels -->
+    <text x={m.left + plotW / 2} y={H - 8} text-anchor="middle" class="bc-axis">{xLabel}</text>
+    <text x="12" y={m.top + plotH / 2} text-anchor="middle" transform={`rotate(-90 12 ${m.top + plotH / 2})`} class="bc-axis">{yLabel}</text>
+  </svg>
+</figure>
+
+<style>
+  .bc-label { font-family: var(--font-mono); font-size: 11px; fill: var(--ink); }
+  .bc-quad { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .04em; fill: var(--faint); text-transform: uppercase; }
+  .bc-axis { font-family: var(--font-mono); font-size: 11px; letter-spacing: .03em; fill: var(--ink2); }
+</style>

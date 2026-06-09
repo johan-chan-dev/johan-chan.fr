@@ -1,0 +1,147 @@
+---
+title: "Boring languages win"
+registre: refl
+date: "2026-03-27"
+tags: ["AI", "craft", "languages"]
+readingTime: 7
+image: ./images/hero.webp
+excerpt: "AI gets it wrong twice as often in JavaScript as in Java. The problem isn’t the model, it’s the language."
+---
+import Callout from '../../../components/Callout.astro';
+import BubbleChart from '../../../components/content/BubbleChart.astro';
+
+Python is the most-used language for doing AI. It’s also one of the worst languages for the AI that writes code.
+
+In 2022, a team tested Copilot on 33 LeetCode problems across four languages. Java: 57% correct code. JavaScript: 27%. Same model, same benchmark. The only variable is the language. Models have improved a lot since. The gap between languages, though, persists.
+
+In March 2026, a study tested Gemini 2.5 Flash on generating test suites. Result: 2,155 attempts in Python to reach a correct suite, versus 323 in Java. Almost 7 times more rounds to converge. It’s not just an error rate, it’s a baseline friction that spreads across the whole workflow.
+
+Go, which its own community claims as boring, is the one where AI gets it wrong the least.
+
+---
+
+## Data volume doesn’t make up for everything
+
+The objection comes right away. Java has a huge corpus on GitHub, well-tested, well-documented enterprise code. No wonder the models are better at Java.
+
+Except Python also has a huge corpus. PyPI, data science, Jupyter notebooks, all of StackOverflow. If training-data volume explained everything, Python should score at the top. It’s at the bottom.
+
+JavaScript has more data than Go. And agents produce valid Go one-shot 95% of the time.
+
+Data volume matters, but not the way you’d think. The corpus determines which pattern the LLM will pick: the most frequent one. The semantics of the language determine how many patterns are valid. In a boring language, there’s a single path, so the most frequent one is also the right one. In an expressive language, the most frequent isn’t necessarily the best fit for the context. Training data doesn’t make the LLM better at a language. It determines which path the LLM takes when there are several.
+
+<Callout type="note" title="On method">
+There’s no study that formally correlates a language’s expressiveness with the LLM error rate. The figures cited come from independent benchmarks (Copilot 2022, Gemini 2026, ETH Zurich 2025). The expressiveness → reliability link is an inference, not a direct measurement.
+</Callout>
+
+---
+
+## Expressiveness, what we’re talking about
+
+Take something simple: filtering the even numbers in a list.
+
+In Go, there’s one way to do it. A `for` loop, an `if`, an `append`. Everyone writes the same code. `gofmt` enforces the formatting. There’s nothing to guess.
+
+In Python, there are at least three ways:
+
+```python
+# list comprehension
+pairs = [x for x in nombres if x % 2 == 0]
+
+# filter + lambda
+pairs = list(filter(lambda x: x % 2 == 0, nombres))
+
+# classic for loop
+pairs = []
+for x in nombres:
+    if x % 2 == 0:
+        pairs.append(x)
+```
+
+All three are valid Python. There are others (generator expressions, numpy...). The list comprehension is "idiomatic". The for loop is "too verbose". But for an LLM, the for loop is the most predictable of the three.
+
+Expressiveness is that: the number of paths to get to the same place. For an expert human, it’s power. Less code, denser, more elegant. For an LLM, each extra path is one more place to get it wrong.
+
+Expressiveness is DRY pushed far. Expressive languages were designed to solve a human problem: repetition. Write less, abstract more, never repeat yourself. The LLM doesn’t have that problem. Writing the same pattern 10 times doesn’t tire it. But choosing between 5 ways not to repeat yourself confuses it. It has no preference, just probabilities. Five valid options are five close probabilities, and it takes the most frequent, not the most fitting.
+
+---
+
+## Speed or reliability
+
+These are two priorities the dev world has been exploring forever. Paul Graham argued in *Beating the Averages* that expressiveness is a competitive advantage: less code for the same idea, you iterate faster and explore more solutions. Rob Pike took the other direction creating Go: *"Less is exponentially more."* Fewer ways to do things means more readability and fewer errors.
+
+Both matter. But not for the same user. The expert human benefits from expressiveness. The LLM benefits from the constraint.
+
+---
+
+## The map of languages
+
+<BubbleChart
+  xLabel="Boring → Expressive"
+  yLabel="Permissive → Strict"
+  quadrants={["Reliable for AI", "Strict but costly", "Unpredictable for AI", "Simple but risky"]}
+  bubbles={[
+    { label: "Go", x: 10, y: 85, size: 1 },
+    { label: "Java", x: 25, y: 80, size: 1 },
+    { label: "C", x: 15, y: 25, size: 0.8 },
+    { label: "TypeScript", x: 40, y: 78, size: 1.2 },
+    { label: "Rust", x: 70, y: 95, size: 1 },
+    { label: "C#", x: 58, y: 68, size: 0.8 },
+    { label: "Python", x: 78, y: 24, size: 1.2 },
+    { label: "JavaScript", x: 68, y: 15, size: 1 },
+    { label: "Ruby", x: 90, y: 15, size: 0.7 }
+  ]}
+  arrows={[
+    { from: "JavaScript", to: "TypeScript" }
+  ]}
+/>
+
+*This positioning is my reading of the data, not a measured ranking. Both axes are defensible (see sources) but the exact positions are subjective.*
+
+---
+
+## What it looks like with today’s languages
+
+**C** is syntactically poor. Few keywords, few ways to write the same thing. And the benchmarks show it helps, in part. But C has another problem: undefined behavior. Pointer arithmetic, buffer overflows, subtle memory bugs. The LLM writes C that compiles and looks correct, but blows up at runtime in edge cases. Being boring in syntax isn’t enough if the language lets you shoot yourself in the foot silently.
+
+**Rust** is the most interesting case. It’s the strictest language there is. The borrow checker, lifetimes, everything checked at compile time. If "strict = good for AI", Rust should dominate. It’s in the middle. Because strict and boring aren’t the same thing. Rust has a very powerful type system, full of idiomatic ways to handle a lifetime problem. For the LLM, the borrow checker isn’t a guardrail, it’s one more maze to solve.
+
+Graydon Hoare, the creator of Rust, said it himself: *"I would have traded performance and expressivity away for simplicity."* He was talking about the complexity of the compiler and the type system, not the number of ways to write the same thing. But the direction is the same: even he would have preferred simpler.
+
+**TypeScript** is the most telling case. It’s JavaScript becoming static, in real time. A study from ETH Zurich (PLDI 2025) shows that forcing the LLM to respect the type system during generation cuts compilation errors in half. Types set limits. Fewer possible choices, fewer errors. And adoption follows: in August 2025, TypeScript became the #1 language on GitHub by monthly contributors. 40% of JS devs write exclusively in TypeScript.
+
+**Python** is two languages in one. The typed subset, with strict mypy and type hints, produces code the LLMs handle well. The dynamic subset, with duck typing and magic, produces code where they fall apart. Python’s average score mixes the two. And the trend is clear: a 2025 Meta survey shows 86% of Python developers use type hints. Even Python is getting more boring.
+
+---
+
+## What changes day to day
+
+It’s not "change languages". It’s "whatever your language, write boring".
+
+Strict TypeScript rather than `any`. Typed Python rather than duck typing. In both cases, declared types, not guessed ones. No magic, no clever tricks: that’s what helps the LLM generate correctly on the first try.
+
+And what holds for the language holds for the framework: fewer implicit conventions, more reliability.
+
+Boring code was already the craft’s recommendation: KISS, explicit is better than implicit. What changes with AI is that the choice of language becomes a baseline friction. There are other layers that help: the context you give the model, the tests, the project architecture. But the more the first layer, the language, is expressive, the more the others have to compensate.
+
+---
+
+Dijkstra, 1975: *"Simplicity is prerequisite for reliability."* The numbers prove him right.
+
+<details>
+<summary>Sources</summary>
+
+- [An Empirical Evaluation of GitHub Copilot’s Code Suggestions (IEEE/ACM MSR 2022)](https://ieeexplore.ieee.org/document/9796235) — Java 57% vs JavaScript 27% on the same LeetCode problems
+- [Evaluating LLM-Based Test Generation Under Software Evolution (arXiv:2603.23443, March 2026)](https://arxiv.org/html/2603.23443) — Python 6.7x more attempts than Java in test generation
+- [Type-Constrained Code Generation with Language Models (ETH Zurich, PLDI 2025)](https://arxiv.org/abs/2504.09246) — type-constraining cuts compilation errors by 2+
+- [Why Go Is Winning the Vibe Coding Wars (WebProNews, 2025)](https://www.webpronews.com/why-go-is-winning-the-vibe-coding-wars-and-what-that-means-for-the-future-of-ai-assisted-programming/) — Go 95% valid one-shot early 2026
+- [Meta Python Typing Survey 2025](https://engineering.fb.com/2025/12/22/developer-tools/python-typing-survey-2025-code-quality-flexibility-typing-adoption/) — 86% of Python devs use type hints
+- [GitHub Octoverse 2025](https://github.blog/news-insights/octoverse/octoverse-a-new-developer-joins-github-every-second-as-ai-leads-typescript-to-1/) — TypeScript #1 on GitHub by monthly contributors (August 2025)
+- [State of JavaScript 2025](https://www.infoq.com/news/2026/03/state-of-js-survey-2025/) — 40% of JS devs write exclusively in TS
+- [AutoCodeBench (arXiv:2508.09101, August 2025)](https://arxiv.org/abs/2508.09101) — multilingual benchmark, 20 languages, 3920 problems
+- [Paul Graham — "Beating the Averages" (2001)](https://paulgraham.com/avg.html) — expressiveness as a competitive advantage
+- [Rob Pike — "Less is exponentially more" (2012)](http://commandcenter.blogspot.com/2012/06/less-is-exponentially-more.html) — why Go has fewer features, not more
+- [Graydon Hoare — retrospective on Rust’s early days (The New Stack, 2023)](https://thenewstack.io/graydon-hoare-remembers-the-early-days-of-rust/) — "I would have traded expressivity for simplicity"
+- [Edsger Dijkstra — EWD498 (1975)](https://www.cs.virginia.edu/~evans/cs655/readings/ewd498.html) — "Simplicity is prerequisite for reliability"
+
+</details>
