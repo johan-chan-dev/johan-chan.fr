@@ -1,0 +1,118 @@
+---
+import type { Lang } from '../i18n/ui';
+import { copy } from '../data/atelier';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const p = copy[lang].proof;
+const uid = 'proof-' + Math.random().toString(36).slice(2, 8);
+---
+<div class="overflow-hidden rounded-[12px] border border-line" data-proof id={uid} data-lang={lang}>
+  <div class="flex items-center justify-between border-b border-line bg-bg2 px-3.5 py-2.5">
+    <span class="atl-meta uppercase text-faint" style="font-size:10.5px;letter-spacing:.12em">{p.bothSides}</span>
+    <button type="button" data-auto aria-pressed="true"
+      class="atl-meta rounded-md border border-line px-2.5 py-1 text-ink2" style="font-size:10.5px">{p.autoOn}</button>
+  </div>
+  <div class="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+    <div class="min-w-0 border-r border-line bg-surf p-4">
+      <span class="atl-meta uppercase text-accent" style="font-size:10px;letter-spacing:.1em">{p.whatYouTouch}</span>
+      <div class="mt-3 overflow-hidden rounded-[9px] border border-line bg-bg">
+        <div class="flex gap-1.5 border-b border-hair px-2.5 py-2">
+          <span class="h-2 w-2 rounded-full opacity-70" style="background:#e06a4a"></span>
+          <span class="h-2 w-2 rounded-full opacity-70" style="background:#dbb54a"></span>
+          <span class="h-2 w-2 rounded-full opacity-70" style="background:#5aa86a"></span>
+        </div>
+        <div class="flex flex-col gap-2.5 p-3.5">
+          <div class="h-2 w-[60%] rounded bg-hair"></div>
+          <div class="h-2 w-[85%] rounded bg-hair"></div>
+          {p.samples.slice(0, 2).map((label, i) => (
+            <button type="button" data-fire={i}
+              class={`mt-0.5 rounded-lg px-3 py-2.5 text-left font-text text-[13px] font-semibold ${i === 0 ? 'bg-accent text-accent-ink' : 'bg-bg2 text-ink'}`}>{label} →</button>
+          ))}
+        </div>
+      </div>
+      <p class="atl-meta mt-3 text-faint" style="font-size:10.5px;line-height:1.5">{p.clickHint}</p>
+    </div>
+    <div class="relative min-w-0 bg-bg p-4">
+      <div class="flex items-center justify-between">
+        <span class="atl-meta uppercase text-live" style="font-size:10px;letter-spacing:.1em">{p.whatHolds}</span>
+        <span class="atl-meta text-faint" style="font-size:10.5px"><span data-count>18 432</span> {p.served}</span>
+      </div>
+      <div class="mt-3.5 flex flex-col gap-[7px]">
+        {p.stages.map((sn, si) => (
+          <div class="grid grid-cols-[74px_1fr] items-center gap-2">
+            <span class="atl-meta text-right text-faint" style="font-size:10px">{sn}</span>
+            <div class="relative h-[22px] overflow-hidden rounded-md border border-hair bg-bg2" data-lane={si}></div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-3.5 flex items-center gap-2">
+        <span class="atl-meta text-faint" style="font-size:10px">scale</span>
+        <div class="flex flex-1 gap-0.5">
+          {Array.from({ length: 24 }).map((_, i) => (
+            <span class="h-3.5 flex-1 rounded-sm" style={`background: ${i < 21 ? 'var(--live)' : 'var(--hair)'}; opacity:${i < 21 ? 0.4 + (i / 24) * 0.6 : 1}`}></span>
+          ))}
+        </div>
+        <span class="atl-meta text-live" style="font-size:10px">99.9%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type EventItem = { id: number; label: string; stage: number; born: number };
+  const SAMPLES: Record<'fr' | 'en', string[]> = {
+    fr: ['ajouter au panier', 'valider l’e-mail', 'publier l’article', 'régler la facture'],
+    en: ['add to cart', 'verify email', 'publish post', 'settle invoice'],
+  };
+  document.querySelectorAll('[data-proof]').forEach((root) => {
+    const lang: 'fr' | 'en' = root.getAttribute('data-lang') === 'en' ? 'en' : 'fr';
+    const samples = SAMPLES[lang];
+    const lanes = [...root.querySelectorAll<HTMLElement>('[data-lane]')];
+    const countEl = root.querySelector('[data-count]') as HTMLElement | null;
+    const autoBtn = root.querySelector('[data-auto]') as HTMLElement | null;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let events: EventItem[] = []; let count = 18432; let auto = true; let _id = 0;
+    const nf = new Intl.NumberFormat(lang === 'fr' ? 'fr-FR' : 'en-US');
+
+    const render = () => {
+      lanes.forEach((lane, si) => {
+        lane.innerHTML = '';
+        events.filter((e) => e.stage === si).forEach((e) => {
+          const chip = document.createElement('span');
+          chip.textContent = e.label;
+          chip.style.cssText = 'position:absolute;top:3px;left:5px;height:16px;padding:0 7px;display:inline-flex;align-items:center;border-radius:4px;font-family:var(--font-mono);font-size:9.5px;white-space:nowrap;max-width:calc(100% - 10px);overflow:hidden;text-overflow:ellipsis;color:var(--accent-ink);background:' + (si >= 3 ? 'var(--live)' : 'var(--accent)');
+          lane.appendChild(chip);
+        });
+      });
+      if (countEl) countEl.textContent = nf.format(count);
+    };
+    const fire = (idx?: number) => {
+      const id = ++_id;
+      const label = samples[idx != null ? idx : id % samples.length];
+      events = [...events.slice(-4), { id, label, stage: 0, born: performance.now() }];
+      count += 1; render();
+    };
+    root.querySelectorAll('[data-fire]').forEach((b) =>
+      b.addEventListener('click', () => fire(Number(b.getAttribute('data-fire')))));
+
+    if (reduce) {
+      events = [{ id: 1, label: samples[0], stage: 1, born: 0 }, { id: 2, label: samples[1], stage: 3, born: 0 }];
+      render();
+      if (autoBtn) autoBtn.style.display = 'none';
+      return;
+    }
+    autoBtn?.addEventListener('click', () => {
+      auto = !auto;
+      (autoBtn as HTMLElement).setAttribute('aria-pressed', String(auto));
+      (autoBtn as HTMLElement).textContent = auto ? (lang === 'fr' ? '⏸ flux auto' : '⏸ auto flow') : (lang === 'fr' ? '▶ flux auto' : '▶ auto flow');
+    });
+    let last = performance.now(); let acc = 0; let emitAcc = 0;
+    const loop = (now: number) => {
+      const dt = now - last; last = now; acc += dt; emitAcc += dt;
+      if (acc > 360) { acc = 0; events = events.map((e) => ({ ...e, stage: Math.min(4, e.stage + 1) })).filter((e) => e.stage < 4 || now - e.born < 2600); render(); }
+      if (auto && emitAcc > 1500) { emitAcc = 0; fire(); }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+  });
+</script>
