@@ -1,34 +1,33 @@
 ---
 import type { Lang } from '../i18n/ui';
-import type { Piece } from '../data/atelier';
-import { copy, fmtDate, kindClass } from '../data/atelier';
-interface Props { piece: Piece; lang: Lang }
-const { piece, lang } = Astro.props;
-const c = piece[lang]; const C = copy[lang];
-const base = lang === 'fr' ? '' : '/en';
-const href = `${base}/journal/${piece.slug}`;
-const hue = kindClass[piece.kind];
-const dotShape = piece.kind === 'impl' ? 'rounded-sm' : 'rounded-full';
-const dotRotate = piece.kind === 'design' ? 'rotate-45' : '';
+import type { Article } from '../lib/content-utils';
+import { copy, fmtDate, kindClass } from '../lib/copy';
+interface Props { article: Article; lang: Lang }
+const { article, lang } = Astro.props;
+const C = copy[lang];
+const href = `/journal/${article.slug}`;
+const hue = kindClass[article.registre];
+const dotShape = article.registre === 'impl' ? 'rounded-sm' : 'rounded-full';
+const dotRotate = article.registre === 'design' ? 'rotate-45' : '';
 ---
-<a href={href} data-testid="piece-row" data-kind={piece.kind} data-tags={c.tags.join('|')}
+<a href={href} data-testid="piece-row" data-kind={article.registre} data-tags={article.tags.join('|')}
   class="atl-row grid grid-cols-1 items-baseline gap-2 border-t border-line py-5 md:grid-cols-[128px_1fr_auto] md:gap-6 md:py-[26px]">
   <div class="flex flex-col gap-[7px]">
     <span class={`atl-meta inline-flex items-center gap-[7px] ${hue}`} style="letter-spacing:.04em">
       <span class={`h-[7px] w-[7px] ${dotShape} ${dotRotate}`} style="background: currentColor"></span>
-      {C.kind[piece.kind]}
+      {C.kind[article.registre]}
     </span>
-    <span class="atl-meta text-faint">{fmtDate(piece.date, lang)}</span>
+    <span class="atl-meta text-faint">{fmtDate(article.date, lang)}</span>
   </div>
   <div class="min-w-0">
-    {piece.fil && (
-      <span class={`atl-meta mb-2 block uppercase ${hue}`} style="font-size:10.5px;letter-spacing:.08em">{C.series} · {piece.fil[lang]}, {C.chapter} {piece.filPart}</span>
+    {article.series && (
+      <span class={`atl-meta mb-2 block uppercase ${hue}`} style="font-size:10.5px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</span>
     )}
-    <h3 class="atl-piece-title m-0 text-ink">{c.title}</h3>
+    <h3 class="atl-piece-title m-0 text-ink">{article.title}</h3>
     <div class="mt-2.5 flex flex-wrap items-center gap-2">
-      {c.tags.map((tg) => <span class="atl-meta text-ink2">#{tg.toLowerCase()}</span>)}
-      <span class="atl-meta whitespace-nowrap text-faint">· {piece.read} {C.read}</span>
-      {piece.live && (
+      {article.tags.map((tg) => <span class="atl-meta text-ink2">#{tg.toLowerCase()}</span>)}
+      <span class="atl-meta whitespace-nowrap text-faint">· {article.readingTime} {C.read}</span>
+      {article.live && (
         <span class="atl-meta inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-accent px-2 text-accent" style="font-size:10.5px">
           <span class="atl-livedot h-[5px] w-[5px] shrink-0 rounded-full bg-accent"></span>{C.live}
         </span>

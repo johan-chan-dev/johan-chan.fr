@@ -3,10 +3,12 @@ import Base from '../../layouts/Base.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
-import { copy, projects } from '../../data/atelier';
+import { copy } from '../../lib/copy';
+import { getProjects } from '../../lib/content';
 import type { Lang } from '../../i18n/ui';
 const lang: Lang = 'fr';
 const C = copy[lang];
+const projects = await getProjects();
 const n = projects.length;
 const word = n > 1 ? 'projets' : 'projet';
 ---
