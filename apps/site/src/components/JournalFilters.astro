@@ -41,8 +41,9 @@ const regs: Kind[] = ['refl', 'design', 'impl'];
   </div>
 </div>
 <script is:inline define:vars={{ lang }}>
-  const root = document.querySelector('[data-filters]');
-  if (root) {
+  const start = () => {
+    const root = document.querySelector('[data-filters]');
+    if (!root) return;
     const rows = [...document.querySelectorAll('[data-testid="piece-row"]')];
     const countEl = root.querySelector('[data-count]');
     const picker = document.querySelector('[data-picker]');
@@ -105,5 +106,7 @@ const regs: Kind[] = ['refl', 'design', 'impl'];
     picker?.addEventListener('click', (e) => { if (e.target === picker) open(false); });
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') open(false); });
     apply();
-  }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 </script>
