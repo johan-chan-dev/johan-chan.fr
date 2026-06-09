@@ -99,8 +99,8 @@ test('EN journal lists the translated articles', async ({ page }) => {
   await page.goto('/en/journal');
   const rows = page.getByTestId('piece-row');
   await expect(rows.first()).toBeVisible();
-  // 14 imported articles now translated + the bilingual showcase
-  expect(await rows.count()).toBeGreaterThanOrEqual(14);
+  // all 15 imported articles now translated + the bilingual showcase
+  expect(await rows.count()).toBeGreaterThanOrEqual(15);
   await expect(page.locator('body')).toContainText('Clean Code Isn’t the Craft');
 });
 
@@ -110,9 +110,13 @@ test('EN article renders English title + body', async ({ page }) => {
   await expect(page.locator('.atl-prose')).toContainText('craft');
 });
 
-test('lang switch is hidden on a FR-only article (boring-languages-win, not yet translated)', async ({ page }) => {
+test('boring-languages-win renders its Callout and BubbleChart components', async ({ page }) => {
   await page.goto('/journal/boring-languages-win');
-  await expect(page.getByTestId('lang-switch')).toHaveCount(0);
+  await expect(page.getByTestId('callout')).toBeVisible();
+  // SVG quadrant chart renders (no raw JSX leak)
+  await expect(page.locator('.atl-bubblechart svg')).toBeVisible();
+  await expect(page.locator('.atl-bubblechart')).toContainText('Python');
+  await expect(page.locator('body')).not.toContainText('quadrants={');
 });
 
 test('language switch from a translated imported article lands on its EN sibling', async ({ page }) => {
