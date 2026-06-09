@@ -10,5 +10,8 @@ export default defineConfig({
     defaultLocale: 'fr',
     routing: { prefixDefaultLocale: false },
   },
-  vite: { plugins: [tailwindcss()] },
+  vite: {
+    plugins: [tailwindcss()],
+    server: { allowedHosts: ['.dev.box'] },
+  },
 });
