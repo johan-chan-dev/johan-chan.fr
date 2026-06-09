@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getLangFromUrl, useTranslations } from '../src/i18n/utils';
+import { getLangFromUrl, useTranslations, getSiblingLocalePath } from '../src/i18n/utils';
 
 describe('useTranslations', () => {
   it('returns the FR string for a known key', () => {
@@ -17,4 +17,12 @@ describe('getLangFromUrl', () => {
   it('defaults to "fr" for an unprefixed path', () => {
     expect(getLangFromUrl(new URL('http://x/about'))).toBe('fr');
   });
+});
+
+describe('getSiblingLocalePath', () => {
+  it('FR root → EN root', () => { expect(getSiblingLocalePath(new URL('http://x/'), 'en')).toBe('/en/'); });
+  it('EN root → FR root', () => { expect(getSiblingLocalePath(new URL('http://x/en/'), 'fr')).toBe('/'); });
+  it('FR subpath → EN subpath', () => { expect(getSiblingLocalePath(new URL('http://x/journal'), 'en')).toBe('/en/journal'); });
+  it('EN subpath → FR subpath', () => { expect(getSiblingLocalePath(new URL('http://x/en/journal'), 'fr')).toBe('/journal'); });
+  it('FR → FR is identity', () => { expect(getSiblingLocalePath(new URL('http://x/about'), 'fr')).toBe('/about'); });
 });

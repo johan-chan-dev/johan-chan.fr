@@ -11,3 +11,11 @@ export function useTranslations(lang: Lang) {
     return (ui[lang] as Record<string, string>)[key] ?? ui[defaultLang][key];
   };
 }
+
+/** Map the current URL's pathname to its equivalent under another locale (segments not localized). */
+export function getSiblingLocalePath(url: URL, target: Lang): string {
+  // strip a leading "/en" to get the canonical FR path
+  const frPath = url.pathname.replace(/^\/en(?=\/|$)/, '') || '/';
+  if (target === 'fr') return frPath;
+  return frPath === '/' ? '/en/' : `/en${frPath}`;
+}
