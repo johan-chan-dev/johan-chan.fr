@@ -1,6 +1,6 @@
 import type { Lang } from '../i18n/ui';
-
-export type Registre = 'refl' | 'design' | 'impl';
+import type { Registre } from './content-utils';
+export type { Registre } from './content-utils';
 
 export interface Copy {
   name: string;
