@@ -5,7 +5,8 @@
     "useDefineForClassFields": false,
     "moduleResolution": "bundler",
     "target": "es2022",
-    "module": "es2022"
+    "module": "es2022",
+    "noEmit": false
   },
   "include": ["src/content/**/*.angular.ts"]
 }

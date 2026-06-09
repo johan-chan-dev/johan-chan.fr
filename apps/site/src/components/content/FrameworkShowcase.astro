@@ -9,7 +9,7 @@
 <noscript><style>{`.atl-showcase[data-mode="focus"] [data-demo]{display:block!important}`}</style></noscript>
 <script>
   type Mode = 'focus' | 'compare';
-  const NAMES: Record<string, string> = { svelte: 'Svelte', vue: 'Vue', react: 'React' };
+  const NAMES: Record<string, string> = { svelte: 'Svelte', vue: 'Vue', react: 'React', angular: 'Angular' };
   function initShowcases() {
     document.querySelectorAll<HTMLElement>('[data-showcase]').forEach((root) => {
       const controls = root.querySelector<HTMLElement>('[data-controls]');
