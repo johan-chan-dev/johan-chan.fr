@@ -3,7 +3,8 @@
  * Quadrant scatter plot for content. Coordinates are 0–100 on both axes.
  * `quadrants` are labelled clockwise from the top-left: [TL, TR, BR, BL].
  */
-interface Bubble { label: string; x: number; y: number; size?: number }
+type Place = 'right' | 'left' | 'above' | 'below';
+interface Bubble { label: string; x: number; y: number; size?: number; place?: Place }
 interface Arrow { from: string; to: string }
 interface Props {
   xLabel: string;
@@ -20,13 +21,18 @@ const plotW = W - m.left - m.right;
 const plotH = H - m.top - m.bottom;
 const px = (x: number) => m.left + (x / 100) * plotW;
 const py = (y: number) => m.top + ((100 - y) / 100) * plotH; // y inverted (100 = top)
+// bubbles use an inset of the plot area so extreme values don't collide with
+// the quadrant labels parked in the corners.
+const pad = { top: 20, bottom: 16, x: 12 };
+const bx = (x: number) => m.left + pad.x + (x / 100) * (plotW - 2 * pad.x);
+const by = (y: number) => m.top + pad.top + ((100 - y) / 100) * (plotH - pad.top - pad.bottom);
 const r = (b: Bubble) => (b.size ?? 1) * 6.5;
 const find = (label: string) => bubbles.find((b) => b.label === label);
 
 const segments = arrows.flatMap((a) => {
   const f = find(a.from), t = find(a.to);
   if (!f || !t) return [];
-  const fx = px(f.x), fy = py(f.y), tx = px(t.x), ty = py(t.y);
+  const fx = bx(f.x), fy = by(f.y), tx = bx(t.x), ty = by(t.y);
   const dx = tx - fx, dy = ty - fy;
   const len = Math.hypot(dx, dy) || 1;
   const ux = dx / len, uy = dy / len;
@@ -36,16 +42,24 @@ const segments = arrows.flatMap((a) => {
   }];
 });
 
-// precompute bubble geometry here (template expressions can't use `<`/`>`)
+// precompute bubble geometry here (template expressions can't use `<`/`>`).
+// Bubbles near the top/bottom edge place their label above/below so it clears
+// the quadrant labels; the rest sit beside the bubble. `place` overrides per bubble.
 const points = bubbles.map((b) => {
-  const cx = px(b.x), cy = py(b.y), rad = r(b);
-  const right = b.x <= 66;
-  return {
-    label: b.label, cx, cy, rad,
-    lx: right ? cx + rad + 4 : cx - rad - 4,
-    ly: cy + 3.5,
-    anchor: right ? 'start' : 'end',
+  const cx = bx(b.x), cy = by(b.y), rad = r(b);
+  let place: Place = b.place ?? 'right';
+  if (!b.place) {
+    if (b.y >= 88) place = 'below';
+    else if (b.y <= 12) place = 'above';
+    else place = b.x <= 66 ? 'right' : 'left';
+  }
+  const geom: Record<Place, { lx: number; ly: number; anchor: string }> = {
+    right: { lx: cx + rad + 4, ly: cy + 3.5, anchor: 'start' },
+    left: { lx: cx - rad - 4, ly: cy + 3.5, anchor: 'end' },
+    above: { lx: cx, ly: cy - rad - 7, anchor: 'middle' },
+    below: { lx: cx, ly: cy + rad + 12, anchor: 'middle' },
   };
+  return { label: b.label, cx, cy, rad, ...geom[place] };
 });
 ---
 <figure class="atl-bubblechart my-7 overflow-hidden rounded-[14px] border border-line bg-surf p-3 md:p-5">
