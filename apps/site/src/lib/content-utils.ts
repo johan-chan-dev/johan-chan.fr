@@ -89,3 +89,42 @@ export function seriesIndex(articles: Article[]): SeriesIndexEntry[] {
   }
   return [...map.values()].sort((x, y) => (x.latest < y.latest ? 1 : x.latest > y.latest ? -1 : 0));
 }
+
+export type FeedItem =
+  | { kind: 'article'; date: string; article: Article }
+  | { kind: 'series'; date: string; series: SeriesIndexEntry };
+
+export interface FeedRow {
+  item: FeedItem;
+  year: number;
+  firstOfYear: boolean;
+}
+
+// Temp render-list: every article (date-desc, as given) plus one series item
+// injected immediately before that series' most-recent chapter.
+export function journalFeed(articles: Article[]): FeedItem[] {
+  const byId = new Map(seriesIndex(articles).map((e) => [e.id, e]));
+  const seen = new Set<string>();
+  const items: FeedItem[] = [];
+  for (const a of articles) {
+    if (a.series) {
+      const entry = byId.get(a.series.id);
+      if (entry && !seen.has(a.series.id)) {
+        items.push({ kind: 'series', date: entry.latest, series: entry });
+        seen.add(a.series.id);
+      }
+    }
+    items.push({ kind: 'article', date: a.date, article: a });
+  }
+  return items;
+}
+
+export function groupByYear(items: FeedItem[]): FeedRow[] {
+  let last: number | null = null;
+  return items.map((item) => {
+    const year = Number(item.date.slice(0, 4));
+    const firstOfYear = year !== last;
+    last = year;
+    return { item, year, firstOfYear };
+  });
+}
