@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { byDateDesc, allTags, relatedArticles, articlesBySlugs, localeOf, slugOf, seriesChapters, seriesIndex, journalFeed, groupByYear, type Article } from '../src/lib/content-utils';
+import { byDateDesc, allTags, relatedArticles, articlesBySlugs, localeOf, slugOf, seriesChapters, seriesIndex, journalFeed, groupByYear, parseLens, lensToParams, type Article } from '../src/lib/content-utils';
 
 const A = (over: Partial<Article>): Article => ({
   slug: 'x', title: 't', registre: 'refl', date: '2026-01-01', tags: [], readingTime: 5, live: false, ...over,
@@ -97,5 +97,23 @@ describe('groupByYear', () => {
     ];
     const rows = groupByYear(journalFeed(all));
     expect(rows.map((r) => [r.year, r.firstOfYear])).toEqual([[2026, true], [2026, false], [2025, true]]);
+  });
+});
+
+describe('parseLens / lensToParams', () => {
+  it('defaults to temps when no params', () => {
+    expect(parseLens(new URLSearchParams(''))).toEqual({ lens: 'temps' });
+    expect(lensToParams({ lens: 'temps' })).toBe('');
+  });
+  it('reads/writes a register', () => {
+    expect(parseLens(new URLSearchParams('reg=refl'))).toEqual({ lens: 'reg', value: 'refl' });
+    expect(lensToParams({ lens: 'reg', value: 'design' })).toBe('?reg=design');
+  });
+  it('reads/writes a tag (url-encoded)', () => {
+    expect(parseLens(new URLSearchParams('tag=craft'))).toEqual({ lens: 'tag', value: 'craft' });
+    expect(lensToParams({ lens: 'tag', value: 'craft' })).toBe('?tag=craft');
+  });
+  it('ignores an invalid register', () => {
+    expect(parseLens(new URLSearchParams('reg=bogus'))).toEqual({ lens: 'temps' });
   });
 });
