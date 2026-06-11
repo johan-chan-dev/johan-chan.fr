@@ -45,4 +45,7 @@ test-results
 
 # Sources (transcripts, raw data)
 .sources/
-lighthouse.json.superpowers/
+lighthouse.json
+
+# Brainstorm/scratch (superpowers visual companion, etc.)
+.superpowers/
