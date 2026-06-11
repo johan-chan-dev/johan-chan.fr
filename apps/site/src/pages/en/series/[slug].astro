@@ -1,0 +1,36 @@
+---
+import PageLayout from '../../../layouts/PageLayout.astro';
+import { copy, fmtDate } from '../../../lib/copy';
+import { getSeriesList, getSeriesEntry } from '../../../lib/content';
+import type { Lang } from '../../../i18n/ui';
+export async function getStaticPaths() {
+  const list = await getSeriesList('en');
+  return list.map((s) => ({ params: { slug: s.id } }));
+}
+const lang: Lang = 'en';
+const { slug } = Astro.params;
+const { series, chapters } = await getSeriesEntry(slug!, lang);
+const C = copy[lang];
+const dates = chapters.map((c) => c.date).sort();
+const first = dates[0];
+const last = dates[dates.length - 1];
+---
+<PageLayout lang={lang} current="journal" title={`${series.title} — ${C.name}`} description={series.description} width="reading">
+  <a href="/en/series" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.seriesIndex.back}</a>
+  <div class="atl-meta mt-5 uppercase text-accent" style="font-size:10.5px;letter-spacing:.1em">{C.series}</div>
+  <h1 class="mt-1 font-display text-[30px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[42px]" style="text-wrap:balance">{series.title}</h1>
+  <p class="atl-body mt-4 text-ink2 md:text-[17.5px]" style="line-height:1.6">{series.description}</p>
+  <div class="atl-meta mt-3 text-faint" style="font-size:11.5px">{chapters.length} {C.seriesIndex.chapters} · {fmtDate(first, lang)} → {fmtDate(last, lang)}</div>
+  <ol class="mt-7 list-none p-0">
+    {chapters.map((c, i) => (
+      <li>
+        <a href={`/en/journal/${c.slug}`} data-testid="chapter-link" class="atl-row flex items-baseline gap-4 border-t border-line py-4">
+          <span class="atl-meta text-accent" style="font-size:12px;min-width:24px">{String(c.order ?? i + 1).padStart(2, '0')}</span>
+          <span class="min-w-0 flex-1 font-display text-[17px] font-medium leading-[1.16] text-ink">{c.title}</span>
+          <span class="atl-meta whitespace-nowrap text-faint" style="font-size:11px">{c.readingTime} {C.read}</span>
+        </a>
+      </li>
+    ))}
+    <li class="border-t border-line"></li>
+  </ol>
+</PageLayout>
