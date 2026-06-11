@@ -1,7 +1,8 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { Article, Project, Series } from './content-utils';
-import { byDateDesc, localeOf, slugOf } from './content-utils';
+import type { SeriesIndexEntry } from './content-utils';
+import { byDateDesc, localeOf, slugOf, seriesChapters, seriesIndex } from './content-utils';
 import type { Lang } from '../i18n/ui';
 export type { Article, Project, Series } from './content-utils';
 
@@ -62,4 +63,26 @@ export async function getSeries(id: string): Promise<Series | undefined> {
 export async function hasTranslation(slug: string, lang: Lang, collection: 'articles' | 'projects'): Promise<boolean> {
   const otherId = lang === 'fr' ? `${slug}/en` : slug;
   return Boolean(await getEntry(collection, otherId));
+}
+
+export interface SeriesCard extends SeriesIndexEntry {
+  description: string;
+}
+
+export async function getSeriesList(lang: Lang): Promise<SeriesCard[]> {
+  const articles = await getArticles(lang);
+  const entries = seriesIndex(articles);
+  return Promise.all(
+    entries.map(async (e) => {
+      const meta = await getSeries(e.id);
+      return { ...e, description: meta?.description ?? '' };
+    }),
+  );
+}
+
+export async function getSeriesEntry(slug: string, lang: Lang) {
+  const meta = await getSeries(slug);
+  const chapters = seriesChapters(slug, await getArticles(lang));
+  if (!meta || chapters.length === 0) throw new Error(`Series not found: ${slug} (${lang})`);
+  return { series: meta, chapters };
 }
