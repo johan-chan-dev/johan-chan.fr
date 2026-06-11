@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { byDateDesc, allTags, relatedArticles, articlesBySlugs, localeOf, slugOf, type Article } from '../src/lib/content-utils';
+import { byDateDesc, allTags, relatedArticles, articlesBySlugs, localeOf, slugOf, seriesChapters, seriesIndex, type Article } from '../src/lib/content-utils';
 
 const A = (over: Partial<Article>): Article => ({
   slug: 'x', title: 't', registre: 'refl', date: '2026-01-01', tags: [], readingTime: 5, live: false, ...over,
@@ -43,5 +43,31 @@ describe('localeOf / slugOf', () => {
   it('EN id → en + stripped slug', () => {
     expect(localeOf('editeur-wasm/en')).toBe('en');
     expect(slugOf('editeur-wasm/en')).toBe('editeur-wasm');
+  });
+});
+
+describe('seriesChapters', () => {
+  it('returns only the series members, ordered by order asc', () => {
+    const all = [
+      A({ slug: 'b', series: { id: 's', title: 'S' }, order: 2 }),
+      A({ slug: 'a', series: { id: 's', title: 'S' }, order: 1 }),
+      A({ slug: 'x' }),
+      A({ slug: 'c', series: { id: 's', title: 'S' }, order: 3 }),
+    ];
+    expect(seriesChapters('s', all).map((c) => c.slug)).toEqual(['a', 'b', 'c']);
+  });
+});
+
+describe('seriesIndex', () => {
+  it('groups by series with count + date range, latest series first', () => {
+    const all = [
+      A({ slug: 'a', series: { id: 's1', title: 'One' }, order: 1, date: '2026-01-01' }),
+      A({ slug: 'b', series: { id: 's1', title: 'One' }, order: 2, date: '2026-03-01' }),
+      A({ slug: 'c', series: { id: 's2', title: 'Two' }, order: 1, date: '2026-02-01' }),
+      A({ slug: 'd' }),
+    ];
+    const idx = seriesIndex(all);
+    expect(idx.map((e) => e.id)).toEqual(['s1', 's2']);
+    expect(idx[0]).toMatchObject({ id: 's1', title: 'One', count: 2, first: '2026-01-01', latest: '2026-03-01' });
   });
 });

@@ -59,3 +59,33 @@ export function articlesBySlugs(slugs: string[], all: Article[]): Article[] {
 
 export const localeOf = (id: string): 'fr' | 'en' => (id.endsWith('/en') ? 'en' : 'fr');
 export const slugOf = (id: string): string => id.replace(/\/en$/, '');
+
+export interface SeriesIndexEntry {
+  id: string;
+  title: string;
+  count: number;
+  first: string; // earliest chapter date (YYYY-MM-DD)
+  latest: string; // most recent chapter date
+}
+
+export function seriesChapters(seriesId: string, articles: Article[]): Article[] {
+  return articles
+    .filter((a) => a.series?.id === seriesId)
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
+export function seriesIndex(articles: Article[]): SeriesIndexEntry[] {
+  const map = new Map<string, SeriesIndexEntry>();
+  for (const a of articles) {
+    if (!a.series) continue;
+    const e = map.get(a.series.id);
+    if (!e) {
+      map.set(a.series.id, { id: a.series.id, title: a.series.title, count: 1, first: a.date, latest: a.date });
+    } else {
+      e.count++;
+      if (a.date < e.first) e.first = a.date;
+      if (a.date > e.latest) e.latest = a.date;
+    }
+  }
+  return [...map.values()].sort((x, y) => (x.latest < y.latest ? 1 : x.latest > y.latest ? -1 : 0));
+}
