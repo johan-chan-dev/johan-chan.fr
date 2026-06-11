@@ -157,3 +157,31 @@ test('framework showcase: code panel, live island, compare mode', async ({ page 
   await expect(page.locator('[data-demo][data-framework="vue"]')).toBeVisible();
   await expect(page.locator('[data-demo][data-framework="react"]')).toBeVisible();
 });
+
+test('series index lists the series', async ({ page }) => {
+  await page.goto('/series');
+  const cards = page.getByTestId('series-card');
+  await expect(cards.first()).toBeVisible();
+  await expect(page.locator('body')).toContainText('Le monde du dev sous choc');
+});
+
+test('series detail lists chapters in order', async ({ page }) => {
+  await page.goto('/series/le-monde-du-dev-sous-choc');
+  const chapters = page.getByTestId('chapter-link');
+  expect(await chapters.count()).toBeGreaterThanOrEqual(12);
+  await expect(chapters.first()).toContainText('Le jour où j’ai cessé d’avoir peur de l’IA');
+});
+
+test('article links to its series and shows prev/next', async ({ page }) => {
+  await page.goto('/journal/le-code-propre-n-est-pas-le-craft');
+  await expect(page.locator('a[href="/series/le-monde-du-dev-sous-choc"]')).toBeVisible();
+  await expect(page.getByTestId('chapter-prev')).toBeVisible();
+  await expect(page.getByTestId('chapter-next')).toBeVisible();
+});
+
+test('EN series detail renders chapters', async ({ page }) => {
+  await page.goto('/en/series/le-monde-du-dev-sous-choc');
+  const chapters = page.getByTestId('chapter-link');
+  expect(await chapters.count()).toBeGreaterThanOrEqual(12);
+  await expect(chapters.first()).toContainText('The Day I Stopped Being Afraid of AI');
+});
