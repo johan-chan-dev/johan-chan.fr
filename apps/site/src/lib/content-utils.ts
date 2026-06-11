@@ -128,3 +128,22 @@ export function groupByYear(items: FeedItem[]): FeedRow[] {
     return { item, year, firstOfYear };
   });
 }
+
+export type LensState =
+  | { lens: 'temps' }
+  | { lens: 'reg'; value: Registre }
+  | { lens: 'tag'; value: string };
+
+export function parseLens(params: URLSearchParams): LensState {
+  const reg = params.get('reg');
+  if (reg === 'refl' || reg === 'design' || reg === 'impl') return { lens: 'reg', value: reg };
+  const tag = params.get('tag');
+  if (tag) return { lens: 'tag', value: tag };
+  return { lens: 'temps' };
+}
+
+export function lensToParams(state: LensState): string {
+  if (state.lens === 'reg') return `?reg=${state.value}`;
+  if (state.lens === 'tag') return `?tag=${encodeURIComponent(state.value)}`;
+  return '';
+}
