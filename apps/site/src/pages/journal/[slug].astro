@@ -3,7 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import { Image, getImage } from 'astro:assets';
 import { copy, fmtDate, kindClass } from '../../lib/copy';
 import { getArticles, getArticleEntry, hasTranslation } from '../../lib/content';
-import { relatedArticles } from '../../lib/content-utils';
+import { relatedArticles, seriesChapters } from '../../lib/content-utils';
 import type { Lang } from '../../i18n/ui';
 
 export async function getStaticPaths() {
@@ -18,6 +18,13 @@ const C = copy[lang];
 const hue = kindClass[article.registre];
 const all = await getArticles('fr');
 const related = relatedArticles(article, all);
+let prevCh, nextCh;
+if (article.series) {
+  const chapters = seriesChapters(article.series.id, all);
+  const i = chapters.findIndex((c) => c.slug === article.slug);
+  prevCh = chapters[i - 1];
+  nextCh = chapters[i + 1];
+}
 const ogImage = article.image
   ? new URL((await getImage({ src: article.image, format: 'webp', width: 1200 })).src, Astro.site).href
   : undefined;
@@ -30,7 +37,7 @@ const ogImage = article.image
     </span>
   </div>
   {article.series && (
-    <div class={`atl-meta mb-3.5 uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</div>
+    <a href={`/series/${article.series.id}`} class={`atl-meta mb-3.5 inline-block uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</a>
   )}
   <h1 class="font-display text-[30px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[42px]" style="text-wrap:balance">{article.title}</h1>
   <div class="atl-meta my-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px">
@@ -57,6 +64,22 @@ const ogImage = article.image
         </span>
       </span>
       <span class="atl-meta whitespace-nowrap text-accent" style="font-size:12px">git clone →</span>
+    </div>
+  )}
+  {article.series && (prevCh || nextCh) && (
+    <div class="mt-9 grid grid-cols-2 gap-3">
+      {prevCh ? (
+        <a href={`/journal/${prevCh.slug}`} data-testid="chapter-prev" class="atl-row rounded-[11px] border border-line bg-surf px-4 py-3">
+          <span class="atl-meta block uppercase text-faint" style="font-size:10px;letter-spacing:.08em">← {C.chapter} {prevCh.order}</span>
+          <span class="mt-1 block font-display text-[15px] font-medium leading-[1.16] text-ink">{prevCh.title}</span>
+        </a>
+      ) : <span></span>}
+      {nextCh && (
+        <a href={`/journal/${nextCh.slug}`} data-testid="chapter-next" class="atl-row rounded-[11px] border border-line bg-surf px-4 py-3 text-right">
+          <span class="atl-meta block uppercase text-faint" style="font-size:10px;letter-spacing:.08em">{C.chapter} {nextCh.order} →</span>
+          <span class="mt-1 block font-display text-[15px] font-medium leading-[1.16] text-ink">{nextCh.title}</span>
+        </a>
+      )}
     </div>
   )}
   {related.length > 0 && (
