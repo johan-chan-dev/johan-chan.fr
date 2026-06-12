@@ -31,15 +31,18 @@ test('theme toggle switches and persists across reload', async ({ page }) => {
   await expect(html).toHaveAttribute('data-theme', after!);
 });
 
-test('journal list renders all pieces and filters by register', async ({ page }) => {
+test('journal list: lens switcher filters by register and collapses series', async ({ page }) => {
   await page.goto('/journal');
-  const rows = page.getByTestId('piece-row');
-  await expect(rows.first()).toBeVisible();
-  const total = await rows.count();
-  expect(total).toBeGreaterThanOrEqual(15); // 15 imported articles + showcase
-  await page.locator('[data-reg="design"]').click();
+  await page.waitForLoadState('networkidle');
+  // Temps (default): the collapsed series row is visible, chapter rows are hidden
+  await expect(page.locator('[data-series-row]').first()).toBeVisible();
+  await expect(page.locator('[data-testid="piece-row"][data-chapter]').first()).toBeHidden();
+  // switch to the refl register lens
+  await page.locator('[data-lens-btn="reg"][data-lens-val="refl"]').click();
+  await expect(page).toHaveURL(/\?reg=refl$/);
+  await expect(page.locator('[data-series-row]').first()).toBeHidden();
   const visible = await page.locator('[data-testid="piece-row"]:visible').count();
-  expect(visible).toBeLessThan(total);
+  expect(visible).toBeGreaterThan(0);
 });
 
 test('imported article renders title, body, hero image, and back link', async ({ page }) => {
@@ -90,7 +93,7 @@ test('view transitions: interactivity + theme survive in-app navigation', async 
   // filters must re-initialise on the swapped-in journal page
   const rows = page.getByTestId('piece-row');
   const total = await rows.count();
-  await page.locator('[data-reg="design"]').click();
+  await page.locator('[data-lens-btn="reg"][data-lens-val="design"]').click();
   const visible = await page.locator('[data-testid="piece-row"]:visible').count();
   expect(visible).toBeLessThan(total);
 });
@@ -184,4 +187,28 @@ test('EN series detail renders chapters', async ({ page }) => {
   const chapters = page.getByTestId('chapter-link');
   expect(await chapters.count()).toBeGreaterThanOrEqual(12);
   await expect(chapters.first()).toContainText('The Day I Stopped Being Afraid of AI');
+});
+
+test('theme lens filters by tag and syncs the URL', async ({ page }) => {
+  await page.goto('/journal');
+  await page.waitForLoadState('networkidle');
+  await page.locator('[data-theme-toggle]').click();
+  await page.locator('[data-lens-btn="tag"][data-lens-val="craft"]').first().click();
+  await expect(page).toHaveURL(/\?tag=craft$/);
+  // reload restores the filtered state from the URL
+  await page.goto('/journal?tag=craft');
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('[data-series-row]').first()).toBeHidden();
+  const visible = await page.locator('[data-testid="piece-row"]:visible').count();
+  expect(visible).toBeGreaterThan(0);
+});
+
+test('Séries link points to the series index', async ({ page }) => {
+  await page.goto('/journal');
+  await expect(page.locator('[data-lens] a[href="/series"]')).toBeVisible();
+});
+
+test('journal has a canonical link to /journal', async ({ page }) => {
+  await page.goto('/journal');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/journal$/);
 });
