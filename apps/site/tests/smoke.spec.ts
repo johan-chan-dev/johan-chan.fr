@@ -126,7 +126,7 @@ test('language switch from a translated imported article lands on its EN sibling
   await page.goto('/journal/le-code-propre-n-est-pas-le-craft');
   await expect(page.getByTestId('lang-switch')).toBeVisible();
   await page.getByTestId('lang-switch').click();
-  await expect(page).toHaveURL('/en/journal/le-code-propre-n-est-pas-le-craft');
+  await expect(page).toHaveURL(/\/en\/journal\/le-code-propre-n-est-pas-le-craft\/?$/);
   await expect(page.getByRole('heading', { level: 1 })).toContainText('Clean Code');
 });
 
@@ -211,4 +211,30 @@ test('Séries link points to the series index', async ({ page }) => {
 test('journal has a canonical link to /journal', async ({ page }) => {
   await page.goto('/journal');
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/journal$/);
+});
+
+test('search returns a matching article and clearing restores the feed', async ({ page }) => {
+  await page.goto('/journal');
+  await page.waitForLoadState('networkidle');
+  const input = page.locator('[data-search-input]');
+  await input.fill('Python');
+  await expect(page.locator('[data-search-results] [data-search-result]').first()).toBeVisible();
+  await expect(page.locator('[data-search-results]')).toContainText('Boring languages win');
+  await expect(page.locator('[data-feed]')).toBeHidden();
+  await input.fill('');
+  await expect(page.locator('[data-feed]')).toBeVisible();
+});
+
+test('clicking a search result navigates to the article', async ({ page }) => {
+  await page.goto('/journal');
+  await page.waitForLoadState('networkidle');
+  await page.locator('[data-search-input]').fill('Python');
+  await page.locator('[data-search-results] [data-search-result]').first().click();
+  await expect(page).toHaveURL(/\/journal\/boring-languages-win\/?$/);
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Boring languages win');
+});
+
+test('pagefind index is served on the build', async ({ page }) => {
+  const res = await page.request.get('/pagefind/pagefind.js');
+  expect(res.status()).toBe(200);
 });
