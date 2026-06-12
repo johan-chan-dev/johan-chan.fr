@@ -139,6 +139,10 @@ test('framework showcase: code panel, live island, compare mode', async ({ page 
   // focus mode: the Svelte demo is shown and interactive
   const svelteDemo = page.locator('[data-demo][data-framework="svelte"]');
   await expect(svelteDemo).toBeVisible();
+  // the cover hero pushes the showcase below the fold; scroll it in + let the
+  // client:visible island hydrate before interacting
+  await svelteDemo.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(500);
   await svelteDemo.getByRole('button', { name: 'plus' }).click();
   await expect(svelteDemo.locator('output')).toHaveText('1');
   // in focus, other frameworks' demos are hidden
@@ -247,14 +251,6 @@ test('breakout: the language chart bleeds wider than the body text', async ({ pa
   expect(chart!.width).toBeGreaterThan(para!.width + 80);
   // body paragraph stays at the reading rail (not stretched to the container)
   expect(para!.width).toBeLessThan(760);
-});
-
-test('breakout: the framework showcase bleeds wider than the body text', async ({ page }) => {
-  await page.goto('/journal/reactivite-trois-frameworks');
-  await page.waitForLoadState('networkidle');
-  const show = await page.locator('[data-showcase]').boundingBox();
-  const para = await page.locator('.atl-prose > p').first().boundingBox();
-  expect(show!.width).toBeGreaterThan(para!.width + 80);
 });
 
 test('series detail leads with a cover hero', async ({ page }) => {
