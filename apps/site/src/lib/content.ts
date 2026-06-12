@@ -1,6 +1,18 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 import type { Article, Project, Series } from './content-utils';
+
+const seriesCovers = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/series/*.{webp,png,jpg,jpeg}',
+  { eager: true },
+);
+function seriesCover(id: string): ImageMetadata | undefined {
+  const hit = Object.entries(seriesCovers).find(
+    ([p]) => p.split('/').pop()?.replace(/\.[^.]+$/, '') === id,
+  );
+  return hit?.[1].default;
+}
 import type { SeriesIndexEntry } from './content-utils';
 import { byDateDesc, localeOf, slugOf, seriesChapters, seriesIndex } from './content-utils';
 import type { Lang } from '../i18n/ui';
@@ -84,5 +96,5 @@ export async function getSeriesEntry(slug: string, lang: Lang) {
   const meta = await getSeries(slug);
   const chapters = seriesChapters(slug, await getArticles(lang));
   if (!meta || chapters.length === 0) throw new Error(`Series not found: ${slug} (${lang})`);
-  return { series: meta, chapters };
+  return { series: meta, chapters, cover: seriesCover(slug) };
 }
