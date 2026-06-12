@@ -1,7 +1,7 @@
 ---
 import PageLayout from '../../../layouts/PageLayout.astro';
 import { getImage } from 'astro:assets';
-import ArticleHero from '../../../components/ArticleHero.astro';
+import ContentHero from '../../../components/ContentHero.astro';
 import { copy, fmtDate, kindClass } from '../../../lib/copy';
 import { getArticles, getArticleEntry, hasTranslation } from '../../../lib/content';
 import { relatedArticles, seriesChapters } from '../../../lib/content-utils';
@@ -16,7 +16,6 @@ const { slug } = Astro.params;
 const { article, Content } = await getArticleEntry(slug!, 'en');
 const translated = await hasTranslation(slug!, 'en', 'articles');
 const C = copy[lang];
-const hue = kindClass[article.registre];
 const all = await getArticles('en');
 const related = relatedArticles(article, all);
 let prevCh, nextCh;
@@ -37,28 +36,20 @@ const ogImage = article.image
     </div>
 
     <div data-pagefind-body class="mt-4">
-      {article.image ? (
-        <ArticleHero image={article.image} imageFocus={article.imageFocus}
-          title={article.title} excerpt={article.excerpt} date={article.date}
-          readingTime={article.readingTime} tags={article.tags} registre={article.registre}
-          series={article.series} order={article.order} lang={lang} />
-      ) : (
-        <div class="mx-auto max-w-[680px]">
+      <ContentHero image={article.image} imageFocus={article.imageFocus} title={article.title} excerpt={article.excerpt}>
+        <Fragment slot="kicker">
           {article.series ? (
-            <a href={`/en/series/${article.series.id}`} class={`atl-meta mb-3.5 inline-block uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</a>
+            <a href={`/en/series/${article.series.id}`} style="color:inherit">{C.series} · {article.series.title}, {C.chapter} {article.order}</a>
           ) : (
-            <span class={`atl-meta mb-3.5 inline-flex items-center gap-2 uppercase ${hue}`} style="font-size:11px;letter-spacing:.1em">
-              <span class="h-[7px] w-[7px] rounded-full" style="background: currentColor"></span>{C.kind[article.registre]}
-            </span>
+            <span class="inline-flex items-center gap-2"><span class="h-[7px] w-[7px] rounded-full" style="background: currentColor"></span>{C.kind[article.registre]}</span>
           )}
-          <h1 class="font-display text-[31px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[44px]" style="text-wrap:balance">{article.title}</h1>
-          {article.excerpt && <p class="mt-4 max-w-[600px] font-text text-[17px] leading-[1.5] text-ink2">{article.excerpt}</p>}
-          <div class="atl-meta mt-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px">
-            <span>{fmtDate(article.date, lang)}</span><span>·</span><span>{article.readingTime} {C.read}</span><span>·</span>
-            <span class="flex gap-2">{article.tags.map((tg) => <span class="text-ink2">#{tg.toLowerCase()}</span>)}</span>
-          </div>
-        </div>
-      )}
+        </Fragment>
+        <Fragment slot="meta">
+          <span>{fmtDate(article.date, lang)}</span><span>·</span><span>{article.readingTime} {C.read}</span>
+          {article.tags.length > 0 && <span>·</span>}
+          <span class="flex flex-wrap gap-2">{article.tags.map((tg) => <span>#{tg.toLowerCase()}</span>)}</span>
+        </Fragment>
+      </ContentHero>
 
       <div class="mt-9">
         <div class="atl-prose font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[17.5px]">
