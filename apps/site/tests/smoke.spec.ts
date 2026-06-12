@@ -238,3 +238,21 @@ test('pagefind index is served on the build', async ({ page }) => {
   const res = await page.request.get('/pagefind/pagefind.js');
   expect(res.status()).toBe(200);
 });
+
+test('breakout: the language chart bleeds wider than the body text', async ({ page }) => {
+  await page.goto('/journal/boring-languages-win');
+  await page.waitForLoadState('networkidle');
+  const chart = await page.locator('.atl-bubblechart').first().boundingBox();
+  const para = await page.locator('.atl-prose > p').first().boundingBox();
+  expect(chart!.width).toBeGreaterThan(para!.width + 80);
+  // body paragraph stays at the reading rail (not stretched to the container)
+  expect(para!.width).toBeLessThan(760);
+});
+
+test('breakout: the framework showcase bleeds wider than the body text', async ({ page }) => {
+  await page.goto('/journal/reactivite-trois-frameworks');
+  await page.waitForLoadState('networkidle');
+  const show = await page.locator('[data-showcase]').boundingBox();
+  const para = await page.locator('.atl-prose > p').first().boundingBox();
+  expect(show!.width).toBeGreaterThan(para!.width + 80);
+});
