@@ -25,6 +25,7 @@ export interface Copy {
   footer: { kicker: string; line: string; sub: string };
   series: string; chapter: string;
   seriesIndex: { title: string; sub: string; back: string; chapters: string };
+  lens: { browse: string; temps: string; theme: string; seriesLink: string };
 }
 
 export const kindLabel: Record<Lang, Record<Registre, string>> = {
@@ -90,6 +91,7 @@ export const copy: Record<Lang, Copy> = {
     footer: { kicker: 'Travaillons ensemble', line: 'Un projet à construire ? Écrivez-moi.', sub: 'Dites-moi ce que vous voulez construire ; on cadre le reste ensemble.' },
     series: 'fil', chapter: 'chap.',
     seriesIndex: { title: 'Séries', sub: 'Des fils à suivre dans l’ordre, du premier au dernier chapitre.', back: '← les séries', chapters: 'chapitres' },
+    lens: { browse: 'Parcourir', temps: 'Temps', theme: 'Thème', seriesLink: 'Séries →' },
   },
   en: {
     name: 'Johan Chan',
@@ -134,5 +136,6 @@ export const copy: Record<Lang, Copy> = {
     footer: { kicker: 'Let’s work together', line: 'Got something to build? Write me.', sub: 'Tell me what you want to build; we’ll shape the rest together.' },
     series: 'series', chapter: 'ch.',
     seriesIndex: { title: 'Series', sub: 'Threads to follow in order, first chapter to last.', back: '← the series', chapters: 'chapters' },
+    lens: { browse: 'Browse', temps: 'Time', theme: 'Theme', seriesLink: 'Series →' },
   },
 };
