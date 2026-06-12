@@ -1,5 +1,7 @@
 ---
 import PageLayout from '../../../layouts/PageLayout.astro';
+import { getImage } from 'astro:assets';
+import ContentHero from '../../../components/ContentHero.astro';
 import { copy, kindClass } from '../../../lib/copy';
 import { getProjects, getProjectEntry, getArticles, hasTranslation } from '../../../lib/content';
 import { articlesBySlugs } from '../../../lib/content-utils';
@@ -15,49 +17,45 @@ const { project, Content } = await getProjectEntry(slug!, 'en');
 const translated = await hasTranslation(slug!, 'en', 'projects');
 const C = copy[lang];
 const related = articlesBySlugs(project.relatedArticles, await getArticles('en'));
+const ogImage = project.image
+  ? new URL((await getImage({ src: project.image, format: 'webp', width: 1200 })).src, Astro.site).href
+  : undefined;
 ---
-<PageLayout lang={lang} current="work" title={`${project.name} — ${C.name}`} width="reading" hasTranslation={translated}>
-  <div class="mb-6 flex items-center justify-between">
-    <a href="/en/projets" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.caseStudy.back}</a>
-    <span class="atl-meta rounded-full border border-accent px-2.5 uppercase text-accent" style="font-size:10.5px;letter-spacing:.12em">{C.projects.badge}</span>
-  </div>
-  <h1 class="font-display text-[32px] font-bold leading-[1.02] tracking-[-.03em] text-ink md:text-[46px]">{project.name}</h1>
-  <p class="atl-body mt-3.5 mb-6 max-w-[620px] text-ink2 md:text-[19px]" style="line-height:1.5">{project.oneliner}</p>
-  <div class="flex flex-wrap gap-x-10 gap-y-4 border-y border-line py-4">
-    <div>
-      <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">rôle</div>
-      <div class="atl-meta text-ink" style="font-size:12.5px">{project.role}</div>
+<PageLayout lang={lang} current="work" title={`${project.name} — ${C.name}`} description={project.oneliner} ogImage={ogImage} hasTranslation={translated}>
+  <article class="atl-rise pt-8 md:pt-10">
+    <div class="mx-auto max-w-[680px]">
+      <a href="/en/projets" class="atl-meta inline-flex items-center gap-2 text-ink2" style="font-size:12px">{C.caseStudy.back}</a>
     </div>
-    <div>
-      <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">année</div>
-      <div class="atl-meta text-ink" style="font-size:12.5px">{project.year}</div>
-    </div>
-    <div>
-      <div class="atl-meta mb-1.5 uppercase text-faint" style="font-size:10px;letter-spacing:.12em">stack</div>
-      <div class="atl-meta text-ink" style="font-size:12.5px">{project.stack.join(' · ')}</div>
-    </div>
-  </div>
-  <div class="mt-6 flex h-[180px] items-end rounded-[12px] border border-line bg-bg2 p-3 md:h-[300px]"
-    style="background-image: repeating-linear-gradient(135deg, var(--hair) 0 1px, transparent 1px 9px)">
-    <span class="atl-meta uppercase text-faint" style="font-size:10.5px;letter-spacing:.1em">visuel du projet</span>
-  </div>
-  <div class="atl-prose mt-7 font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[18px]">
-    <Content />
-  </div>
-  {related.length > 0 && (
-    <div class="mt-9 border-t border-line pt-5">
-      <div class="atl-meta mb-1.5 uppercase text-ink2" style="font-size:11px;letter-spacing:.12em">{C.caseStudy.whatHelped}</div>
-      <p class="font-text text-[14px] text-faint" style="margin:0 0 16px">{C.caseStudy.whatHelpedSub}</p>
-      <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {related.map((rp) => (
-          <a href={`/en/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
-            <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.registre]}`} style="font-size:10px;letter-spacing:.08em">
-              <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.registre]}
-            </span>
-            <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp.title}</span>
-          </a>
-        ))}
+    <div data-pagefind-body class="mt-4">
+      <ContentHero image={project.image} imageFocus={project.imageFocus} title={project.name} excerpt={project.oneliner}>
+        <Fragment slot="kicker">{C.projects.badge}</Fragment>
+        <Fragment slot="meta">
+          <span>{project.year}</span><span>·</span><span>{project.role}</span>
+          {project.stack.length > 0 && <span>·</span>}
+          <span class="flex flex-wrap gap-2">{project.stack.map((s) => <span>{s}</span>)}</span>
+        </Fragment>
+      </ContentHero>
+      <div class="mt-9">
+        <div class="atl-prose font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[18px]">
+          <Content />
+        </div>
       </div>
     </div>
-  )}
+    {related.length > 0 && (
+      <div class="mt-9 border-t border-line pt-5">
+        <div class="atl-meta mb-1.5 uppercase text-ink2" style="font-size:11px;letter-spacing:.12em">{C.caseStudy.whatHelped}</div>
+        <p class="font-text text-[14px] text-faint" style="margin:0 0 16px">{C.caseStudy.whatHelpedSub}</p>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {related.map((rp) => (
+            <a href={`/en/journal/${rp.slug}`} class="atl-row block rounded-[11px] border border-line bg-surf px-3.5 py-3.5">
+              <span class={`atl-meta inline-flex items-center gap-[7px] uppercase ${kindClass[rp.registre]}`} style="font-size:10px;letter-spacing:.08em">
+                <span class="h-1.5 w-1.5 rounded-full" style="background: currentColor"></span>{C.kind[rp.registre]}
+              </span>
+              <span class="mt-2 block font-display text-[17px] font-medium leading-[1.16] text-ink" style="text-wrap:pretty">{rp.title}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+  </article>
 </PageLayout>
