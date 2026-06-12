@@ -256,3 +256,12 @@ test('breakout: the framework showcase bleeds wider than the body text', async (
   const para = await page.locator('.atl-prose > p').first().boundingBox();
   expect(show!.width).toBeGreaterThan(para!.width + 80);
 });
+
+test('series detail leads with a cover hero', async ({ page }) => {
+  await page.goto('/series/le-monde-du-dev-sous-choc');
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('article figure img').first()).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Le monde du dev sous choc');
+  await expect(page.locator('article')).toContainText('chapitres');
+  expect(await page.getByTestId('chapter-link').count()).toBeGreaterThanOrEqual(12);
+});
