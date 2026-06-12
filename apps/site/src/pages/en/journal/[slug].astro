@@ -39,6 +39,7 @@ const ogImage = article.image
   {article.series && (
     <a href={`/en/series/${article.series.id}`} class={`atl-meta mb-3.5 inline-block uppercase ${hue}`} style="font-size:11px;letter-spacing:.08em">{C.series} · {article.series.title}, {C.chapter} {article.order}</a>
   )}
+  <div data-pagefind-body>
   <h1 class="font-display text-[30px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[42px]" style="text-wrap:balance">{article.title}</h1>
   <div class="atl-meta my-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px">
     <span>{fmtDate(article.date, lang)}</span><span>·</span><span>{article.readingTime} {C.read}</span><span>·</span>
@@ -53,6 +54,7 @@ const ogImage = article.image
   )}
   <div class="atl-prose font-text text-[16.5px] leading-[1.7] text-ink2 md:text-[17.5px]">
     <Content />
+  </div>
   </div>
   {article.repo && (
     <div class="mt-7 flex items-center justify-between gap-3 rounded-[12px] border border-line bg-surf px-4 py-4">
