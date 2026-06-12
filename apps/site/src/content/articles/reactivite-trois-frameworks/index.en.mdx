@@ -4,6 +4,7 @@ registre: design
 date: "2026-06-09"
 tags: [Reactivity, Frameworks]
 readingTime: 7
+image: ./images/hero.webp
 ---
 import FrameworkShowcase from '../../../components/content/FrameworkShowcase.astro';
 import Demo from '../../../components/content/Demo.astro';
@@ -14,7 +15,7 @@ import { NgCounter } from './counter.angular';  import ngSrc from './counter.ang
 
 A counter is trivial — but how you get there says a lot about each framework’s philosophy. The same pattern, four times:
 
-<FrameworkShowcase class="bleed">
+<FrameworkShowcase>
   <Demo framework="svelte" source={svelteSrc}><Svelte client:visible /></Demo>
   <Demo framework="vue" source={vueSrc}><Vue client:visible /></Demo>
   <Demo framework="react" source={reactSrc}><React client:visible /></Demo>
