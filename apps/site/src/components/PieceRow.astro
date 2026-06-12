@@ -10,7 +10,7 @@ const hue = kindClass[article.registre];
 const dotShape = article.registre === 'impl' ? 'rounded-sm' : 'rounded-full';
 const dotRotate = article.registre === 'design' ? 'rotate-45' : '';
 ---
-<a href={href} data-testid="piece-row" data-kind={article.registre} data-tags={article.tags.join('|')}
+<a href={href} data-testid="piece-row" data-kind={article.registre} data-tags={article.tags.join('|')} data-chapter={article.series ? '' : undefined} data-series={article.series ? article.series.id : undefined}
   class="atl-row grid grid-cols-1 items-baseline gap-2 border-t border-line py-5 md:grid-cols-[128px_1fr_auto] md:gap-6 md:py-[26px]">
   <div class="flex flex-col gap-[7px]">
     <span class={`atl-meta inline-flex items-center gap-[7px] ${hue}`} style="letter-spacing:.04em">
