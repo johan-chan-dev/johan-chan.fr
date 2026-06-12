@@ -1,8 +1,10 @@
 ---
 // Wraps N <Demo> children. data-mode drives focus(tabs)/compare(grid) via CSS.
 // The controls bar (tabs + Comparer) is built client-side from the rendered demos.
+interface Props { class?: string }
+const { class: className } = Astro.props;
 ---
-<div class="atl-showcase my-7" data-showcase data-mode="focus">
+<div class:list={["atl-showcase my-7", className]} data-showcase data-mode="focus">
   <div class="atl-showcase-controls flex flex-wrap items-center gap-2" data-controls></div>
   <div class="atl-showcase-demos mt-3 flex flex-col gap-4"><slot /></div>
 </div>

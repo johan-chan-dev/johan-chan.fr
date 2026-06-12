@@ -1,9 +1,9 @@
 ---
-interface Props { title?: string; type?: 'note' | 'tip' | 'warning' }
-const { title, type = 'note' } = Astro.props;
+interface Props { title?: string; type?: 'note' | 'tip' | 'warning'; class?: string }
+const { title, type = 'note', class: className } = Astro.props;
 ---
 <aside
-  class="atl-callout my-7 rounded-[12px] border border-line border-l-[3px] border-l-accent bg-surf px-4 py-3.5"
+  class:list={["atl-callout my-7 rounded-[12px] border border-line border-l-[3px] border-l-accent bg-surf px-4 py-3.5", className]}
   data-testid="callout"
   data-type={type}
 >
