@@ -81,6 +81,10 @@ html { background: var(--bg); color: var(--ink); font-family: var(--font-text); 
   .atl-livedot, .atl-rise, .atl-sheet, .atl-row { animation: none; transition: none; }
 }
 
+.atl-prose { display: grid; grid-template-columns: 1fr min(680px, 100%) 1fr; }
+.atl-prose > * { grid-column: 2; min-width: 0; }
+.atl-prose > .bleed { grid-column: 1 / -1; }
+.atl-prose > pre { overflow-x: auto; }
 .atl-prose > p { margin: 0 0 18px; }
 .atl-prose > p:first-child { font-weight: 500; color: var(--ink); }
 
