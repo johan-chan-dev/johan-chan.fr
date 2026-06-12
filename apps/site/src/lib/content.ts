@@ -41,6 +41,8 @@ function toProject(entry: ProjectEntry): Project {
   return {
     slug: slugOf(entry.id), name: d.name, year: d.year, role: d.role, oneliner: d.oneliner,
     stack: d.stack, demo: d.demo, relatedArticles: d.relatedArticles.map((r) => r.id),
+    image: d.image,
+    imageFocus: d.imageFocus,
   };
 }
 
