@@ -35,7 +35,7 @@ const projects = defineCollection({
     generateId: ({ entry }) =>
       entry.replace(/\/index\.en\.mdx?$/, '/en').replace(/\/index\.mdx?$/, ''),
   }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     name: z.string().min(1),
     year: z.string(),
     role: z.string(),
@@ -44,6 +44,8 @@ const projects = defineCollection({
     demo: z.boolean().default(false),
     relatedArticles: z.array(reference('articles')).default([]),
     translationId: z.string().optional(),
+    image: image().optional(),
+    imageFocus: z.enum(['center', 'top', 'bottom']).default('center'),
   }),
 });
 

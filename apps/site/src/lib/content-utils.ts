@@ -26,6 +26,8 @@ export interface Project {
   stack: string[];
   demo: boolean;
   relatedArticles: string[]; // article slugs
+  image?: ImageMetadata;
+  imageFocus?: 'center' | 'top' | 'bottom';
 }
 export interface Series { id: string; title: string; description: string }
 
