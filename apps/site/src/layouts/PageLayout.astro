@@ -19,7 +19,7 @@ const { lang, current, title, description, ogImage, width = 'wide', hasTranslati
   <Header lang={lang} current={current} hasTranslation={hasTranslation} />
   <main class:list={["atl-container pb-16 md:pb-24", width === 'reading' && 'atl-rise']}>
     {width === 'reading' ? (
-      <article class="mx-auto max-w-[880px] pt-8 md:pt-10">
+      <article class="mx-auto max-w-[680px] pt-8 md:pt-10">
         <slot />
       </article>
     ) : (
