@@ -46,7 +46,7 @@ const ogImage = article.image
     <span class="flex gap-2">{article.tags.map((tg) => <span class="text-ink2">#{tg.toLowerCase()}</span>)}</span>
   </div>
   {article.image && (
-    <figure class="mb-7 h-[clamp(280px,46vw,460px)] overflow-hidden rounded-[14px] border border-line">
+    <figure class="mb-7 h-[clamp(300px,50vw,480px)] overflow-hidden rounded-[14px] border border-line">
       <Image src={article.image} alt={article.title} widths={[480, 800, 1200]}
         sizes="(min-width: 768px) 680px, 100vw"
         class="h-full w-full object-cover" style={`object-position: ${article.imageFocus ?? 'center'}`} />
