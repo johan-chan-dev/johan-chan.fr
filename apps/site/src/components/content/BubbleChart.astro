@@ -12,8 +12,9 @@ interface Props {
   quadrants: [string, string, string, string];
   bubbles: Bubble[];
   arrows?: Arrow[];
+  class?: string;
 }
-const { xLabel, yLabel, quadrants, bubbles, arrows = [] } = Astro.props;
+const { xLabel, yLabel, quadrants, bubbles, arrows = [], class: className } = Astro.props;
 
 const W = 380, H = 360;
 const m = { top: 24, right: 18, bottom: 38, left: 36 };
@@ -62,7 +63,7 @@ const points = bubbles.map((b) => {
   return { label: b.label, cx, cy, rad, ...geom[place] };
 });
 ---
-<figure class="atl-bubblechart my-7 overflow-hidden rounded-[14px] border border-line bg-surf p-3 md:p-5">
+<figure class:list={["atl-bubblechart my-7 overflow-hidden rounded-[14px] border border-line bg-surf p-3 md:p-5", className]}>
   <svg viewBox={`0 0 ${W} ${H}`} class="h-auto w-full" role="img"
     aria-label={`${xLabel} vs ${yLabel} — ${bubbles.map((b) => b.label).join(', ')}`}>
     <defs>
