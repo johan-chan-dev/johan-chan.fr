@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+interface Props {
+  image?: ImageMetadata;
+  imageFocus?: 'center' | 'top' | 'bottom';
+  title: string;
+  excerpt?: string;
+}
+const { image, imageFocus = 'center', title, excerpt } = Astro.props;
+---
+{image ? (
+  <figure
+    class="relative -mx-[22px] mb-10 flex min-h-[480px] flex-col justify-end overflow-hidden rounded-[16px] md:-mx-[56px]"
+  >
+    <Image src={image} alt={title} widths={[640, 960, 1280, 1600]} sizes="(min-width: 1136px) 1080px, 100vw"
+      class="absolute inset-0 h-full w-full object-cover" style={`object-position: ${imageFocus}`} />
+    <div class="absolute inset-0"
+      style="background: linear-gradient(to bottom, transparent 0%, transparent 28%, rgba(0,0,0,.5) 62%, rgba(0,0,0,.86) 100%)"></div>
+    <div class="relative z-10 mx-auto w-full max-w-[680px] px-[22px] pb-9 pt-12 md:px-0"
+      style="color:#ededed;text-shadow:0 1px 6px rgba(0,0,0,.5)">
+      <div class="atl-meta mb-3 uppercase" style="font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,.82)"><slot name="kicker" /></div>
+      <h1 class="font-display text-[31px] font-bold leading-[1.05] tracking-[-.03em] md:text-[46px]" style="text-wrap:balance">{title}</h1>
+      {excerpt && (
+        <p class="mt-4 max-w-[600px] font-text text-[16px] leading-[1.5] md:text-[18px]" style="color:rgba(255,255,255,.9)">{excerpt}</p>
+      )}
+      <div class="atl-meta mt-5 flex flex-wrap items-center gap-3" style="font-size:11.5px;color:rgba(255,255,255,.72)"><slot name="meta" /></div>
+    </div>
+  </figure>
+) : (
+  <div class="mx-auto max-w-[680px]">
+    <div class="atl-meta mb-3.5 uppercase text-accent" style="font-size:11px;letter-spacing:.08em"><slot name="kicker" /></div>
+    <h1 class="font-display text-[31px] font-bold leading-[1.04] tracking-[-.03em] text-ink md:text-[44px]" style="text-wrap:balance">{title}</h1>
+    {excerpt && <p class="mt-4 max-w-[600px] font-text text-[17px] leading-[1.5] text-ink2">{excerpt}</p>}
+    <div class="atl-meta mt-5 flex flex-wrap items-center gap-3.5 text-faint" style="font-size:11.5px"><slot name="meta" /></div>
+  </div>
+)}
