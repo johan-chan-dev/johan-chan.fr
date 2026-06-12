@@ -81,7 +81,7 @@ html { background: var(--bg); color: var(--ink); font-family: var(--font-text); 
   .atl-livedot, .atl-rise, .atl-sheet, .atl-row { animation: none; transition: none; }
 }
 
-.atl-prose > p { margin: 0 0 18px; max-width: 660px; }
+.atl-prose > p { margin: 0 0 18px; }
 .atl-prose > p:first-child { font-weight: 500; color: var(--ink); }
 
 /* ---- framework showcase ---- */
