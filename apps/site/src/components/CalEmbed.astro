@@ -1,0 +1,102 @@
+---
+interface Props {
+  /** Cal event link, e.g. "johan.chan/30min" */
+  calLink: string;
+  /** Self-hosted Cal origin, e.g. "https://cal.lagraineducraft.fr" */
+  origin: string;
+  /** Embed namespace (one per event type) */
+  namespace?: string;
+}
+const { calLink, origin, namespace = '30min' } = Astro.props;
+---
+
+<div
+  id="cal-inline"
+  data-testid="cal-inline"
+  data-cal-link={calLink}
+  data-cal-origin={origin}
+  data-cal-namespace={namespace}
+  class="min-h-[600px] w-full overflow-hidden rounded-[14px] border border-line bg-surf"
+>
+</div>
+
+<script>
+  // Map the Atelier theme to Cal's light/dark.
+  function calTheme(): 'dark' | 'light' {
+    return document.documentElement.dataset.theme === 'atelier-dark' ? 'dark' : 'light';
+  }
+
+  // Cal.com official loader (structurally verbatim): creates window.Cal as a
+  // replaying queue and injects embed.js, so calls made before it loads are replayed.
+  function loadCal(origin: string) {
+    /* eslint-disable */
+    (function (C: any, A: string, L: string) {
+      const p = (a: any, ar: any) => { a.q.push(ar); };
+      const d = C.document;
+      C.Cal = C.Cal || function () {
+        const cal = C.Cal; const ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {}; cal.q = cal.q || [];
+          d.head.appendChild(d.createElement('script')).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api: any = function () { p(api, arguments); };
+          const ns = ar[1];
+          api.q = api.q || [];
+          if (typeof ns === 'string') {
+            cal.ns[ns] = cal.ns[ns] || api;
+            p(cal.ns[ns], ar);
+            p(cal, ['initNamespace', ns]);
+          } else { p(cal, ar); }
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, `${origin}/embed/embed.js`, 'init');
+    /* eslint-enable */
+  }
+
+  function mountCal() {
+    const el = document.getElementById('cal-inline');
+    if (!el || el.dataset.calMounted === 'true') return; // idempotent per DOM instance
+    const origin = el.dataset.calOrigin!;
+    const calLink = el.dataset.calLink!;
+    const namespace = el.dataset.calNamespace || '30min';
+    const theme = calTheme();
+    el.dataset.calTheme = theme; // deterministic record of the theme handed to Cal
+
+    loadCal(origin);
+    const Cal = (window as any).Cal;
+    Cal('init', namespace, { origin });
+    Cal.ns[namespace]('inline', {
+      elementOrSelector: '#cal-inline',
+      config: { layout: 'week_view', useSlotsViewOnSmallScreen: false, theme },
+      calLink,
+    });
+    Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
+    el.dataset.calMounted = 'true';
+  }
+
+  function rethemeCal() {
+    const el = document.getElementById('cal-inline');
+    const Cal = (window as any).Cal;
+    if (!el || el.dataset.calMounted !== 'true' || !Cal) return;
+    const namespace = el.dataset.calNamespace || '30min';
+    const theme = calTheme();
+    el.dataset.calTheme = theme;
+    Cal.ns[namespace]?.('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
+  }
+
+  // Runs on initial load and after every view-transition swap.
+  document.addEventListener('astro:page-load', mountCal);
+
+  // Re-theme the embed live when the visitor toggles the site theme. Register once.
+  if (!(window as any).__calThemeHook) {
+    (window as any).__calThemeHook = true;
+    new MutationObserver(rethemeCal).observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    });
+  }
+</script>
