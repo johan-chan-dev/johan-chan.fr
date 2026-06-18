@@ -41,3 +41,16 @@ test('FR /call survives a view transition without duplicating', async ({ page })
   await expect(page.getByTestId('cal-inline')).toHaveCount(1);
   await expect(page.getByTestId('cal-inline')).toHaveAttribute('data-cal-mounted', 'true');
 });
+
+test('EN /en/call renders English heading, embed, and is noindex', async ({ page }) => {
+  await page.goto('/en/call');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('find a moment');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  await expect(page.getByTestId('cal-inline')).toHaveAttribute('data-cal-mounted', 'true');
+});
+
+test('EN /en/call language switch points back to /call', async ({ page }) => {
+  await page.goto('/en/call');
+  await expect(page.getByTestId('lang-switch')).toHaveAttribute('href', /^\/call\/?$/);
+});
