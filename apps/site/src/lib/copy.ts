@@ -22,6 +22,7 @@ export interface Copy {
     defTitle: string; def: [string, string, string?, string?][];
     aiTitle: string; ai: string; openTitle: string; open: string; readMore: string;
   };
+  call: { kicker: string; lede: string; intro: string };
   footer: { kicker: string; line: string; sub: string };
   series: string; chapter: string;
   seriesIndex: { title: string; sub: string; back: string; chapters: string };
@@ -89,6 +90,11 @@ export const copy: Record<Lang, Copy> = {
       open: 'Je n’ai pas fini d’apprendre, et je le montre. Ce journal suit le travail au fur et à mesure, avec ses décisions, ses ratés et ses corrections. Un atelier ouvert, pas une vitrine.',
       readMore: 'Lire le journal',
     },
+    call: {
+      kicker: 'Réserver un appel',
+      lede: 'Réservons un moment.',
+      intro: 'Choisissez le créneau qui vous convient pour notre échange de 30 minutes.',
+    },
     footer: { kicker: 'Travaillons ensemble', line: 'Un projet à construire ? Écrivez-moi.', sub: 'Dites-moi ce que vous voulez construire ; on cadre le reste ensemble.' },
     series: 'fil', chapter: 'chap.',
     seriesIndex: { title: 'Séries', sub: 'Des fils à suivre dans l’ordre, du premier au dernier chapitre.', back: '← les séries', chapters: 'chapitres' },
@@ -134,6 +140,11 @@ export const copy: Record<Lang, Copy> = {
       openTitle: 'In the open',
       open: 'I’m not done learning, and I show it. This journal follows the work as it goes, with its decisions, its misses and its fixes. An open workshop, not a showcase.',
       readMore: 'Read the journal',
+    },
+    call: {
+      kicker: 'Book a call',
+      lede: 'Let’s find a moment.',
+      intro: 'Pick the slot that works for you for our 30-minute conversation.',
     },
     footer: { kicker: 'Let’s work together', line: 'Got something to build? Write me.', sub: 'Tell me what you want to build; we’ll shape the rest together.' },
     series: 'series', chapter: 'ch.',
