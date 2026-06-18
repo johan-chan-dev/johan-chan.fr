@@ -76,6 +76,18 @@ const config = {
 		paths: {
 			base: process.env.BASE_PATH ?? ''
 		},
+		// Pin the app version so the SvelteKit runtime global (__sveltekit_<hash>)
+		// is derived from a stable value, not the default Date.now(). Without this,
+		// the prerender pass (HTML) and the client-build pass (JS chunks) can resolve
+		// different app-ids — the HTML defines __sveltekit_A while a chunk reads
+		// __sveltekit_B, so globalThis.__sveltekit_B is undefined and reading `.env`
+		// on it throws at top-level module load, aborting hydration site-wide (the
+		// /call calendar embed silently never mounts). GITHUB_SHA gives a value that
+		// is stable within a deploy yet unique per deploy (so client-side update
+		// detection still works); falls back to a constant for local builds.
+		version: {
+			name: process.env.GITHUB_SHA ?? 'dev'
+		},
 		adapter: adapter({
 			pages: 'build',
 			assets: 'build',
