@@ -12,10 +12,11 @@ interface Props {
   width?: 'wide' | 'reading';
   hasTranslation?: boolean;
   canonical?: string;
+  noindex?: boolean;
 }
-const { lang, current, title, description, ogImage, width = 'wide', hasTranslation = true, canonical } = Astro.props;
+const { lang, current, title, description, ogImage, width = 'wide', hasTranslation = true, canonical, noindex = false } = Astro.props;
 ---
-<Base lang={lang} title={title} description={description} ogImage={ogImage} canonical={canonical}>
+<Base lang={lang} title={title} description={description} ogImage={ogImage} canonical={canonical} noindex={noindex}>
   <Header lang={lang} current={current} hasTranslation={hasTranslation} />
   <main class:list={["atl-container pb-16 md:pb-24", width === 'reading' && 'atl-rise']}>
     {width === 'reading' ? (

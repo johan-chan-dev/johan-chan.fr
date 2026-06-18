@@ -1,0 +1,17 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import CalEmbed from '../components/CalEmbed.astro';
+import { copy } from '../lib/copy';
+import type { Lang } from '../i18n/ui';
+const lang: Lang = 'fr';
+const C = copy[lang]; const K = C.call;
+---
+<PageLayout lang={lang} current="home" title={`${K.kicker} — ${C.name}`} noindex hasTranslation>
+  <section class="pt-10 md:pt-[60px]">
+    <h1 class="atl-lede m-0 max-w-[820px] text-ink">{K.lede}</h1>
+    <p class="atl-body mt-4 max-w-[820px] text-ink2 md:mt-[22px] md:text-[18px]" style="line-height:1.6">{K.intro}</p>
+  </section>
+  <section class="mt-8 md:mt-10">
+    <CalEmbed calLink="johan.chan/30min" origin="https://cal.lagraineducraft.fr" />
+  </section>
+</PageLayout>

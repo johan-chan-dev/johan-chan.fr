@@ -2,14 +2,15 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import type { Lang } from '../i18n/ui';
-interface Props { lang?: Lang; title?: string; description?: string; ogImage?: string; canonical?: string }
-const { lang = 'fr', title = 'Johan Chan', description, ogImage, canonical } = Astro.props;
+interface Props { lang?: Lang; title?: string; description?: string; ogImage?: string; canonical?: string; noindex?: boolean }
+const { lang = 'fr', title = 'Johan Chan', description, ogImage, canonical, noindex = false } = Astro.props;
 ---
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     {description && <meta name="description" content={description} />}
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
