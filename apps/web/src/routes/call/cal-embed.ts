@@ -74,10 +74,10 @@ export function mountCalInline({
 	Cal('init', namespace, { origin });
 	Cal.ns[namespace]('inline', {
 		elementOrSelector: selector,
-		config: { layout: 'week_view', useSlotsViewOnSmallScreen: false, theme },
+		config: { layout: 'month_view', useSlotsViewOnSmallScreen: true, theme },
 		calLink
 	});
-	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
+	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'month_view' });
 }
 
 /**
@@ -87,5 +87,5 @@ export function mountCalInline({
 export function updateCalTheme(namespace: string, theme: 'light' | 'dark'): void {
 	const Cal = window.Cal;
 	if (!Cal || !Cal.ns || !Cal.ns[namespace]) return;
-	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'week_view' });
+	Cal.ns[namespace]('ui', { theme, hideEventTypeDetails: false, layout: 'month_view' });
 }
