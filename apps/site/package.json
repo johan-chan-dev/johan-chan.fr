@@ -46,6 +46,7 @@
     "svelte-check": "^4.3.5",
     "tailwindcss": "4.3.0",
     "typescript": "5.9.3",
+    "vite-plugin-dev-proxy": "link:/home/jconan/.devbox/packages/vite-plugin-dev-proxy",
     "vitest": "4.1.8",
     "vue-tsc": "^3.3.4"
   }
