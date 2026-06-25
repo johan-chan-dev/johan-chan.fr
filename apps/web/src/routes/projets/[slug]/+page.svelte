@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { base } from '$app/paths';
 	import { appHref } from '$lib/utils/href';
 	import Icon from '@iconify/svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -35,6 +36,24 @@
 			<span class="text-sm text-base-content/50">{projet.status}</span>
 		</div>
 	</header>
+
+	{#if projet.image}
+		<a
+			href={projet.externalUrl}
+			target="_blank"
+			rel="noopener noreferrer"
+			class="block mb-8 rounded-lg overflow-hidden border border-base-300 shadow-lg shadow-base-content/10"
+		>
+			<img
+				src="{base}{projet.image}"
+				alt={projet.imageAlt}
+				width="1600"
+				height="1000"
+				class="w-full h-auto"
+				loading="lazy"
+			/>
+		</a>
+	{/if}
 
 	<div class="flex flex-col gap-4">
 		{#each projet.sections as section (section.heading)}

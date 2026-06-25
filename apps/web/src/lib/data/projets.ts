@@ -18,6 +18,9 @@ export interface Projet {
 	tags: string[];
 	stack: string[];
 	sections: ProjetSection[];
+	/** Capture réelle du site, sous static/images/ (chemin relatif au base). */
+	image?: string;
+	imageAlt?: string;
 	/** Description SEO (≤ ~160 caractères). */
 	seoDescription: string;
 }
@@ -28,10 +31,12 @@ export const projets: Projet[] = [
 		title: "Baan-Waan : d'une idée à une plateforme en production",
 		summary:
 			'Une plateforme e-commerce complète pour un commerce de restauration, conçue et livrée de bout en bout, opérée en production depuis mars 2026. En ligne sur baan-waan.com.',
-		externalUrl: 'https://baan-waan.com',
+		externalUrl: 'https://www.baan-waan.com',
 		status: 'En production depuis mars 2026',
 		tags: ['SvelteKit', 'Stripe', 'e-commerce', 'idée→prod'],
 		stack: ['SvelteKit', 'Drizzle', 'PostgreSQL', 'Stripe', 'Vercel'],
+		image: '/images/baan-waan.webp',
+		imageAlt: "Page d'accueil de Baan-Waan : « Bienvenue chez Baan Waan »",
 		seoDescription:
 			"Étude de cas Baan-Waan : une plateforme e-commerce menée d'une idée à la production de bout en bout. SvelteKit, Stripe, PostgreSQL, en ligne depuis mars 2026.",
 		sections: [
