@@ -18,6 +18,7 @@ const articles = defineCollection({
     tags: z.array(z.string()).default([]),
     readingTime: z.number().int().positive(),
     live: z.boolean().default(false),
+    draft: z.boolean().default(false),
     series: reference('series').optional(),
     order: z.number().int().positive().optional(),
     repo: z.string().optional(),
