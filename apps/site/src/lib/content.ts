@@ -47,7 +47,11 @@ function toProject(entry: ProjectEntry): Project {
 }
 
 export async function getArticles(lang: Lang): Promise<Article[]> {
-  const entries = (await getCollection('articles')).filter((e) => localeOf(e.id) === lang);
+  // `draft` is a publish gate: drafts stay visible in dev (so they can be reviewed)
+  // but are excluded from the production build — no feed entry, no list, no prerendered page.
+  const entries = (await getCollection('articles')).filter(
+    (e) => localeOf(e.id) === lang && (import.meta.env.DEV || !e.data.draft),
+  );
   return byDateDesc(await Promise.all(entries.map(toArticle)));
 }
 

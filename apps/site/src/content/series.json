@@ -3,5 +3,10 @@
     "id": "le-monde-du-dev-sous-choc",
     "title": "Le monde du dev sous choc",
     "description": "L’IA débarque dans le software. Les devs, les équipes, les boîtes — tout le monde encaisse. Une série pour regarder honnêtement ce que ça change vraiment."
+  },
+  {
+    "id": "supabase-serieusement",
+    "title": "Supabase, sérieusement",
+    "description": "Un starter-kit de backend Supabase qui vieillit bien. Chaque recette concrète part d'un besoin réel, remonte au principe d'architecture qui la justifie, puis montre le code. Et dit honnêtement ce qui est prouvé, et ce qui ne l'est pas."
   }
 ]
