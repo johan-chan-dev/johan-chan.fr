@@ -42,8 +42,6 @@ export const projets: Projet[] = [
 		status: 'En production depuis mars 2026',
 		tags: ['SvelteKit', 'Stripe', 'e-commerce', 'idée→prod'],
 		stack: ['SvelteKit', 'Drizzle', 'PostgreSQL', 'Stripe', 'Vercel'],
-		image: '/images/baan-waan.webp',
-		imageAlt: "Page d'accueil de Baan-Waan : « Bienvenue chez Baan Waan »",
 		seoDescription:
 			"Étude de cas Baan-Waan : une plateforme e-commerce menée d'une idée à la production de bout en bout. SvelteKit, Stripe, PostgreSQL, en ligne depuis mars 2026.",
 		sections: [
