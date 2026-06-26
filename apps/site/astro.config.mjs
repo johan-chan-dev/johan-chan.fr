@@ -5,6 +5,7 @@ import vue from '@astrojs/vue';
 import react from '@astrojs/react';
 import angular from '@analogjs/astro-angular';
 import tailwindcss from '@tailwindcss/vite';
+import devProxy from 'vite-plugin-dev-proxy';
 
 // @analogjs/astro-angular hardcodes `esbuild: { jsxDev: true }` and injects it via
 // updateConfig during astro:config:setup. That flag forces our React .tsx islands onto
@@ -43,7 +44,6 @@ export default defineConfig({
     routing: { prefixDefaultLocale: false },
   },
   vite: {
-    plugins: [tailwindcss()],
-    server: { allowedHosts: ['.dev.box'] },
+    plugins: [tailwindcss(), devProxy({ name: 'johan-chan' })],
   },
 });

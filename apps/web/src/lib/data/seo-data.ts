@@ -25,6 +25,12 @@ export const seoData: Record<string, SEOData> = {
 			"Réflexions sur le craft logiciel, l'architecture durable et la philosophie du code.",
 		type: 'website'
 	},
+	'/projets': {
+		title: 'Réalisations - Johan Chan',
+		description:
+			"Des projets menés de l'idée à la production, d'un seul tenant. Études de cas et preuves de capacité.",
+		type: 'website'
+	},
 	'/404': {
 		title: 'Page introuvable - Johan Chan',
 		description:

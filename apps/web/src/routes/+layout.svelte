@@ -17,7 +17,8 @@
 		'/articles/[slug]',
 		'/devlogs/[slug]',
 		'/series/[series]',
-		'/series/[series]/[chapter]'
+		'/series/[series]/[chapter]',
+		'/projets/[slug]'
 	];
 	const hasOwnSEO = $derived(contentRoutes.includes(page.route.id ?? ''));
 	const seoData = $derived(getSEOData(page.url.pathname));
@@ -58,6 +59,7 @@
 		{#if data.contentCounts.devlogs > 0}
 			<Link href="/devlogs">{m['navigation.devlogs']()}</Link>
 		{/if}
+		<Link href="/projets">{m['navigation.realisations']()}</Link>
 		<Link href="/about">{m['navigation.about']()}</Link>
 	</Navbar>
 
