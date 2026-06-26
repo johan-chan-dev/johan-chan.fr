@@ -10,6 +10,12 @@ export interface ProjetSection {
 
 export interface Projet {
 	slug: string;
+	/**
+	 * Visible publiquement. Champ requis (pas de défaut) : un nouveau projet doit
+	 * choisir explicitement. false = brouillon : 404, absent de la liste, de la
+	 * nav et du prerender.
+	 */
+	published: boolean;
 	title: string;
 	/** Phrase d'accroche affichée en tête (liste + détail). */
 	summary: string;
@@ -28,6 +34,7 @@ export interface Projet {
 export const projets: Projet[] = [
 	{
 		slug: 'baan-waan',
+		published: false,
 		title: "Baan-Waan : d'une idée à une plateforme en production",
 		summary:
 			'Une plateforme e-commerce complète pour un commerce de restauration, conçue et livrée de bout en bout, opérée en production depuis mars 2026. En ligne sur baan-waan.com.',
@@ -59,6 +66,9 @@ export const projets: Projet[] = [
 		]
 	}
 ];
+
+/** Projets visibles publiquement (liste, nav, prerender). */
+export const publishedProjets: Projet[] = projets.filter((p) => p.published);
 
 export function getProjet(slug: string): Projet | undefined {
 	return projets.find((p) => p.slug === slug);

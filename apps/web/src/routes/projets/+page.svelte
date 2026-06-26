@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { appHref } from '$lib/utils/href';
 	import Icon from '@iconify/svelte';
-	import { projets } from '$lib/data/projets';
+	import { publishedProjets } from '$lib/data/projets';
 </script>
 
 <div class="max-w-4xl mx-auto py-8">
@@ -13,7 +13,7 @@
 	</header>
 
 	<div class="grid grid-cols-1 gap-4">
-		{#each projets as projet (projet.slug)}
+		{#each publishedProjets as projet (projet.slug)}
 			<a
 				href={appHref(`/projets/${projet.slug}`)}
 				class="block p-5 bg-base-200 rounded-lg hover:bg-base-300 transition group"
@@ -38,6 +38,8 @@
 					{/each}
 				</div>
 			</a>
+		{:else}
+			<p class="text-base-content/60">Aucune réalisation pour le moment.</p>
 		{/each}
 	</div>
 </div>

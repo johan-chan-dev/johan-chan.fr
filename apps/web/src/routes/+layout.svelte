@@ -7,6 +7,7 @@
 	import SEO from '$lib/components/SEO.svelte';
 	import ParticleBackground from '$lib/components/background/ParticleBackground.svelte';
 	import { getSEOData } from '$lib/data/seo-data';
+	import { publishedProjets } from '$lib/data/projets';
 	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
 
@@ -59,7 +60,9 @@
 		{#if data.contentCounts.devlogs > 0}
 			<Link href="/devlogs">{m['navigation.devlogs']()}</Link>
 		{/if}
-		<Link href="/projets">{m['navigation.realisations']()}</Link>
+		{#if publishedProjets.length > 0}
+			<Link href="/projets">{m['navigation.realisations']()}</Link>
+		{/if}
 		<Link href="/about">{m['navigation.about']()}</Link>
 	</Navbar>
 
