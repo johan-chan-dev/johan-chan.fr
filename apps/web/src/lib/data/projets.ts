@@ -54,7 +54,7 @@ export const projets: Projet[] = [
 			},
 			{
 				heading: 'La suite',
-				body: 'Ce pilote est devenu la graine d\'une plateforme pour restaurateurs, en développement. Elle aura son propre portail le moment venu.'
+				body: "Ce pilote est devenu la graine d'une plateforme pour restaurateurs, en développement. Elle aura son propre portail le moment venu."
 			}
 		]
 	}
